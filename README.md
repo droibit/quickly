@@ -1,4 +1,5 @@
 ## Quickly
+[![Build Status](https://travis-ci.org/droibit/quickly.svg?branch=master)](https://travis-ci.org/droibit/quickly)
 
 Displays quickly the android app information.
 
