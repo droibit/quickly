@@ -10,6 +10,7 @@ data class AppInfo @Setter constructor(
         @Column(indexed = true) val name: String,
         @Column val versionName: String,
         @Column val versionCode: Int,
+        @Column val icon: Int, // resource Id
         @Column val preInstalled: Boolean,
         @Column(indexed = true) val lastUpdateTime: Long
 )
