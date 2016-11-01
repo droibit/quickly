@@ -5,6 +5,7 @@ import com.droibit.quickly.data.repository.appinfo.OrmaDatabase
 import com.github.salomonbrys.kodein.Kodein
 import com.github.salomonbrys.kodein.instance
 import com.github.salomonbrys.kodein.singleton
+import com.squareup.picasso.Picasso
 import timber.log.Timber
 
 fun applicationModule(context: Context, debuggable: Boolean) = Kodein.Module {
@@ -14,6 +15,8 @@ fun applicationModule(context: Context, debuggable: Boolean) = Kodein.Module {
     bind<OrmaDatabase>() with singleton { OrmaDatabase.Builder(instance()).build() }
 
     bind<Timber.Tree>() with singleton { if (debuggable) Timber.DebugTree() else EmptyTimberTree() }
+
+    bind<Picasso>() with singleton { Picasso.with(instance()) }
 }
 
 private class EmptyTimberTree: Timber.Tree() {
