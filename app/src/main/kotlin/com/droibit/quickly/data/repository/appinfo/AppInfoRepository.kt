@@ -9,6 +9,8 @@ interface AppInfoRepository {
 
     fun addAll(appInfoList: List<AppInfo>): Observable<AppInfo>
 
+    fun add(appInfo: AppInfo): Single<AppInfo>
+
     fun update(appInfo: AppInfo): Single<Boolean>
 
     fun delete(packageName: String): Single<Boolean>

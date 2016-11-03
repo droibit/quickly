@@ -1,6 +1,7 @@
 package com.droibit.quickly
 
 import android.content.Context
+import android.content.pm.PackageManager
 import com.droibit.quickly.data.repository.appinfo.OrmaDatabase
 import com.github.salomonbrys.kodein.Kodein
 import com.github.salomonbrys.kodein.instance
@@ -11,6 +12,8 @@ import timber.log.Timber
 fun applicationModule(context: Context, debuggable: Boolean) = Kodein.Module {
 
     bind<Context>() with instance(context)
+
+    bind<PackageManager>() with singleton { context.packageManager }
 
     bind<OrmaDatabase>() with singleton { OrmaDatabase.Builder(instance()).build() }
 
