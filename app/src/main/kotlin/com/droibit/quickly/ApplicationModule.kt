@@ -15,7 +15,11 @@ fun applicationModule(context: Context, debuggable: Boolean) = Kodein.Module {
 
     bind<PackageManager>() with singleton { context.packageManager }
 
-    bind<OrmaDatabase>() with singleton { OrmaDatabase.Builder(instance()).build() }
+    bind<OrmaDatabase>() with singleton {
+        OrmaDatabase.Builder(instance())
+                .name(null)
+                .build()
+    }
 
     bind<Timber.Tree>() with singleton { if (debuggable) Timber.DebugTree() else EmptyTimberTree() }
 
