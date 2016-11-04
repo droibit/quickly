@@ -5,7 +5,9 @@ import rx.Single
 
 interface AppInfoRepository {
 
-    fun getAll(): Observable<List<AppInfo>>
+    fun loadAll(): Observable<List<AppInfo>>
+
+    // TODO: fun reload(): Observable<List<AppInfo>>
 
     fun addOrUpdate(appInfo: AppInfo): Single<Boolean>
 

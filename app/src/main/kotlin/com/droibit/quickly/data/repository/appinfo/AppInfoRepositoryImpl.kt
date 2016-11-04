@@ -9,7 +9,7 @@ class AppInfoRepositoryImpl(
         private val orma: OrmaDatabase,
         private val appInfoSource: AppInfoDataSource) : AppInfoRepository {
 
-    override fun getAll(): Observable<List<AppInfo>> {
+    override fun loadAll(): Observable<List<AppInfo>> {
         // TODO: need review
         return orma.selectFromAppInfo()
                 .executeAsObservable()
