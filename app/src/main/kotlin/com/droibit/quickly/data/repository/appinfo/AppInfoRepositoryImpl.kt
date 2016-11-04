@@ -1,6 +1,7 @@
 package com.droibit.quickly.data.repository.appinfo
 
 import com.droibit.quickly.data.repository.source.AppInfoDataSource
+import com.github.gfx.android.orma.annotation.OnConflict
 import rx.Observable
 import rx.Single
 
@@ -16,12 +17,10 @@ class AppInfoRepositoryImpl(
                 .toList()
     }
 
-    override fun add(appInfo: AppInfo): Single<AppInfo> {
-        TODO()
-    }
-
-    override fun update(appInfo: AppInfo): Single<Boolean> {
-        TODO()
+    override fun addOrUpdate(appInfo: AppInfo): Single<Boolean> {
+        return orma.prepareInsertIntoAppInfoAsObservable(OnConflict.REPLACE)
+                .flatMap { it.executeAsObservable(appInfo) }
+                .map { it > 0 }
     }
 
     override fun delete(packageName: String): Single<Boolean> {
