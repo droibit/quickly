@@ -24,16 +24,16 @@ class AppInfoRepositoryImpl(
     }
 
     override fun delete(packageName: String): Single<Boolean> {
-        TODO()
+        return orma.deleteFromAppInfo()
+                .packageNameEq(packageName)
+                .executeAsObservable()
+                .map { it > 0 }
     }
 
     private fun storeAll(): Observable<AppInfo> {
         return appInfoSource.getAll()
                 .flatMap {
-                    orma.transactionSync {
-                        val inserter = orma.prepareInsertIntoAppInfo()
-                        inserter.executeAll(it)
-                    }
+                    orma.transactionSync { orma.prepareInsertIntoAppInfo().executeAll(it) }
                     return@flatMap Observable.from(it)
                 }
     }
