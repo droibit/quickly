@@ -17,6 +17,16 @@ class AppInfoRepositoryImpl(
                 .toList()
     }
 
+    override fun reload(): Observable<List<AppInfo>> {
+        return orma.deleteFromAppInfo()
+                .executeAsObservable()
+                .toObservable()
+                .flatMap {
+                    appInfoSource.getAll()
+                            .doOnNext { storeSync(appInfoList = it) }
+                }
+    }
+
     override fun addOrUpdate(appInfo: AppInfo): Single<Boolean> {
         return orma.prepareInsertIntoAppInfoAsObservable(OnConflict.REPLACE)
                 .flatMap { it.executeAsObservable(appInfo) }
@@ -32,9 +42,14 @@ class AppInfoRepositoryImpl(
 
     private fun storeAll(): Observable<AppInfo> {
         return appInfoSource.getAll()
-                .flatMap {
-                    orma.transactionSync { orma.prepareInsertIntoAppInfo().executeAll(it) }
-                    return@flatMap Observable.from(it)
-                }
+                .doOnNext { storeSync(appInfoList = it) }
+                .flatMap { Observable.from(it) }
+    }
+
+    private fun storeSync(appInfoList: List<AppInfo>) {
+        orma.transactionSync {
+            orma.prepareInsertIntoAppInfo()
+                    .executeAll(appInfoList)
+        }
     }
 }

@@ -7,7 +7,7 @@ interface AppInfoRepository {
 
     fun loadAll(): Observable<List<AppInfo>>
 
-    // TODO: fun reload(): Observable<List<AppInfo>>
+    fun reload(): Observable<List<AppInfo>>
 
     fun addOrUpdate(appInfo: AppInfo): Single<Boolean>
 
