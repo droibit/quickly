@@ -31,7 +31,7 @@ class AppInfoRepositoryImplTest {
     }
 
     @Test
-    fun loadAll_shouldReturnAllOfAppInfo() {
+    fun loadAll_shouldReturnLoadedAppInfo() {
         val expectedAppInfoList = listOf(
                 AppInfo(
                         packageName = "com.droibit.quickly.1",
@@ -67,8 +67,10 @@ class AppInfoRepositoryImplTest {
         repository.loadAll().subscribe(testSubscriber)
 
         testSubscriber.assertNoErrors()
-        val actualAppInfoList = testSubscriber.onNextEvents.first()
+        testSubscriber.assertCompleted()
+        testSubscriber.assertValueCount(1)
 
+        val actualAppInfoList = testSubscriber.onNextEvents.first()
         assertThat(actualAppInfoList).containsExactlyElementsOf(expectedAppInfoList)
     }
 
@@ -116,8 +118,157 @@ class AppInfoRepositoryImplTest {
         repository.loadAll().subscribe(testSubscriber)
 
         testSubscriber.assertNoErrors()
-        val actualAppInfoList = testSubscriber.onNextEvents.first()
+        testSubscriber.assertCompleted()
+        testSubscriber.assertValueCount(1)
 
+        val actualAppInfoList = testSubscriber.onNextEvents.first()
         assertThat(actualAppInfoList).containsExactlyElementsOf(expectedAppInfoList)
+    }
+
+    @Test
+    fun reload_shouldReturnNewAppInfo() {
+        run {
+            val appInfo = AppInfo(
+                    packageName = "com.droibit.quickly.1",
+                    name = "Qickly1",
+                    versionName = "1",
+                    versionCode = 2,
+                    icon = 3,
+                    preInstalled = true,
+                    lastUpdateTime = 4
+            ).apply {
+                repository.addOrUpdate(appInfo = this)
+                        .subscribe { assertThat(it).isTrue() }
+            }
+            `when`(appInfoSource.getAll()).thenReturn(Observable.empty())
+
+            val testSubscriber = TestSubscriber.create<List<AppInfo>>()
+            repository.loadAll().subscribe(testSubscriber)
+
+            testSubscriber.assertNoErrors()
+            testSubscriber.assertCompleted()
+            testSubscriber.assertValueCount(1)
+
+            val actualAppInfoList = testSubscriber.onNextEvents.first()
+            assertThat(actualAppInfoList).containsExactly(appInfo)
+        }
+
+        run {
+            val expectedAppInfoList = listOf(
+                    AppInfo(
+                            packageName = "com.droibit.quickly.2",
+                            name = "Qickly2",
+                            versionName = "5",
+                            versionCode = 6,
+                            icon = 7,
+                            preInstalled = true,
+                            lastUpdateTime = 8
+                    ),
+                    AppInfo(
+                            packageName = "com.droibit.quickly.3",
+                            name = "Qickly3",
+                            versionName = "9",
+                            versionCode = 10,
+                            icon = 11,
+                            preInstalled = true,
+                            lastUpdateTime = 12
+                    )
+            )
+            `when`(appInfoSource.getAll()).thenReturn(Observable.just(expectedAppInfoList))
+
+            val testSubscriber = TestSubscriber.create<List<AppInfo>>()
+            repository.reload().subscribe(testSubscriber)
+
+            testSubscriber.assertNoErrors()
+            testSubscriber.assertCompleted()
+            testSubscriber.assertValueCount(1)
+
+            val actualAppInfoList = testSubscriber.onNextEvents.first()
+            assertThat(actualAppInfoList).containsExactlyElementsOf(expectedAppInfoList)
+        }
+    }
+
+    @Test
+    fun addOrUpdate_shouldAddNewAppInfo() {
+        val expectedAppInfoList = listOf(
+                AppInfo(
+                        packageName = "com.droibit.quickly.1",
+                        name = "Qickly1",
+                        versionName = "1",
+                        versionCode = 2,
+                        icon = 3,
+                        preInstalled = true,
+                        lastUpdateTime = 4
+                ),
+                AppInfo(
+                        packageName = "com.droibit.quickly.3",
+                        name = "Qickly3",
+                        versionName = "9",
+                        versionCode = 10,
+                        icon = 11,
+                        preInstalled = true,
+                        lastUpdateTime = 12
+                )
+        )
+        expectedAppInfoList.forEach {
+            repository.addOrUpdate(appInfo = it)
+                    .subscribe { assertThat(it).isTrue() }
+        }
+        assertThat(orma.selectFromAppInfo().toList()).containsExactlyElementsOf(expectedAppInfoList)
+    }
+
+    @Test
+    fun addOrUpdate_shouldUpdatedExistAppInfo() {
+        AppInfo(
+                packageName = "com.droibit.quickly.1",
+                name = "Qickly1",
+                versionName = "1",
+                versionCode = 2,
+                icon = 3,
+                preInstalled = true,
+                lastUpdateTime = 4
+        ).apply {
+            repository.addOrUpdate(appInfo = this)
+                    .subscribe { assertThat(it).isTrue() }
+            assertThat(orma.selectFromAppInfo().toList()).containsExactly(this)
+        }
+
+        AppInfo(
+                packageName = "com.droibit.quickly.1",
+                name = "Qickly1",
+                versionName = "2",
+                versionCode = 3,
+                icon = 3,
+                preInstalled = true,
+                lastUpdateTime = 5
+        ).run {
+            repository.addOrUpdate(appInfo = this)
+                    .subscribe { assertThat(it).isTrue() }
+            assertThat(orma.selectFromAppInfo().toList()).containsExactly(this)
+        }
+    }
+
+    @Test
+    fun delete_shouldDeleteExistAppInfo() {
+        val appInfo = AppInfo(
+                packageName = "com.droibit.quickly.1",
+                name = "Qickly1",
+                versionName = "1",
+                versionCode = 2,
+                icon = 3,
+                preInstalled = true,
+                lastUpdateTime = 4
+        ).apply {
+            repository.addOrUpdate(appInfo = this)
+                    .subscribe { assertThat(it).isTrue() }
+        }
+        assertThat(orma.selectFromAppInfo().toList()).containsExactly(appInfo)
+
+        repository.delete(appInfo.packageName)
+                .subscribe { assertThat(it).isTrue() }
+
+        // has removed
+        repository.delete(appInfo.packageName)
+                .subscribe { assertThat(it).isFalse() }
     }
 }
