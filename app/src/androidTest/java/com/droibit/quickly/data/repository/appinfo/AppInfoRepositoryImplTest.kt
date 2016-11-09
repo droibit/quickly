@@ -1,0 +1,123 @@
+package com.droibit.quickly.data.repository.appinfo
+
+import android.support.test.InstrumentationRegistry
+import android.support.test.runner.AndroidJUnit4
+import com.droibit.quickly.data.repository.source.AppInfoDataSource
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.Before
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.mockito.Mockito.`when`
+import org.mockito.Mockito.mock
+import rx.Observable
+import rx.observers.TestSubscriber
+
+@RunWith(AndroidJUnit4::class)
+class AppInfoRepositoryImplTest {
+
+    private val context = InstrumentationRegistry.getTargetContext()
+
+    private lateinit var orma: OrmaDatabase
+
+    private lateinit var appInfoSource: AppInfoDataSource
+
+    private lateinit var repository: AppInfoRepositoryImpl
+
+    @Before
+    fun setUp() {
+        orma = OrmaDatabase.Builder(context).name(null).build()
+        appInfoSource = mock(AppInfoDataSource::class.java)
+        repository = AppInfoRepositoryImpl(orma, appInfoSource)
+    }
+
+    @Test
+    fun loadAll_shouldReturnAllOfAppInfo() {
+        val expectedAppInfoList = listOf(
+                AppInfo(
+                        packageName = "com.droibit.quickly.1",
+                        name = "Qickly1",
+                        versionName = "1",
+                        versionCode = 2,
+                        icon = 3,
+                        preInstalled = true,
+                        lastUpdateTime = 4
+                ),
+                AppInfo(
+                        packageName = "com.droibit.quickly.2",
+                        name = "Qickly2",
+                        versionName = "5",
+                        versionCode = 6,
+                        icon = 7,
+                        preInstalled = true,
+                        lastUpdateTime = 8
+                ),
+                AppInfo(
+                        packageName = "com.droibit.quickly.3",
+                        name = "Qickly3",
+                        versionName = "9",
+                        versionCode = 10,
+                        icon = 11,
+                        preInstalled = true,
+                        lastUpdateTime = 12
+                )
+        )
+        `when`(appInfoSource.getAll()).thenReturn(Observable.just(expectedAppInfoList))
+
+        val testSubscriber = TestSubscriber.create<List<AppInfo>>()
+        repository.loadAll().subscribe(testSubscriber)
+
+        testSubscriber.assertNoErrors()
+        val actualAppInfoList = testSubscriber.onNextEvents.first()
+
+        assertThat(actualAppInfoList).containsExactlyElementsOf(expectedAppInfoList)
+    }
+
+    @Test
+    fun loadAll_shouldReturnStoredAppInfo() {
+        val expectedAppInfoList = listOf(
+                AppInfo(
+                        packageName = "com.droibit.quickly.1",
+                        name = "Qickly1",
+                        versionName = "1",
+                        versionCode = 2,
+                        icon = 3,
+                        preInstalled = true,
+                        lastUpdateTime = 4
+                ),
+                AppInfo(
+                        packageName = "com.droibit.quickly.3",
+                        name = "Qickly3",
+                        versionName = "9",
+                        versionCode = 10,
+                        icon = 11,
+                        preInstalled = true,
+                        lastUpdateTime = 12
+                )
+        )
+        expectedAppInfoList.forEach {
+            repository.addOrUpdate(appInfo = it)
+                    .subscribe { assertThat(it).isTrue() }
+        }
+
+        val notCallAppInfoList = listOf(
+                AppInfo(
+                        packageName = "com.droibit.quickly.2",
+                        name = "Qickly2",
+                        versionName = "5",
+                        versionCode = 6,
+                        icon = 7,
+                        preInstalled = true,
+                        lastUpdateTime = 8
+                )
+        )
+        `when`(appInfoSource.getAll()).thenReturn(Observable.just(notCallAppInfoList))
+
+        val testSubscriber = TestSubscriber.create<List<AppInfo>>()
+        repository.loadAll().subscribe(testSubscriber)
+
+        testSubscriber.assertNoErrors()
+        val actualAppInfoList = testSubscriber.onNextEvents.first()
+
+        assertThat(actualAppInfoList).containsExactlyElementsOf(expectedAppInfoList)
+    }
+}

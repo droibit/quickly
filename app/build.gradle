@@ -32,11 +32,11 @@ android {
     dexOptions {
         // Skip pre-dexing when running on CI or when disabled via -Dpre-dex=false.
         preDexLibraries = preDexEnabled && !isCi
-
     }
     packagingOptions {
         exclude 'META-INF/LICENSE.txt'
         exclude 'META-INF/services/javax.annotation.processing.Processor'
+        exclude 'asm-license.txt'
     }
 }
 
@@ -69,9 +69,13 @@ dependencies {
 
     debugCompile "com.facebook.stetho:stetho:$stethoVersion"
 
-    androidTestCompile("com.android.support.test.espresso:espresso-core:$espressoVersion", {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
+    androidTestCompile "org.mockito:mockito-core:$mockitoVersion"
+    androidTestCompile "com.squareup.assertj:assertj-android:$assertjAndroidVersion"
+    androidTestCompile "com.google.dexmaker:dexmaker:$dexmakerVersion"
+    androidTestCompile "com.google.dexmaker:dexmaker-mockito:$dexmakerVersion"
+    androidTestCompile "com.android.support.test.espresso:espresso-core:$espressoVersion"
+    androidTestCompile "com.android.support:support-annotations:$supportLibraryVersion"
+
     testCompile "junit:junit:$junitVersion"
     testCompile "org.assertj:assertj-core:$assertjVersion"
 }
