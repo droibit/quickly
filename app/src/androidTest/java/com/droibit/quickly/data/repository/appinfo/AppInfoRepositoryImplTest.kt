@@ -126,7 +126,46 @@ class AppInfoRepositoryImplTest {
     }
 
     @Test
-    fun reload_shouldReturnNewAppInfo() {
+    fun loadAll_shouldReturnCachedAppInfo() {
+        val expectedAppInfoList = listOf(
+                AppInfo(
+                        packageName = "com.droibit.quickly.1",
+                        name = "Qickly1",
+                        versionName = "1",
+                        versionCode = 2,
+                        icon = 3,
+                        preInstalled = true,
+                        lastUpdateTime = 4
+                ),
+                AppInfo(
+                        packageName = "com.droibit.quickly.2",
+                        name = "Qickly2",
+                        versionName = "5",
+                        versionCode = 6,
+                        icon = 7,
+                        preInstalled = true,
+                        lastUpdateTime = 8
+                )
+        )
+        `when`(appInfoSource.getAll()).thenReturn(Observable.just(expectedAppInfoList))
+        repository.loadAll().subscribe()
+
+        `when`(appInfoSource.getAll()).thenReturn(Observable.empty())
+        assertThat(orma.deleteFromAppInfo().execute()).isEqualTo(2)
+
+        val testSubscriber = TestSubscriber.create<List<AppInfo>>()
+        repository.loadAll().subscribe(testSubscriber)
+
+        testSubscriber.assertNoErrors()
+        testSubscriber.assertCompleted()
+        testSubscriber.assertValueCount(1)
+
+        val actualAppInfoList = testSubscriber.onNextEvents.first()
+        assertThat(actualAppInfoList).containsExactlyElementsOf(expectedAppInfoList)
+    }
+
+    @Test
+    fun roadAll_shouldReturnAppInfoWithForceReload() {
         run {
             val appInfo = AppInfo(
                     packageName = "com.droibit.quickly.1",
@@ -136,11 +175,8 @@ class AppInfoRepositoryImplTest {
                     icon = 3,
                     preInstalled = true,
                     lastUpdateTime = 4
-            ).apply {
-                repository.addOrUpdate(appInfo = this)
-                        .subscribe { assertThat(it).isTrue() }
-            }
-            `when`(appInfoSource.getAll()).thenReturn(Observable.empty())
+            )
+            `when`(appInfoSource.getAll()).thenReturn(Observable.just(listOf(appInfo)))
 
             val testSubscriber = TestSubscriber.create<List<AppInfo>>()
             repository.loadAll().subscribe(testSubscriber)
@@ -177,7 +213,7 @@ class AppInfoRepositoryImplTest {
             `when`(appInfoSource.getAll()).thenReturn(Observable.just(expectedAppInfoList))
 
             val testSubscriber = TestSubscriber.create<List<AppInfo>>()
-            repository.reload().subscribe(testSubscriber)
+            repository.loadAll(forceReload = true).subscribe(testSubscriber)
 
             testSubscriber.assertNoErrors()
             testSubscriber.assertCompleted()
@@ -210,9 +246,12 @@ class AppInfoRepositoryImplTest {
                         lastUpdateTime = 12
                 )
         )
-        expectedAppInfoList.forEach {
-            repository.addOrUpdate(appInfo = it)
-                    .subscribe { assertThat(it).isTrue() }
+        expectedAppInfoList.forEach { appInfo ->
+            repository.addOrUpdate(appInfo)
+                    .subscribe { added ->
+                        assertThat(added).isTrue()
+                        assertThat(repository.cache).containsEntry(appInfo.packageName, appInfo)
+                    }
         }
         assertThat(orma.selectFromAppInfo().toList()).containsExactlyElementsOf(expectedAppInfoList)
     }
@@ -231,6 +270,7 @@ class AppInfoRepositoryImplTest {
             repository.addOrUpdate(appInfo = this)
                     .subscribe { assertThat(it).isTrue() }
             assertThat(orma.selectFromAppInfo().toList()).containsExactly(this)
+            assertThat(repository.cache).containsEntry(packageName, this)
         }
 
         AppInfo(
@@ -245,6 +285,7 @@ class AppInfoRepositoryImplTest {
             repository.addOrUpdate(appInfo = this)
                     .subscribe { assertThat(it).isTrue() }
             assertThat(orma.selectFromAppInfo().toList()).containsExactly(this)
+            assertThat(repository.cache).containsEntry(packageName, this)
         }
     }
 
@@ -266,6 +307,7 @@ class AppInfoRepositoryImplTest {
 
         repository.delete(appInfo.packageName)
                 .subscribe { assertThat(it).isTrue() }
+        assertThat(repository.cache).doesNotContainKey(appInfo.packageName)
 
         // has removed
         repository.delete(appInfo.packageName)

@@ -1,36 +1,37 @@
 package com.droibit.quickly.data.repository.appinfo
 
+import android.support.annotation.VisibleForTesting
 import com.droibit.quickly.data.repository.source.AppInfoDataSource
 import com.github.gfx.android.orma.annotation.OnConflict
 import rx.Observable
 import rx.Single
+import java.util.*
 
 class AppInfoRepositoryImpl(
         private val orma: OrmaDatabase,
         private val appInfoSource: AppInfoDataSource) : AppInfoRepository {
 
-    override fun loadAll(): Observable<List<AppInfo>> {
-        // TODO: need review
-        return orma.selectFromAppInfo()
-                .executeAsObservable()
-                .switchIfEmpty(storeAll())
-                .toList()
-    }
+    @VisibleForTesting
+    internal val cache: MutableMap<String, AppInfo> = LinkedHashMap()
 
-    override fun reload(): Observable<List<AppInfo>> {
-        return orma.deleteFromAppInfo()
-                .executeAsObservable()
-                .toObservable()
-                .flatMap {
-                    appInfoSource.getAll()
-                            .doOnNext { storeSync(appInfoList = it) }
-                }
+    override fun loadAll(forceReload: Boolean): Observable<List<AppInfo>> {
+        if (!forceReload && cache.isNotEmpty()) {
+            return Observable.just(ArrayList(cache.values))
+        }
+
+        val storedAppInfo = getStoredAppInfo()
+        if (forceReload) {
+            return storedAppInfo
+        }
+        return Observable.concat(getLocalAppInfo(), storedAppInfo)
+                .first { it.isNotEmpty() }
     }
 
     override fun addOrUpdate(appInfo: AppInfo): Single<Boolean> {
         return orma.prepareInsertIntoAppInfoAsObservable(OnConflict.REPLACE)
                 .flatMap { it.executeAsObservable(appInfo) }
                 .map { it > 0 }
+                .doOnSuccess { if (it) cache[appInfo.packageName] = appInfo }
     }
 
     override fun delete(packageName: String): Single<Boolean> {
@@ -38,12 +39,18 @@ class AppInfoRepositoryImpl(
                 .packageNameEq(packageName)
                 .executeAsObservable()
                 .map { it > 0 }
+                .doOnSuccess { if (it) cache.remove(packageName) }
     }
 
-    private fun storeAll(): Observable<AppInfo> {
+    private fun getLocalAppInfo(): Observable<List<AppInfo>> {
+        return orma.selectFromAppInfo()
+                .executeAsObservable()
+                .toList()
+    }
+
+    private fun getStoredAppInfo(): Observable<List<AppInfo>> {
         return appInfoSource.getAll()
                 .doOnNext { storeSync(appInfoList = it) }
-                .flatMap { Observable.from(it) }
     }
 
     private fun storeSync(appInfoList: List<AppInfo>) {
@@ -51,5 +58,8 @@ class AppInfoRepositoryImpl(
             orma.prepareInsertIntoAppInfo()
                     .executeAll(appInfoList)
         }
+
+        cache.clear()
+        appInfoList.forEach { cache[it.packageName] = it }
     }
 }
