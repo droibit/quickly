@@ -1,67 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginTop="6dp"
+    android:layout_marginBottom="6dp"
+    android:layout_marginLeft="12dp"
+    android:layout_marginRight="12dp"
+    app:cardCornerRadius="2dp" >
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/icon"
+            android:id="@+id/app_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:layout_marginLeft="8dp"
+            android:layout_marginLeft="@dimen/card_content_side_margin"
+            android:layout_marginRight="@dimen/card_content_side_margin"
             android:layout_marginTop="8dp"
-            android:layout_marginRight="16dp"
+            android:layout_marginBottom="8dp"
             tools:src="@mipmap/ic_launcher" />
 
         <TextView
             android:id="@+id/app_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/icon"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="16dp"
             android:layout_centerVertical="true"
+            android:layout_alignTop="@+id/app_icon"
+            android:layout_toRightOf="@id/app_icon"
+            android:layout_marginRight="@dimen/card_content_side_margin"
+            android:layout_marginTop="4dp"
             android:ellipsize="end"
             android:maxLines="1"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@android:color/black"
             tools:text="@string/app_name" />
 
+        <TextView
+            android:id="@+id/app_version"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/app_icon"
+            android:layout_toRightOf="@id/app_icon"
+            android:layout_marginRight="@dimen/card_content_side_margin"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            tools:text="Version: 1.0.0 (10)" />
 
         <TextView
-            android:id="@+id/package_name"
+            android:id="@+id/app_package"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:layout_toRightOf="@id/icon"
-            android:layout_below="@id/icon"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="16dp"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            tools:text="com.droibit.qickly"
+            android:layout_below="@id/app_icon"
+            android:layout_alignLeft="@id/app_version"
+            android:layout_marginRight="@dimen/card_content_side_margin"
+            android:layout_marginBottom="4dp"
+            android:ellipsize="middle"
+            android:maxLines="1"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            tools:text="com.droibit.quickly" />
+
+        <TextView
+            android:id="@+id/app_last_update_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/app_package"
+            android:layout_marginLeft="@dimen/card_content_side_margin"
+            android:layout_marginRight="@dimen/card_content_side_margin"
+            android:layout_marginBottom="4dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:gravity="right"
+            tools:text="16/10/01 01:00" />
+
+        <View
+            android:id="@+id/content_divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorGrey200"
+            android:layout_below="@id/app_last_update_time"
             />
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <ImageView
+            android:id="@+id/more"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_toRightOf="@id/icon"
-            android:layout_below="@id/package_name"
-            android:weightSum="2" >
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/content_divider"
+            android:paddingTop="8dp"
+            android:paddingRight="8dp"
+            android:paddingLeft="8dp"
+            android:paddingBottom="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:clickable="true"
+            android:scaleType="center"
+            android:foreground="?android:attr/selectableItemBackground"
+            app:srcCompat="@drawable/ic_more_menu"
+            />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                 />
-
-        </LinearLayout>
 
     </RelativeLayout>
 
