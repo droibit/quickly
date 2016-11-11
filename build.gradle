@@ -2,7 +2,7 @@
 
 buildscript {
     ext {
-        kotlinVersion = '1.0.4'
+        kotlinVersion = '1.0.5'
         supportLibraryVersion = '25.0.0'
         kodeinAndroidVersion = '3.1.0'
         ormaVersion = '3.1.1'
