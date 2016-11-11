@@ -40,7 +40,6 @@ class AppInfoAdapter(
         this.appInfoList.addAll(appInfoList)
         this.notifyDataSetChanged()
     }
-
 }
 
 class ViewHolder(
@@ -58,16 +57,17 @@ class ViewHolder(
     private val lastUpdateTimeView: TextView by bindView(R.id.app_last_update_time)
 
     fun bind(appInfo: AppInfo) {
-        picasso.load(appInfo.iconUri)
-                .into(iconView)
+        picasso.load(appInfo.iconUri).into(iconView)
 
         nameView.text = appInfo.name
         versionView.text = appInfo.version
         packageView.text = appInfo.packageName
 
         // TODO:
-        val formatter = DateFormat.getMediumDateFormat(itemView.context)
-        lastUpdateTimeView.text = formatter.format(Date(appInfo.lastUpdateTime))
+        val lastUpdateDate = Date(appInfo.lastUpdateTime)
+        val dateFormatter = DateFormat.getMediumDateFormat(itemView.context)
+        val timeFormatter = DateFormat.getTimeFormat(itemView.context)
+        lastUpdateTimeView.text = "${dateFormatter.format(lastUpdateDate)} ${timeFormatter.format(lastUpdateDate)}"
     }
 }
 
@@ -75,4 +75,4 @@ private val AppInfo.iconUri: Uri
     get() = Uri.parse("$SCHEME_ANDROID_RESOURCE://$packageName/$icon")
 
 private val AppInfo.version: String
-    get() = "Version: $versionName ($versionCode)"
+    get() = "Version:$versionName ($versionCode)"
