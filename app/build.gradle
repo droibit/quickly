@@ -61,8 +61,8 @@ dependencies {
     compile "com.jakewharton.rxrelay:rxrelay:$rxRelayVersion"
     compile "com.github.droibit:rxactivitylauncher:$rxActivitylauncherVersion"
 
+    compile "com.lapism:searchview:$searchViewVersion"
     compile "com.squareup.picasso:picasso:$picassoVersion"
-
     compile "com.jakewharton.timber:timber:$timberVersion"
     compile "com.github.droibit.chopsticks:chopstick:$chopsticksVersion"
     compile "com.github.droibit.chopsticks:chopstick-preference:$chopsticksVersion"
