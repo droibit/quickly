@@ -1,7 +1,7 @@
 package com.droibit.quickly.main
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
             extend(appKodein())
         })
 
-        appInfoAdapter = AppInfoAdapter(this, picasso).apply {
+        appInfoAdapter = AppInfoAdapter(this).apply {
             addAll(listOf(
                     AppInfo(
                             packageName = "com.droibit.quickly",
