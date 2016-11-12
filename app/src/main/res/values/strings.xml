@@ -2,4 +2,6 @@
     <string name="app_name">Quickly</string>
 
     <string name="main_no_apps">No applications</string>
+
+    <string name="app_date_format" translatable="false">%1$s %2$s</string>
 </resources>

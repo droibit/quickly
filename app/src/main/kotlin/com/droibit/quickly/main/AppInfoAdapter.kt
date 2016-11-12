@@ -11,14 +11,18 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.droibit.quickly.R
+import com.droibit.quickly.data.provider.date.DateFormatter
 import com.droibit.quickly.data.repository.appinfo.AppInfo
 import com.github.droibit.chopstick.bindView
+import com.github.salomonbrys.kodein.Kodein
+import com.github.salomonbrys.kodein.KodeinInjector
+import com.github.salomonbrys.kodein.android.appKodein
+import com.github.salomonbrys.kodein.instance
 import com.squareup.picasso.Picasso
 import java.util.*
 
 class AppInfoAdapter(
-        private val context: Context,
-        private val picasso: Picasso) : RecyclerView.Adapter<ViewHolder>() {
+        private val context: Context) : RecyclerView.Adapter<ViewHolder>() {
 
     private val appInfoList: MutableList<AppInfo> = ArrayList()
 
@@ -32,7 +36,7 @@ class AppInfoAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView = LayoutInflater.from(context).inflate(R.layout.recycler_item_app_info, parent, false)
-        return ViewHolder(itemView, picasso)
+        return ViewHolder(itemView)
     }
 
     fun addAll(appInfoList: List<AppInfo>) {
@@ -42,9 +46,7 @@ class AppInfoAdapter(
     }
 }
 
-class ViewHolder(
-        itemView: View,
-        private val picasso: Picasso) : RecyclerView.ViewHolder(itemView) {
+class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     private val iconView: ImageView by bindView(R.id.app_icon)
 
@@ -56,18 +58,27 @@ class ViewHolder(
 
     private val lastUpdateTimeView: TextView by bindView(R.id.app_last_update_time)
 
+    private val injector = KodeinInjector()
+
+    private val picasso: Picasso by injector.instance()
+
+    private val dateFormatter: DateFormatter by injector.instance()
+
+    init {
+        injector.inject(Kodein {
+            extend(itemView.context.appKodein())
+        })
+    }
+
     fun bind(appInfo: AppInfo) {
-        picasso.load(appInfo.iconUri).into(iconView)
+        picasso.load(appInfo.iconUri)
+                .error(R.mipmap.ic_launcher)
+                .into(iconView)
 
         nameView.text = appInfo.name
         versionView.text = appInfo.version
         packageView.text = appInfo.packageName
-
-        // TODO:
-        val lastUpdateDate = Date(appInfo.lastUpdateTime)
-        val dateFormatter = DateFormat.getMediumDateFormat(itemView.context)
-        val timeFormatter = DateFormat.getTimeFormat(itemView.context)
-        lastUpdateTimeView.text = "${dateFormatter.format(lastUpdateDate)} ${timeFormatter.format(lastUpdateDate)}"
+        lastUpdateTimeView.text = dateFormatter.format(timeMillis = appInfo.lastUpdateTime)
     }
 }
 
@@ -75,4 +86,4 @@ private val AppInfo.iconUri: Uri
     get() = Uri.parse("$SCHEME_ANDROID_RESOURCE://$packageName/$icon")
 
 private val AppInfo.version: String
-    get() = "Version:$versionName ($versionCode)"
+    get() = "v$versionName ($versionCode)"
