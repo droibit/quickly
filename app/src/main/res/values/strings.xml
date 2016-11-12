@@ -4,4 +4,8 @@
     <string name="main_no_apps">No applications</string>
 
     <string name="app_date_format" translatable="false">%1$s %2$s</string>
+    <string name="main_menu_refresh">Refresh</string>
+    <string name="main_menu_sort_by">Sort by</string>
+    <string name="main_menu_show_system">Show system</string>
+    <string name="app_menu_settings">Settings</string>
 </resources>
