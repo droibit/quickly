@@ -1,7 +1,7 @@
 ## Quickly
-[![Build Status](https://travis-ci.org/droibit/quickly.svg?branch=master)](https://travis-ci.org/droibit/quickly)
+[![Build Status](https://travis-ci.org/droibit/quickly.svg?branch=develop)](https://travis-ci.org/droibit/quickly)
 
-Displays quickly the android app information.
+Quickly display Android app information for development.
 
 ## License
 
