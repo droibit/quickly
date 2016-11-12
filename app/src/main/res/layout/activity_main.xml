@@ -12,7 +12,8 @@
         android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="vertical" />
+        android:scrollbars="vertical"
+        android:fadeScrollbars="true" />
 
     <FrameLayout
         android:id="@+id/alt_list"
