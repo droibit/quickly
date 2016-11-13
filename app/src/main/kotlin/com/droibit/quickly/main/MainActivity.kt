@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.ProgressBar
 import com.droibit.quickly.R
@@ -13,8 +14,6 @@ import com.github.droibit.chopstick.bindView
 import com.github.salomonbrys.kodein.Kodein
 import com.github.salomonbrys.kodein.KodeinInjector
 import com.github.salomonbrys.kodein.android.appKodein
-import com.github.salomonbrys.kodein.instance
-import com.squareup.picasso.Picasso
 
 class MainActivity : AppCompatActivity() {
 
@@ -25,8 +24,6 @@ class MainActivity : AppCompatActivity() {
     private val emptyView: View by bindView(R.id.empty)
 
     private val injector = KodeinInjector()
-
-    private val picasso: Picasso by injector.instance()
 
     private lateinit var appInfoAdapter: AppInfoAdapter
 
@@ -39,7 +36,7 @@ class MainActivity : AppCompatActivity() {
         })
 
         appInfoAdapter = AppInfoAdapter(this).apply {
-            addAll(listOf(
+            addAll(
                     AppInfo(
                             packageName = "com.droibit.quickly",
                             name = "Qickly",
@@ -49,7 +46,7 @@ class MainActivity : AppCompatActivity() {
                             preInstalled = false,
                             lastUpdateTime = System.currentTimeMillis()
                     )
-            ))
+            )
         }
         recyclerView.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
@@ -61,5 +58,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.main, menu)
         return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        return super.onOptionsItemSelected(item)
     }
 }

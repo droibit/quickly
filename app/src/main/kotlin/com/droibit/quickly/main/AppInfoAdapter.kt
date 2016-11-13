@@ -3,6 +3,7 @@ package com.droibit.quickly.main
 import android.content.ContentResolver.SCHEME_ANDROID_RESOURCE
 import android.content.Context
 import android.net.Uri
+import android.support.v7.util.SortedList
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -18,19 +19,18 @@ import com.github.salomonbrys.kodein.KodeinInjector
 import com.github.salomonbrys.kodein.android.appKodein
 import com.github.salomonbrys.kodein.instance
 import com.squareup.picasso.Picasso
-import java.util.*
 
 class AppInfoAdapter(
         private val context: Context) : RecyclerView.Adapter<ViewHolder>() {
 
-    private val appInfoList: MutableList<AppInfo> = ArrayList()
+    private val items = SortedList(AppInfo::class.java, SortedListCallback(this))
 
     override fun getItemCount(): Int {
-        return appInfoList.size
+        return items.size()
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(appInfoList[position])
+        holder.bind(items[position])
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -38,10 +38,62 @@ class AppInfoAdapter(
         return ViewHolder(itemView)
     }
 
-    fun addAll(appInfoList: List<AppInfo>) {
-        this.appInfoList.clear()
-        this.appInfoList.addAll(appInfoList)
-        this.notifyDataSetChanged()
+    fun addAll(items: List<AppInfo>) {
+        this.items.addAll(items)
+    }
+
+    fun addAll(vararg items: AppInfo) {
+        this.items.addAll(*items)
+    }
+
+    fun clear() {
+        items.clear()
+    }
+
+    fun isEmpty(): Boolean {
+        return items.size() == 0
+    }
+
+    fun replace(items: List<AppInfo>) {
+        this.items.beginBatchedUpdates()
+        try {
+            this.items.clear()
+            this.items.addAll(items)
+        } finally {
+            this.items.endBatchedUpdates()
+        }
+    }
+}
+
+class SortedListCallback(private val adapter: AppInfoAdapter) : SortedList.Callback<AppInfo>() {
+
+    override fun compare(o1: AppInfo, o2: AppInfo): Int {
+        // TODO:
+        return o1.packageName.compareTo(o2.packageName)
+    }
+
+    override fun areItemsTheSame(item1: AppInfo, item2: AppInfo): Boolean {
+        return item1.packageName == item2.packageName
+    }
+
+    override fun areContentsTheSame(oldItem: AppInfo, newItem: AppInfo): Boolean {
+        return oldItem == newItem
+    }
+
+    override fun onChanged(position: Int, count: Int) {
+        adapter.notifyItemRangeChanged(position, count)
+    }
+
+    override fun onMoved(fromPosition: Int, toPosition: Int) {
+        adapter.notifyItemMoved(fromPosition, toPosition)
+    }
+
+    override fun onRemoved(position: Int, count: Int) {
+        adapter.notifyItemRangeRemoved(position, count)
+    }
+
+    override fun onInserted(position: Int, count: Int) {
+        adapter.notifyItemRangeInserted(position, count)
     }
 }
 
