@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="48dp"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
+    android:translationZ="8dp"
+    tools:ignore="UnusedAttribute,RtlHardcoded">
+
+    <TextView
+        android:id="@+id/app_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        tools:text="99 Apps" />
+
+    <ImageView
+        android:id="@+id/sort_by_icon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="8dp"
+        android:src="@mipmap/ic_launcher" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@id/sort_by_icon"
+        tools:text="Name" />
+
+</RelativeLayout>

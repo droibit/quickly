@@ -20,6 +20,8 @@
             app:layout_scrollFlags="scroll|enterAlways"
             app:popupTheme="@style/AppTheme.Main.PopupOverlay" />
 
+        <include layout="@layout/activity_main_subtitle" />
+
     </android.support.design.widget.AppBarLayout>
 
     <FrameLayout
