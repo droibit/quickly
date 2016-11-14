@@ -3,9 +3,10 @@
     <string name="app_name">Quickly</string>
     <string name="main_no_apps">アプリケーションがありません</string>
     <string name="main_menu_refresh">更新</string>
-    <string name="main_menu_sort_by">並び順</string>
+    <string name="main_menu_sort_by">並べ替え</string>
     <string name="main_menu_show_system">システムアプリを表示</string>
     <string name="app_menu_settings">設定</string>
     <string name="main_subtitle_app_count_format">%1$d アプリ</string>
     <string name="sorted_by_name">名前</string>
+    <string name="main_menu_search">検索</string>
 </resources>
