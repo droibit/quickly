@@ -20,6 +20,11 @@
             app:layout_scrollFlags="scroll|enterAlways"
             app:popupTheme="@style/AppTheme.Main.PopupOverlay" />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorGrey200" />
+
         <include layout="@layout/activity_main_subtitle" />
 
     </android.support.design.widget.AppBarLayout>

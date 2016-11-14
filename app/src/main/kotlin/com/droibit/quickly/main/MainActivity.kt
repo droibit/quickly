@@ -9,9 +9,11 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.ProgressBar
+import android.widget.TextView
 import com.droibit.quickly.R
 import com.droibit.quickly.data.repository.appinfo.AppInfo
 import com.github.droibit.chopstick.bindView
+import com.github.droibit.chopstick.findView
 import com.github.salomonbrys.kodein.Kodein
 import com.github.salomonbrys.kodein.KodeinInjector
 import com.github.salomonbrys.kodein.android.appKodein
@@ -85,6 +87,10 @@ class MainActivity : AppCompatActivity() {
             adapter = appInfoAdapter
             setHasFixedSize(true)
         }
+
+        findView<TextView>(R.id.app_count).apply { text = getString(R.string.main_subtitle_app_count_format, 99) }
+        findView<TextView>(R.id.sort_by_label).apply { text = getString(R.string.sorted_by_name) }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
