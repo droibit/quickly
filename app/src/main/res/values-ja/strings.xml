@@ -9,4 +9,6 @@
     <string name="main_subtitle_app_count_format">%1$d アプリ</string>
     <string name="sorted_by_name">名前</string>
     <string name="main_menu_search">検索</string>
+    <string name="sorted_by_package">パッケージ</string>
+    <string name="sorted_by_last_updated">最終更新日</string>
 </resources>

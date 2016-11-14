@@ -11,4 +11,6 @@
     <string name="main_subtitle_app_count_format">%1$d apps</string>
     <string name="sorted_by_name">Name</string>
     <string name="main_menu_search">Search</string>
+    <string name="sorted_by_package">Package</string>
+    <string name="sorted_by_last_updated">Last updated</string>
 </resources>
