@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -16,6 +17,8 @@ import com.github.salomonbrys.kodein.KodeinInjector
 import com.github.salomonbrys.kodein.android.appKodein
 
 class MainActivity : AppCompatActivity() {
+
+    private val toolbar: Toolbar by bindView(R.id.toolbar)
 
     private val recyclerView: RecyclerView by bindView(R.id.list)
 
@@ -31,6 +34,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        setSupportActionBar(toolbar)
+
         injector.inject(Kodein {
             extend(appKodein())
         })
@@ -40,6 +45,33 @@ class MainActivity : AppCompatActivity() {
                     AppInfo(
                             packageName = "com.droibit.quickly",
                             name = "Qickly",
+                            versionName = "1",
+                            versionCode = 2,
+                            icon = R.mipmap.ic_launcher,
+                            preInstalled = false,
+                            lastUpdateTime = System.currentTimeMillis()
+                    ),
+                    AppInfo(
+                            packageName = "com.droibit.quickly.1",
+                            name = "Qickly1",
+                            versionName = "1",
+                            versionCode = 2,
+                            icon = R.mipmap.ic_launcher,
+                            preInstalled = false,
+                            lastUpdateTime = System.currentTimeMillis()
+                    ),
+                    AppInfo(
+                            packageName = "com.droibit.quickly.2",
+                            name = "Qickly2",
+                            versionName = "1",
+                            versionCode = 2,
+                            icon = R.mipmap.ic_launcher,
+                            preInstalled = false,
+                            lastUpdateTime = System.currentTimeMillis()
+                    ),
+                    AppInfo(
+                            packageName = "com.droibit.quickly.3",
+                            name = "Qickly3",
                             versionName = "1",
                             versionCode = 2,
                             icon = R.mipmap.ic_launcher,
