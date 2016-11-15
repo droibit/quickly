@@ -1,6 +1,7 @@
 package com.droibit.quickly
 
 import android.app.Application
+import com.droibit.quickly.data.config.provideConfigModule
 import com.droibit.quickly.data.provider.providerModule
 import com.droibit.quickly.data.repository.repositoryModule
 import com.github.salomonbrys.kodein.*
@@ -14,6 +15,7 @@ class QuicklyApplication : Application(), KodeinAware {
         import(applicationModule(context, debuggable = BuildConfig.DEBUG))
         import(repositoryModule())
         import(providerModule())
+        import(provideConfigModule())
     }
 
     private val injector = KodeinInjector()
