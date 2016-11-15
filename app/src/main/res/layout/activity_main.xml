@@ -25,7 +25,9 @@
             android:layout_height="1dp"
             android:background="@color/colorGrey200" />
 
-        <include layout="@layout/activity_main_subtitle" />
+        <com.droibit.quickly.main.SubtitleToolbar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
     </android.support.design.widget.AppBarLayout>
 
