@@ -20,7 +20,7 @@ interface MainContract {
 
     interface View {
 
-        fun showAppInfoList(appInfoList: List<AppInfo>)
+        fun showAppInfoList(appInfos: List<AppInfo>)
 
         fun showNoAppInfo()
 
@@ -43,10 +43,17 @@ interface MainContract {
         fun onOptionsItemClicked(menuItem: MenuItem)
     }
 
-    interface LoadTask {
+    interface LoadAppInfoTask {
+
+        sealed class LoadEvent {
+            class OnResult(val appInfos: List<AppInfo>) : LoadEvent()
+            object Nothing : LoadEvent()
+        }
+
+        fun asObservable(): Observable<LoadEvent>
 
         fun isRunning(): Observable<Boolean>
 
-        fun load(forceReload: Boolean): Observable<List<AppInfo>>
+        fun load(forceReload: Boolean)
     }
 }
