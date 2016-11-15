@@ -9,7 +9,7 @@ buildscript {
         rxJavaVersion = '1.2.1'
         rxKotlinVersion = '0.60.0'
         rxAndroidVersion = '1.2.1'
-        rxRelayVersion = '1.1.0'
+        rxRelayVersion = '1.2.0'
         rxActivitylauncherVersion = '0.5.0'
         searchViewVersion = '4.0'
         picassoVersion = '2.5.2'
