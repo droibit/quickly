@@ -16,11 +16,6 @@
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/sort_by"
-        android:title="@string/main_menu_sort_by"
-        app:showAsAction="never" />
-
-    <item
         android:id="@+id/show_system"
         android:title="@string/main_menu_show_system"
         android:checkable="true"

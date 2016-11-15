@@ -9,7 +9,6 @@ interface MainContract {
 
     enum class MenuItem(@IdRes val id: Int) {
         REFRESH(R.id.refresh),
-        SORT_BY(R.id.sort_by),
         SHOW_SYSTEM(R.id.show_system),
         SETTINGS(R.id.settings);
 
