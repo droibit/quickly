@@ -2,6 +2,8 @@ package com.droibit.quickly.data.repository
 
 import com.droibit.quickly.data.repository.appinfo.AppInfoRepository
 import com.droibit.quickly.data.repository.appinfo.AppInfoRepositoryImpl
+import com.droibit.quickly.data.repository.settings.ShowSettingsRepository
+import com.droibit.quickly.data.repository.settings.ShowSettingsRepositoryImpl
 import com.droibit.quickly.data.repository.source.AppInfoDataSource
 import com.droibit.quickly.data.repository.source.AppInfoDataSourceImpl
 import com.github.salomonbrys.kodein.Kodein
@@ -17,5 +19,9 @@ fun repositoryModule() = Kodein.Module {
                 orma = instance(),
                 appInfoSource = instance()
         )
+    }
+
+    bind<ShowSettingsRepository>() with singleton {
+        ShowSettingsRepositoryImpl(appConfig = instance())
     }
 }
