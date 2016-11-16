@@ -54,6 +54,6 @@ interface MainContract {
 
         fun isRunning(): Observable<Boolean>
 
-        fun load(forceReload: Boolean)
+        fun requestLoad(forceReload: Boolean = false)
     }
 }

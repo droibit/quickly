@@ -9,88 +9,61 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.ProgressBar
-import android.widget.TextView
 import com.droibit.quickly.R
 import com.droibit.quickly.data.repository.appinfo.AppInfo
 import com.github.droibit.chopstick.bindView
-import com.github.droibit.chopstick.findView
 import com.github.salomonbrys.kodein.Kodein
 import com.github.salomonbrys.kodein.KodeinInjector
 import com.github.salomonbrys.kodein.android.appKodein
+import com.github.salomonbrys.kodein.instance
+import timber.log.Timber
 
-class MainActivity : AppCompatActivity() {
+
+class MainActivity : AppCompatActivity(), MainContract.View {
 
     private val toolbar: Toolbar by bindView(R.id.toolbar)
 
     private val recyclerView: RecyclerView by bindView(R.id.list)
 
-    private val progressBar: ProgressBar by bindView(R.id.progress)
-
     private val emptyView: View by bindView(R.id.empty)
+
+    private val contentView: View by bindView(R.id.content)
+
+    private val progressBar: ProgressBar by bindView(R.id.progress)
 
     private val injector = KodeinInjector()
 
-    private lateinit var appInfoAdapter: AppInfoAdapter
+    private val presenter: MainContract.Presenter by injector.instance()
+
+    private val appInfoAdapter: AppInfoAdapter by lazy { AppInfoAdapter(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         setSupportActionBar(toolbar)
 
         injector.inject(Kodein {
             extend(appKodein())
+            import(mainModule(view = this@MainActivity))
         })
 
-        appInfoAdapter = AppInfoAdapter(this).apply {
-            addAll(
-                    AppInfo(
-                            packageName = "com.droibit.quickly",
-                            name = "Qickly",
-                            versionName = "1",
-                            versionCode = 2,
-                            icon = R.mipmap.ic_launcher,
-                            preInstalled = false,
-                            lastUpdateTime = System.currentTimeMillis()
-                    ),
-                    AppInfo(
-                            packageName = "com.droibit.quickly.1",
-                            name = "Qickly1",
-                            versionName = "1",
-                            versionCode = 2,
-                            icon = R.mipmap.ic_launcher,
-                            preInstalled = false,
-                            lastUpdateTime = System.currentTimeMillis()
-                    ),
-                    AppInfo(
-                            packageName = "com.droibit.quickly.2",
-                            name = "Qickly2",
-                            versionName = "1",
-                            versionCode = 2,
-                            icon = R.mipmap.ic_launcher,
-                            preInstalled = false,
-                            lastUpdateTime = System.currentTimeMillis()
-                    ),
-                    AppInfo(
-                            packageName = "com.droibit.quickly.3",
-                            name = "Qickly3",
-                            versionName = "1",
-                            versionCode = 2,
-                            icon = R.mipmap.ic_launcher,
-                            preInstalled = false,
-                            lastUpdateTime = System.currentTimeMillis()
-                    )
-            )
-        }
         recyclerView.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
             adapter = appInfoAdapter
             setHasFixedSize(true)
         }
 
-        findView<TextView>(R.id.app_count).apply { text = getString(R.string.main_subtitle_app_count_format, 99) }
-        findView<TextView>(R.id.sort_by_label).apply { text = getString(R.string.sorted_by_name) }
+        presenter.onCreate(shouldLoad = false)
+    }
 
+    override fun onResume() {
+        super.onResume()
+        presenter.onResume()
+    }
+
+    override fun onPause() {
+        presenter.onPause()
+        super.onPause()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -98,7 +71,27 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        return super.onOptionsItemSelected(item)
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        presenter.onOptionsItemClicked(MainContract.MenuItem.from(item.itemId))
+        return true
+    }
+
+    // MainContract.View
+
+    override fun showAppInfoList(appInfos: List<AppInfo>) {
+        Timber.d("showAppInfoList(appInfos=${appInfos.size})")
+        emptyView.visibility = View.GONE
+        recyclerView.visibility = View.VISIBLE
+        appInfoAdapter.addAll(appInfos)
+    }
+
+    override fun showNoAppInfo() {
+        TODO()
+    }
+
+    override fun setLoadingIndicator(active: Boolean) {
+        Timber.d("setLoadingIndicator(active=%b)", active)
+        progressBar.visibility = if (active) View.VISIBLE else View.GONE
+        contentView.visibility = if (active) View.GONE else View.VISIBLE
     }
 }
