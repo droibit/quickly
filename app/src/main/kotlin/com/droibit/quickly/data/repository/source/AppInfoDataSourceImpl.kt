@@ -25,7 +25,7 @@ class AppInfoDataSourceImpl(private val pm: PackageManager) : AppInfoDataSource 
                 packageName = packageName,
                 name = "${applicationInfo.loadLabel(pm)}",
                 versionCode = versionCode,
-                versionName = versionName ?: "null",
+                versionName = versionName ?: "(NULL)",
                 icon = applicationInfo.icon,
                 preInstalled = (applicationInfo.flags and FLAG_SYSTEM) == 1,
                 lastUpdateTime = lastUpdateTime
