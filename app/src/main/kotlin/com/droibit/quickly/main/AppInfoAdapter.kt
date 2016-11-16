@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import com.bumptech.glide.Glide
 import com.droibit.quickly.R
 import com.droibit.quickly.data.provider.date.DateFormatter
 import com.droibit.quickly.data.repository.appinfo.AppInfo
@@ -18,7 +19,6 @@ import com.github.salomonbrys.kodein.Kodein
 import com.github.salomonbrys.kodein.KodeinInjector
 import com.github.salomonbrys.kodein.android.appKodein
 import com.github.salomonbrys.kodein.instance
-import com.squareup.picasso.Picasso
 
 class AppInfoAdapter(
         private val context: Context) : RecyclerView.Adapter<ViewHolder>() {
@@ -111,8 +111,6 @@ class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     private val injector = KodeinInjector()
 
-    private val picasso: Picasso by injector.instance()
-
     private val dateFormatter: DateFormatter by injector.instance()
 
     init {
@@ -122,7 +120,8 @@ class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     }
 
     fun bind(appInfo: AppInfo) {
-        picasso.load(appInfo.iconUri)
+        Glide.with(itemView.context)
+                .load(appInfo.iconUri)
                 .error(R.mipmap.ic_launcher)
                 .into(iconView)
 
