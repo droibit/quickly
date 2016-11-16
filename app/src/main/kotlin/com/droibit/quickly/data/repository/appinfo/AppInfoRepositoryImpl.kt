@@ -27,11 +27,14 @@ class AppInfoRepositoryImpl(
                 .first { it.isNotEmpty() }
     }
 
-    override fun addOrUpdate(appInfo: AppInfo): Single<Boolean> {
-        return orma.prepareInsertIntoAppInfoAsObservable(OnConflict.REPLACE)
-                .flatMap { it.executeAsObservable(appInfo) }
-                .map { it > 0 }
-                .doOnSuccess { if (it) cache[appInfo.packageName] = appInfo }
+    override fun addOrUpdate(packageName: String): Single<Boolean> {
+        return appInfoSource.get(packageName)
+                .flatMap { appInfo ->
+                    orma.prepareInsertIntoAppInfoAsObservable(OnConflict.REPLACE)
+                            .flatMap { it.executeAsObservable(appInfo) }
+                            .map { it > 0 }
+                            .doOnSuccess { if (it) cache[packageName] = appInfo }
+                }
     }
 
     override fun delete(packageName: String): Single<Boolean> {

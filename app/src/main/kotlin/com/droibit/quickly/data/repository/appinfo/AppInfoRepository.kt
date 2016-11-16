@@ -7,7 +7,7 @@ interface AppInfoRepository {
 
     fun loadAll(forceReload: Boolean = false): Observable<List<AppInfo>>
 
-    fun addOrUpdate(appInfo: AppInfo): Single<Boolean>
+    fun addOrUpdate(packageName: String): Single<Boolean>
 
     fun delete(packageName: String): Single<Boolean>
 }

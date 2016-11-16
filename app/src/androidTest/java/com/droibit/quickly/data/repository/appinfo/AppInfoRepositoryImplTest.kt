@@ -10,6 +10,7 @@ import org.junit.runner.RunWith
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
 import rx.Observable
+import rx.Single
 import rx.observers.TestSubscriber
 
 @RunWith(AndroidJUnit4::class)
@@ -96,8 +97,11 @@ class AppInfoRepositoryImplTest {
                         lastUpdateTime = 12
                 )
         )
+
         expectedAppInfoList.forEach {
-            repository.addOrUpdate(appInfo = it)
+            `when`(appInfoSource.get(it.packageName)).thenReturn(Single.just(it))
+
+            repository.addOrUpdate(packageName = it.packageName)
                     .subscribe { assertThat(it).isTrue() }
         }
 
@@ -247,7 +251,9 @@ class AppInfoRepositoryImplTest {
                 )
         )
         expectedAppInfoList.forEach { appInfo ->
-            repository.addOrUpdate(appInfo)
+            `when`(appInfoSource.get(appInfo.packageName)).thenReturn(Single.just(appInfo))
+
+            repository.addOrUpdate(appInfo.packageName)
                     .subscribe { added ->
                         assertThat(added).isTrue()
                         assertThat(repository.cache).containsEntry(appInfo.packageName, appInfo)
@@ -267,7 +273,9 @@ class AppInfoRepositoryImplTest {
                 preInstalled = true,
                 lastUpdateTime = 4
         ).apply {
-            repository.addOrUpdate(appInfo = this)
+            `when`(appInfoSource.get(packageName)).thenReturn(Single.just(this))
+
+            repository.addOrUpdate(packageName)
                     .subscribe { assertThat(it).isTrue() }
             assertThat(orma.selectFromAppInfo().toList()).containsExactly(this)
             assertThat(repository.cache).containsEntry(packageName, this)
@@ -282,7 +290,9 @@ class AppInfoRepositoryImplTest {
                 preInstalled = true,
                 lastUpdateTime = 5
         ).run {
-            repository.addOrUpdate(appInfo = this)
+            `when`(appInfoSource.get(packageName)).thenReturn(Single.just(this))
+
+            repository.addOrUpdate(packageName)
                     .subscribe { assertThat(it).isTrue() }
             assertThat(orma.selectFromAppInfo().toList()).containsExactly(this)
             assertThat(repository.cache).containsEntry(packageName, this)
@@ -300,7 +310,9 @@ class AppInfoRepositoryImplTest {
                 preInstalled = true,
                 lastUpdateTime = 4
         ).apply {
-            repository.addOrUpdate(appInfo = this)
+            `when`(appInfoSource.get(packageName)).thenReturn(Single.just(this))
+
+            repository.addOrUpdate(packageName)
                     .subscribe { assertThat(it).isTrue() }
         }
         assertThat(orma.selectFromAppInfo().toList()).containsExactly(appInfo)
