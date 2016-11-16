@@ -3,6 +3,7 @@ package com.droibit.quickly.main
 import com.droibit.quickly.data.config.ApplicationConfig
 import com.droibit.quickly.data.repository.appinfo.AppInfo
 import com.droibit.quickly.data.repository.appinfo.AppInfoRepository
+import com.droibit.quickly.data.repository.settings.ShowSettingsRepository
 import com.droibit.quickly.main.MainContract.LoadAppInfoTask.LoadEvent
 import com.droibit.quickly.rules.RxSchedulersOverrideRule
 import com.jakewharton.rxrelay.BehaviorRelay
@@ -35,6 +36,9 @@ class LoadAppInfoTaskTest {
     private lateinit var appInfoRepository: AppInfoRepository
 
     @Mock
+    private lateinit var showSettingsRepository: ShowSettingsRepository
+
+    @Mock
     private lateinit var appConfig: ApplicationConfig
 
     @Mock
@@ -49,6 +53,7 @@ class LoadAppInfoTaskTest {
         appInfosRelay = BehaviorRelay.create()
         task = LoadAppInfoTask(
                 appInfoRepository,
+                showSettingsRepository,
                 appConfig,
                 appInfosRelay,
                 runningRelay
@@ -56,13 +61,33 @@ class LoadAppInfoTaskTest {
     }
 
     @Test
-    fun load_onResult() {
-        val mockAppInfos = Collections.singletonList(mock(AppInfo::class.java))
-        `when`(appInfoRepository.loadAll(anyBoolean())).thenReturn(mockAppInfos.toSingletonObservable())
+    fun requestLoad_allApps_onResult() {
+        val expectedAppInfoList = listOf(
+                AppInfo(
+                        packageName = "com.droibit.quickly.1",
+                        name = "Qickly1",
+                        versionName = "1",
+                        versionCode = 2,
+                        icon = 3,
+                        preInstalled = false,
+                        lastUpdateTime = 4
+                ),
+                AppInfo(
+                        packageName = "com.droibit.quickly.3",
+                        name = "Qickly3",
+                        versionName = "9",
+                        versionCode = 10,
+                        icon = 11,
+                        preInstalled = true,
+                        lastUpdateTime = 12
+                )
+        )
+        `when`(appInfoRepository.loadAll(anyBoolean())).thenReturn(expectedAppInfoList.toSingletonObservable())
+        `when`(showSettingsRepository.isShowSystem).thenReturn(true)
 
         val testSubscriber = TestSubscriber.create<LoadEvent>()
         task.asObservable().subscribe(testSubscriber)
-        task.load(forceReload = true)
+        task.requestLoad(forceReload = true)
 
         testSubscriber.assertNoTerminalEvent()
         testSubscriber.assertValueCount(1)
@@ -71,7 +96,7 @@ class LoadAppInfoTaskTest {
         assertThat(loadEvent).isExactlyInstanceOf(LoadEvent.OnResult::class.java)
 
         val onResult = loadEvent as LoadEvent.OnResult
-        assertThat(onResult.appInfos).isSameAs(mockAppInfos)
+        assertThat(onResult.appInfos).isEqualTo(expectedAppInfoList)
 
         val inOrder = inOrder(runningRelay)
         inOrder.verify(runningRelay).call(true)
@@ -79,12 +104,33 @@ class LoadAppInfoTaskTest {
     }
 
     @Test
-    fun load_onResultWithError() {
-        `when`(appInfoRepository.loadAll(anyBoolean())).thenReturn(Observable.error(RuntimeException()))
+    fun requestLoad_onlyInstalled_onResult() {
+        val expectedAppInfoList = listOf(
+                AppInfo(
+                        packageName = "com.droibit.quickly.1",
+                        name = "Qickly1",
+                        versionName = "1",
+                        versionCode = 2,
+                        icon = 3,
+                        preInstalled = false,
+                        lastUpdateTime = 4
+                ),
+                AppInfo(
+                        packageName = "com.droibit.quickly.3",
+                        name = "Qickly3",
+                        versionName = "9",
+                        versionCode = 10,
+                        icon = 11,
+                        preInstalled = true,
+                        lastUpdateTime = 12
+                )
+        )
+        `when`(appInfoRepository.loadAll(anyBoolean())).thenReturn(expectedAppInfoList.toSingletonObservable())
+        `when`(showSettingsRepository.isShowSystem).thenReturn(false)
 
         val testSubscriber = TestSubscriber.create<LoadEvent>()
         task.asObservable().subscribe(testSubscriber)
-        task.load(forceReload = true)
+        task.requestLoad(forceReload = true)
 
         testSubscriber.assertNoTerminalEvent()
         testSubscriber.assertValueCount(1)
@@ -93,7 +139,29 @@ class LoadAppInfoTaskTest {
         assertThat(loadEvent).isExactlyInstanceOf(LoadEvent.OnResult::class.java)
 
         val onResult = loadEvent as LoadEvent.OnResult
-        assertThat(onResult.appInfos).isSameAs(Collections.emptyList<AppInfo>())
+        assertThat(onResult.appInfos).isEqualTo(expectedAppInfoList.filter { !it.preInstalled })
+
+        val inOrder = inOrder(runningRelay)
+        inOrder.verify(runningRelay).call(true)
+        inOrder.verify(runningRelay).call(false)
+    }
+
+    @Test
+    fun  requestLoad_occurError_onResult() {
+        `when`(appInfoRepository.loadAll(anyBoolean())).thenReturn(Observable.error(RuntimeException()))
+
+        val testSubscriber = TestSubscriber.create<LoadEvent>()
+        task.asObservable().subscribe(testSubscriber)
+        task.requestLoad(forceReload = true)
+
+        testSubscriber.assertNoTerminalEvent()
+        testSubscriber.assertValueCount(1)
+
+        val loadEvent = testSubscriber.onNextEvents.first()
+        assertThat(loadEvent).isExactlyInstanceOf(LoadEvent.OnResult::class.java)
+
+        val onResult = loadEvent as LoadEvent.OnResult
+        assertThat(onResult.appInfos).isEqualTo(Collections.emptyList<AppInfo>())
 
         val inOrder = inOrder(runningRelay)
         inOrder.verify(runningRelay).call(true)
