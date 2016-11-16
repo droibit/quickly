@@ -8,6 +8,7 @@ import com.droibit.quickly.main.MainContract.LoadAppInfoTask.LoadEvent
 import com.jakewharton.rxrelay.BehaviorRelay
 import rx.Observable
 import rx.schedulers.Schedulers
+import timber.log.Timber
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -28,6 +29,7 @@ class LoadAppInfoTask(
                 .onErrorReturn { Collections.emptyList() }
                 .timestamp()
                 .flatMap {
+                    Timber.d("LoadAppInfo: ${it.timestampMillis}ms")
                     return@flatMap Observable.from(it.value)
                             .filter { filterIfOnlyInstalled(appInfo = it) }
                             // TODO: sort
