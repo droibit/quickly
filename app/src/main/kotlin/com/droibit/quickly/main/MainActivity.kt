@@ -50,7 +50,6 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         recyclerView.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
             adapter = appInfoAdapter
-            setHasFixedSize(true)
         }
 
         presenter.onCreate(shouldLoad = false)

@@ -5,11 +5,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="6dp"
-    android:layout_marginBottom="6dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="8dp"
     android:layout_marginLeft="@dimen/activity_vertical_margin"
     android:layout_marginRight="@dimen/activity_vertical_margin"
-    app:cardCornerRadius="2dp" >
+    app:cardCornerRadius="2dp"
+    tools:ignore="RtlHardcoded,ContentDescription">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -23,23 +24,37 @@
             android:layout_alignParentTop="true"
             android:layout_marginLeft="@dimen/card_content_side_margin"
             android:layout_marginRight="@dimen/card_content_side_margin"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="12dp"
             android:layout_marginBottom="4dp"
             android:scaleType="centerInside"
             tools:src="@mipmap/ic_launcher" />
+
+        <ImageView
+            android:id="@+id/more"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="8dp"
+            android:padding="4dp"
+            android:clickable="true"
+            android:scaleType="center"
+            android:background="?attr/actionBarItemBackground"
+            app:srcCompat="@drawable/ic_more_menu" />
 
         <TextView
             android:id="@+id/app_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_alignTop="@+id/app_icon"
             android:layout_toRightOf="@id/app_icon"
+            android:layout_toLeftOf="@id/more"
             android:layout_marginTop="6dp"
-            android:layout_marginRight="@dimen/card_content_side_margin"
+            android:layout_marginBottom="4dp"
             android:ellipsize="end"
-            android:maxLines="1"
+            android:maxLines="2"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@android:color/black"
             tools:text="@string/app_name" />
@@ -48,9 +63,10 @@
             android:id="@+id/app_version"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/app_icon"
+            android:layout_below="@id/app_name"
             android:layout_toRightOf="@id/app_icon"
             android:layout_marginRight="@dimen/card_content_side_margin"
+            android:layout_marginBottom="4dp"
             android:ellipsize="end"
             android:maxLines="1"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
@@ -60,11 +76,13 @@
             android:id="@+id/app_package"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/app_icon"
-            android:layout_alignLeft="@id/app_version"
+            android:layout_below="@id/app_version"
+            android:layout_alignParentLeft="true"
             android:layout_marginRight="@dimen/card_content_side_margin"
+            android:layout_marginLeft="@dimen/card_content_side_margin"
             android:layout_marginBottom="4dp"
             android:ellipsize="middle"
+            android:gravity="right"
             android:maxLines="1"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
             tools:text="com.droibit.quickly" />
@@ -74,40 +92,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/app_package"
-            android:layout_alignLeft="@id/app_name"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="@dimen/card_content_side_margin"
             android:layout_marginRight="@dimen/card_content_side_margin"
-            android:layout_marginBottom="4dp"
+            android:layout_marginBottom="8dp"
             android:ellipsize="end"
             android:maxLines="1"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
             android:gravity="right"
             tools:text="16/10/01 01:00" />
-
-        <View
-            android:id="@+id/content_divider"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/colorGrey200"
-            android:layout_below="@id/app_last_update_time"
-            />
-
-        <ImageView
-            android:id="@+id/more"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_below="@id/content_divider"
-            android:paddingTop="8dp"
-            android:paddingRight="8dp"
-            android:paddingLeft="8dp"
-            android:paddingBottom="8dp"
-            android:layout_marginRight="8dp"
-            android:clickable="true"
-            android:scaleType="center"
-            android:background="?attr/actionBarItemBackground"
-            app:srcCompat="@drawable/ic_more_menu"
-            />
-
 
     </RelativeLayout>
 
