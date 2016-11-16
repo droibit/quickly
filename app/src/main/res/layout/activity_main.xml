@@ -26,6 +26,7 @@
             android:background="@color/colorGrey200" />
 
         <com.droibit.quickly.main.SubtitleToolbar
+            android:id="@+id/subtitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 

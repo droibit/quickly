@@ -4,7 +4,9 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import android.widget.RelativeLayout
+import android.widget.TextView
 import com.droibit.quickly.R
+import com.github.droibit.chopstick.bindView
 
 
 class SubtitleToolbar @JvmOverloads constructor(
@@ -12,7 +14,14 @@ class SubtitleToolbar @JvmOverloads constructor(
         attrs: AttributeSet? = null,
         defStyleAttr: Int = 0) : RelativeLayout(context, attrs, defStyleAttr) {
 
+    private val appCountView: TextView by bindView(R.id.app_count)
+
     init {
         View.inflate(context, R.layout.activity_main_subtitle, this)
+    }
+
+    fun setAppCount(count: Int) {
+        check(count > 0)
+        appCountView.text = context.getString(R.string.main_subtitle_app_count_format, count)
     }
 }

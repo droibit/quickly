@@ -31,6 +31,8 @@ class MainActivity : AppCompatActivity(), MainContract.View {
 
     private val progressBar: ProgressBar by bindView(R.id.progress)
 
+    private val subtitleToolbar: SubtitleToolbar by bindView(R.id.subtitle)
+
     private val injector = KodeinInjector()
 
     private val presenter: MainContract.Presenter by injector.instance()
@@ -82,6 +84,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         emptyView.visibility = View.GONE
         recyclerView.visibility = View.VISIBLE
         appInfoAdapter.addAll(appInfos)
+        subtitleToolbar.setAppCount(appInfos.size)
     }
 
     override fun showNoAppInfo() {
