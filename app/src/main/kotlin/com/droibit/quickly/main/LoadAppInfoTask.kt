@@ -8,6 +8,7 @@ import com.droibit.quickly.main.MainContract.LoadAppInfoTask.LoadEvent
 import com.jakewharton.rxrelay.BehaviorRelay
 import rx.Observable
 import rx.schedulers.Schedulers
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 class LoadAppInfoTask(
@@ -25,12 +26,11 @@ class LoadAppInfoTask(
     override fun requestLoad(forceReload: Boolean) {
         Observable.zip(
                 Observable.just(null).timestamp(),
-                appInfoRepository.loadAll(forceReload)
-                        .flatMap { Observable.from(it).filter { filterIfOnlyInstalled(it) }.toList() }
-                        .timestamp()
+                loadAppInfos(forceReload).timestamp()
         ) { f, s -> Pair(s.timestampMillis - f.timestampMillis, s.value) }
                 .flatMap {
                     val (elapsedTimeMillis, appInfos) = it
+                    Timber.d("loadAppInfo(forceReload=$forceReload): ${elapsedTimeMillis}ms")
                     return@flatMap Observable.just(appInfos).run {
                         val delayMillis = appConfig.minTaskDurationMillis - elapsedTimeMillis
                         if (delayMillis > 0L) delay(delayMillis, TimeUnit.MILLISECONDS, Schedulers.immediate()) else this
@@ -48,5 +48,10 @@ class LoadAppInfoTask(
             return true
         }
         return !appInfo.preInstalled
+    }
+
+    private fun loadAppInfos(forceReload: Boolean): Observable<List<AppInfo>> {
+        return appInfoRepository.loadAll(forceReload)
+                .flatMap { Observable.from(it).filter { filterIfOnlyInstalled(it) }.toList() }
     }
 }
