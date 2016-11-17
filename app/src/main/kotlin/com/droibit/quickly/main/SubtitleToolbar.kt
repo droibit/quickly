@@ -20,8 +20,10 @@ class SubtitleToolbar @JvmOverloads constructor(
         View.inflate(context, R.layout.activity_main_subtitle, this)
     }
 
-    fun setAppCount(count: Int) {
-        check(count > 0)
-        appCountView.text = context.getString(R.string.main_subtitle_app_count_format, count)
-    }
+    var appCount: Int = 0
+        set(value) {
+            if (value > 0) {
+                appCountView.text = context.getString(R.string.main_subtitle_app_count_format, value)
+            }
+        }
 }

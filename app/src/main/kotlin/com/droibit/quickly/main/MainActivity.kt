@@ -84,7 +84,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         emptyView.visibility = View.GONE
         recyclerView.visibility = View.VISIBLE
         appInfoAdapter.addAll(appInfos)
-        subtitleToolbar.setAppCount(appInfos.size)
+        subtitleToolbar.appCount = appInfos.size
     }
 
     override fun showNoAppInfo() {
