@@ -13,14 +13,11 @@ import org.junit.Rule
 import org.junit.Test
 import org.mockito.Matchers.anyBoolean
 import org.mockito.Mock
-import org.mockito.Mockito.*
+import org.mockito.Mockito.`when`
+import org.mockito.Mockito.inOrder
 import org.mockito.junit.MockitoJUnit
-import rx.Observable
 import rx.lang.kotlin.toSingletonObservable
 import rx.observers.TestSubscriber
-import rx.schedulers.Schedulers
-import java.util.*
-import java.util.concurrent.TimeUnit
 
 class LoadAppInfoTaskTest {
 
@@ -140,28 +137,6 @@ class LoadAppInfoTaskTest {
 
         val onResult = loadEvent as LoadEvent.OnResult
         assertThat(onResult.appInfos).isEqualTo(expectedAppInfoList.filter { !it.preInstalled })
-
-        val inOrder = inOrder(runningRelay)
-        inOrder.verify(runningRelay).call(true)
-        inOrder.verify(runningRelay).call(false)
-    }
-
-    @Test
-    fun  requestLoad_occurError_onResult() {
-        `when`(appInfoRepository.loadAll(anyBoolean())).thenReturn(Observable.error(RuntimeException()))
-
-        val testSubscriber = TestSubscriber.create<LoadEvent>()
-        task.asObservable().subscribe(testSubscriber)
-        task.requestLoad(forceReload = true)
-
-        testSubscriber.assertNoTerminalEvent()
-        testSubscriber.assertValueCount(1)
-
-        val loadEvent = testSubscriber.onNextEvents.first()
-        assertThat(loadEvent).isExactlyInstanceOf(LoadEvent.OnResult::class.java)
-
-        val onResult = loadEvent as LoadEvent.OnResult
-        assertThat(onResult.appInfos).isEqualTo(Collections.emptyList<AppInfo>())
 
         val inOrder = inOrder(runningRelay)
         inOrder.verify(runningRelay).call(true)

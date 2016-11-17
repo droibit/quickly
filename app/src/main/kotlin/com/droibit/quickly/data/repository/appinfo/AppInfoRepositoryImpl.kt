@@ -25,6 +25,7 @@ class AppInfoRepositoryImpl(
         }
         return Observable.concat(getLocalAppInfo(), storedAppInfo)
                 .first { it.isNotEmpty() }
+                .onErrorReturn { Collections.emptyList() }
     }
 
     override fun addOrUpdate(packageName: String): Single<Boolean> {
