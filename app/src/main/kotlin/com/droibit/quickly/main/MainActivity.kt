@@ -10,8 +10,11 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ProgressBar
 import com.droibit.quickly.R
+import com.droibit.quickly.data.provider.comparators.AppInfoComparators
 import com.droibit.quickly.data.repository.appinfo.AppInfo
 import com.droibit.quickly.data.repository.settings.ShowSettingsRepository
+import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.Order
+import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.SortBy
 import com.github.droibit.chopstick.bindView
 import com.github.salomonbrys.kodein.Kodein
 import com.github.salomonbrys.kodein.KodeinInjector
@@ -38,6 +41,8 @@ class MainActivity : AppCompatActivity(), MainContract.View {
     private val injector = KodeinInjector()
 
     private val presenter: MainContract.Presenter by injector.instance()
+
+    private val appInfoComparators: AppInfoComparators by injector.instance()
 
     private val appInfoAdapter: AppInfoAdapter by lazy { AppInfoAdapter(this) }
 
@@ -99,7 +104,8 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         contentView.visibility = if (active) View.GONE else View.VISIBLE
     }
 
-    override fun setComparator(comparator: Comparator<AppInfo>) {
-        appInfoAdapter.comparator = comparator
+    override fun setSortBy(sortBy: SortBy, order: Order) {
+        appInfoAdapter.comparator = appInfoComparators.get(sortBy, order)
+        subtitleToolbar.sortBy(sortBy, order)
     }
 }

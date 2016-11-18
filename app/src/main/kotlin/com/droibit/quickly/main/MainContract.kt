@@ -3,8 +3,9 @@ package com.droibit.quickly.main
 import android.support.annotation.IdRes
 import com.droibit.quickly.R
 import com.droibit.quickly.data.repository.appinfo.AppInfo
+import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.Order
+import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.SortBy
 import rx.Observable
-import java.util.*
 
 interface MainContract {
 
@@ -27,7 +28,7 @@ interface MainContract {
 
         fun setLoadingIndicator(active: Boolean)
 
-        fun setComparator(comparator: Comparator<AppInfo>)
+        fun setSortBy(sortBy: SortBy, order: Order)
     }
 
     interface Navigator {

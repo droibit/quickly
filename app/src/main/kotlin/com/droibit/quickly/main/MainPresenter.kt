@@ -15,7 +15,7 @@ class MainPresenter(
     private var cacheEvent: LoadEvent? = null
 
     override fun onCreate(shouldLoad: Boolean) {
-        view.setComparator(showSettingsRepository.currentComparator)
+        view.setSortBy(showSettingsRepository.sortBy, showSettingsRepository.order)
         loadTask.requestLoad(shouldLoad)
     }
 

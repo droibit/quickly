@@ -2,6 +2,8 @@ package com.droibit.quickly.main
 
 import com.droibit.quickly.data.repository.appinfo.AppInfo
 import com.droibit.quickly.data.repository.settings.ShowSettingsRepository
+import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.Order
+import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.SortBy
 import com.droibit.quickly.main.MainContract.LoadAppInfoTask.LoadEvent
 import com.droibit.quickly.rules.RxSchedulersOverrideRule
 import com.jakewharton.rxrelay.BehaviorRelay
@@ -57,6 +59,15 @@ class MainPresenterTest {
 
         presenter.onCreate(shouldLoad = false)
         verify(loadTask).requestLoad(false)
+    }
+
+    @Test
+    fun onCreate_setSortBy() {
+        `when`(showSettingsRepository.sortBy).thenReturn(SortBy.LAST_UPDATED)
+        `when`(showSettingsRepository.order).thenReturn(Order.DESC)
+
+        presenter.onCreate(true)
+        verify(view).setSortBy(SortBy.LAST_UPDATED, Order.DESC)
     }
 
     @Test
