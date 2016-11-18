@@ -7,9 +7,7 @@ import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.Order
 import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.SortBy
 import java.util.*
 
-class ShowSettingsRepositoryImpl(
-        appConfig: ApplicationConfig,
-        private val comparators: AppInfoComparators) : KotprefModel(), ShowSettingsRepository {
+class ShowSettingsRepositoryImpl(appConfig: ApplicationConfig) : KotprefModel(), ShowSettingsRepository {
 
     override val kotprefName = appConfig.showSettingsPrefsName
 
@@ -18,7 +16,4 @@ class ShowSettingsRepositoryImpl(
     override var sortBy: SortBy by enumValuePrefVar(SortBy::class, default = SortBy.NAME)
 
     override var order: Order by enumValuePrefVar(Order::class, default = Order.ASC)
-
-    override val currentComparator: Comparator<AppInfo>
-        get() = comparators.get(sortBy, order)
 }

@@ -1,4 +1,4 @@
-package com.droibit.quickly.data.repository.settings
+package com.droibit.quickly.data.provider.comparators
 
 import com.droibit.quickly.data.repository.appinfo.AppInfo
 import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.Order

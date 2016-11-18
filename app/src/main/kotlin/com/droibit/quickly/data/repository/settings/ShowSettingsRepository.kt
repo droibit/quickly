@@ -1,8 +1,5 @@
 package com.droibit.quickly.data.repository.settings
 
-import com.droibit.quickly.data.repository.appinfo.AppInfo
-import java.util.*
-
 interface ShowSettingsRepository {
 
     enum class SortBy(val index: Int) {
@@ -25,6 +22,4 @@ interface ShowSettingsRepository {
     var sortBy: SortBy
 
     var order: Order
-
-    val currentComparator: Comparator<AppInfo>
 }
