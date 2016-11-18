@@ -24,18 +24,16 @@ import java.util.*
 class AppInfoAdapter(
         private val context: Context) : RecyclerView.Adapter<ViewHolder>() {
 
-    private val soortedItemCallback = SortedListCallback(this)
+    private val sortedItemsCallback = SortedListCallback(this)
 
-    private val items = SortedList(AppInfo::class.java, soortedItemCallback)
+    private val items = SortedList(AppInfo::class.java, sortedItemsCallback)
 
     val isEmpty: Boolean
         get() = items.size() == 0
 
     var comparator: Comparator<AppInfo>
-        get() = checkNotNull(soortedItemCallback.comparator)
-        set(value) {
-            soortedItemCallback.comparator = value
-        }
+        get() = sortedItemsCallback.comparator
+        set(value) { sortedItemsCallback.comparator = value }
 
     override fun getItemCount(): Int {
         return items.size()
@@ -76,10 +74,10 @@ class AppInfoAdapter(
 private class SortedListCallback(private val adapter: AppInfoAdapter)
     : SortedList.Callback<AppInfo>() {
 
-    var comparator: Comparator<AppInfo>? = null
+    var comparator = Comparator<AppInfo> { lhs, rhs -> throw NotImplementedError() }
 
     override fun compare(o1: AppInfo, o2: AppInfo): Int {
-        return checkNotNull(comparator).compare(o1, o2)
+        return comparator.compare(o1, o2)
     }
 
     override fun areItemsTheSame(item1: AppInfo, item2: AppInfo): Boolean {
