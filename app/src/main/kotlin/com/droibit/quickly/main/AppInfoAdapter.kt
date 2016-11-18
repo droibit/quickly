@@ -19,11 +19,23 @@ import com.github.salomonbrys.kodein.Kodein
 import com.github.salomonbrys.kodein.KodeinInjector
 import com.github.salomonbrys.kodein.android.appKodein
 import com.github.salomonbrys.kodein.instance
+import java.util.*
 
 class AppInfoAdapter(
         private val context: Context) : RecyclerView.Adapter<ViewHolder>() {
 
-    private val items = SortedList(AppInfo::class.java, SortedListCallback(this))
+    private val soortedItemCallback = SortedListCallback(this)
+
+    private val items = SortedList(AppInfo::class.java, soortedItemCallback)
+
+    val isEmpty: Boolean
+        get() = items.size() == 0
+
+    var comparator: Comparator<AppInfo>
+        get() = checkNotNull(soortedItemCallback.comparator)
+        set(value) {
+            soortedItemCallback.comparator = value
+        }
 
     override fun getItemCount(): Int {
         return items.size()
@@ -50,10 +62,6 @@ class AppInfoAdapter(
         items.clear()
     }
 
-    fun isEmpty(): Boolean {
-        return items.size() == 0
-    }
-
     fun replace(items: List<AppInfo>) {
         this.items.beginBatchedUpdates()
         try {
@@ -65,11 +73,13 @@ class AppInfoAdapter(
     }
 }
 
-class SortedListCallback(private val adapter: AppInfoAdapter) : SortedList.Callback<AppInfo>() {
+private class SortedListCallback(private val adapter: AppInfoAdapter)
+    : SortedList.Callback<AppInfo>() {
+
+    var comparator: Comparator<AppInfo>? = null
 
     override fun compare(o1: AppInfo, o2: AppInfo): Int {
-        // TODO:
-        return o1.packageName.compareTo(o2.packageName)
+        return checkNotNull(comparator).compare(o1, o2)
     }
 
     override fun areItemsTheSame(item1: AppInfo, item2: AppInfo): Boolean {

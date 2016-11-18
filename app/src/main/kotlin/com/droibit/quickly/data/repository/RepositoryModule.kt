@@ -2,6 +2,7 @@ package com.droibit.quickly.data.repository
 
 import com.droibit.quickly.data.repository.appinfo.AppInfoRepository
 import com.droibit.quickly.data.repository.appinfo.AppInfoRepositoryImpl
+import com.droibit.quickly.data.repository.settings.AppInfoComparators
 import com.droibit.quickly.data.repository.settings.ShowSettingsRepository
 import com.droibit.quickly.data.repository.settings.ShowSettingsRepositoryImpl
 import com.droibit.quickly.data.repository.source.AppInfoDataSource
@@ -22,6 +23,11 @@ fun repositoryModule() = Kodein.Module {
     }
 
     bind<ShowSettingsRepository>() with singleton {
-        ShowSettingsRepositoryImpl(appConfig = instance())
+        ShowSettingsRepositoryImpl(
+                appConfig = instance(),
+                comparators = instance()
+        )
     }
+
+    bind<AppInfoComparators>() with singleton { AppInfoComparators }
 }

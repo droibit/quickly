@@ -15,6 +15,7 @@ fun mainModule(view: MainContract.View) = Kodein.Module {
         MainPresenter(
                 view = instance(),
                 loadTask = instance(),
+                showSettingsRepository = instance(),
                 subscriptions = instance()
         )
     }

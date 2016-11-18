@@ -1,5 +1,6 @@
 package com.droibit.quickly.main
 
+import com.droibit.quickly.data.repository.settings.ShowSettingsRepository
 import com.droibit.quickly.main.MainContract.LoadAppInfoTask.LoadEvent
 import rx.android.schedulers.AndroidSchedulers
 import rx.lang.kotlin.addTo
@@ -8,11 +9,13 @@ import rx.subscriptions.CompositeSubscription
 class MainPresenter(
         private val view: MainContract.View,
         private val loadTask: MainContract.LoadAppInfoTask,
+        private val showSettingsRepository: ShowSettingsRepository,
         private val subscriptions: CompositeSubscription) : MainContract.Presenter {
 
     private var cacheEvent: LoadEvent? = null
 
     override fun onCreate(shouldLoad: Boolean) {
+        view.setComparator(showSettingsRepository.currentComparator)
         loadTask.requestLoad(shouldLoad)
     }
 

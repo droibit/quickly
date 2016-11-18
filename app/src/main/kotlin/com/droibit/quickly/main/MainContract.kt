@@ -4,6 +4,7 @@ import android.support.annotation.IdRes
 import com.droibit.quickly.R
 import com.droibit.quickly.data.repository.appinfo.AppInfo
 import rx.Observable
+import java.util.*
 
 interface MainContract {
 
@@ -25,6 +26,8 @@ interface MainContract {
         fun showNoAppInfo()
 
         fun setLoadingIndicator(active: Boolean)
+
+        fun setComparator(comparator: Comparator<AppInfo>)
     }
 
     interface Navigator {

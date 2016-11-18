@@ -1,6 +1,7 @@
 package com.droibit.quickly.main
 
 import com.droibit.quickly.data.repository.appinfo.AppInfo
+import com.droibit.quickly.data.repository.settings.ShowSettingsRepository
 import com.droibit.quickly.main.MainContract.LoadAppInfoTask.LoadEvent
 import com.droibit.quickly.rules.RxSchedulersOverrideRule
 import com.jakewharton.rxrelay.BehaviorRelay
@@ -31,6 +32,9 @@ class MainPresenterTest {
     @Mock
     private lateinit var loadTask: MainContract.LoadAppInfoTask
 
+    @Mock
+    private lateinit var showSettingsRepository: ShowSettingsRepository
+
     private lateinit var subscriptions: CompositeSubscription
 
     private lateinit var presenter: MainPresenter
@@ -41,6 +45,7 @@ class MainPresenterTest {
         presenter = MainPresenter(
                 view,
                 loadTask,
+                showSettingsRepository,
                 subscriptions
         )
     }

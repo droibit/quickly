@@ -11,12 +11,14 @@ import android.view.View
 import android.widget.ProgressBar
 import com.droibit.quickly.R
 import com.droibit.quickly.data.repository.appinfo.AppInfo
+import com.droibit.quickly.data.repository.settings.ShowSettingsRepository
 import com.github.droibit.chopstick.bindView
 import com.github.salomonbrys.kodein.Kodein
 import com.github.salomonbrys.kodein.KodeinInjector
 import com.github.salomonbrys.kodein.android.appKodein
 import com.github.salomonbrys.kodein.instance
 import timber.log.Timber
+import java.util.*
 
 
 class MainActivity : AppCompatActivity(), MainContract.View {
@@ -95,5 +97,9 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         Timber.d("setLoadingIndicator(active=%b)", active)
         progressBar.visibility = if (active) View.VISIBLE else View.GONE
         contentView.visibility = if (active) View.GONE else View.VISIBLE
+    }
+
+    override fun setComparator(comparator: Comparator<AppInfo>) {
+        appInfoAdapter.comparator = comparator
     }
 }
