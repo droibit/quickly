@@ -169,6 +169,64 @@ class AppInfoRepositoryImplTest {
     }
 
     @Test
+    fun loadAll_thenForceReloadAll() {
+        val expectedAppInfoList = listOf(
+                AppInfo(
+                        packageName = "com.droibit.quickly.1",
+                        name = "Qickly1",
+                        versionName = "1",
+                        versionCode = 2,
+                        icon = 3,
+                        preInstalled = true,
+                        lastUpdateTime = 4
+                ),
+                AppInfo(
+                        packageName = "com.droibit.quickly.2",
+                        name = "Qickly2",
+                        versionName = "5",
+                        versionCode = 6,
+                        icon = 7,
+                        preInstalled = true,
+                        lastUpdateTime = 8
+                ),
+                AppInfo(
+                        packageName = "com.droibit.quickly.3",
+                        name = "Qickly3",
+                        versionName = "9",
+                        versionCode = 10,
+                        icon = 11,
+                        preInstalled = true,
+                        lastUpdateTime = 12
+                )
+        )
+        `when`(appInfoSource.getAll()).thenReturn(Observable.just(expectedAppInfoList))
+
+        run {
+            val testSubscriber = TestSubscriber.create<List<AppInfo>>()
+            repository.loadAll().subscribe(testSubscriber)
+
+            testSubscriber.assertNoErrors()
+            testSubscriber.assertCompleted()
+            testSubscriber.assertValueCount(1)
+
+            val actualAppInfoList = testSubscriber.onNextEvents.first()
+            assertThat(actualAppInfoList).containsExactlyElementsOf(expectedAppInfoList)
+        }
+
+        run {
+            val testSubscriber = TestSubscriber.create<List<AppInfo>>()
+            repository.loadAll(forceReload = true).subscribe(testSubscriber)
+
+            testSubscriber.assertNoErrors()
+            testSubscriber.assertCompleted()
+            testSubscriber.assertValueCount(1)
+
+            val actualAppInfoList = testSubscriber.onNextEvents.first()
+            assertThat(actualAppInfoList).containsExactlyElementsOf(expectedAppInfoList)
+        }
+    }
+
+    @Test
     fun roadAll_shouldReturnAppInfoWithForceReload() {
         run {
             val appInfo = AppInfo(

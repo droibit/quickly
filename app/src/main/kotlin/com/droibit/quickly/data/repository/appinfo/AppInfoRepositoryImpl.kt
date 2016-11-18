@@ -59,7 +59,7 @@ class AppInfoRepositoryImpl(
 
     private fun storeSync(appInfoList: List<AppInfo>) {
         orma.transactionSync {
-            orma.prepareInsertIntoAppInfo()
+            orma.prepareInsertIntoAppInfo(OnConflict.REPLACE)
                     .executeAll(appInfoList)
         }
 
