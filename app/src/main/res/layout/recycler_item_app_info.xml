@@ -51,7 +51,7 @@
             android:layout_alignTop="@+id/app_icon"
             android:layout_toRightOf="@id/app_icon"
             android:layout_toLeftOf="@id/more"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="2dp"
             android:layout_marginBottom="4dp"
             android:ellipsize="end"
             android:maxLines="2"
