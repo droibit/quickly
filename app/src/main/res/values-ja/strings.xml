@@ -12,4 +12,5 @@
     <string name="sorted_by_last_updated">最終更新日</string>
     <string name="asc">昇順</string>
     <string name="desc">降順</string>
+    <string name="sorted_by_dialog_title_chooser">並べ替え</string>
 </resources>

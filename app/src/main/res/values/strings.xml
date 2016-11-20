@@ -14,4 +14,5 @@
     <string name="sorted_by_last_updated">Last updated</string>
     <string name="asc">Asc</string>
     <string name="desc">Desc</string>
+    <string name="sorted_by_dialog_title_chooser">Sort by</string>
 </resources>

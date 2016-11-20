@@ -40,6 +40,10 @@ class MainPresenter(
     override fun onOptionsItemClicked(menuItem: MainContract.MenuItem) {
     }
 
+    override fun onSortByClicked() {
+        view.showSortByChooserDialog(showSettingsRepository.sortBy)
+    }
+
     private fun onLoadAppInfos(event: LoadEvent) {
         when (event) {
             is LoadEvent.OnResult -> {

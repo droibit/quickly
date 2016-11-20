@@ -12,19 +12,20 @@ import android.widget.ProgressBar
 import com.droibit.quickly.R
 import com.droibit.quickly.data.provider.comparators.AppInfoComparators
 import com.droibit.quickly.data.repository.appinfo.AppInfo
-import com.droibit.quickly.data.repository.settings.ShowSettingsRepository
 import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.Order
 import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.SortBy
 import com.github.droibit.chopstick.bindView
-import com.github.salomonbrys.kodein.Kodein
-import com.github.salomonbrys.kodein.KodeinInjector
+import com.github.salomonbrys.kodein.*
 import com.github.salomonbrys.kodein.android.appKodein
-import com.github.salomonbrys.kodein.instance
 import timber.log.Timber
-import java.util.*
 
 
-class MainActivity : AppCompatActivity(), MainContract.View {
+class MainActivity : AppCompatActivity(), MainContract.View, KodeinAware {
+
+    companion object {
+
+        private val TAG_FRAGMENT_SORT_BY_CHOOSER = "TAG_FRAGMENT_SORT_BY_CHOOSER"
+    }
 
     private val toolbar: Toolbar by bindView(R.id.toolbar)
 
@@ -36,7 +37,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
 
     private val progressBar: ProgressBar by bindView(R.id.progress)
 
-    private val subtitleToolbar: SubtitleToolbar by bindView(R.id.subtitle)
+    private val subTitleToolbar: SubtitleToolbar by bindView(R.id.subtitle)
 
     private val injector = KodeinInjector()
 
@@ -46,19 +47,25 @@ class MainActivity : AppCompatActivity(), MainContract.View {
 
     private val appInfoAdapter: AppInfoAdapter by lazy { AppInfoAdapter(this) }
 
+    override val kodein: Kodein by Kodein.lazy {
+        extend(appKodein())
+        import(mainModule(view = this@MainActivity))
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-        injector.inject(Kodein {
-            extend(appKodein())
-            import(mainModule(view = this@MainActivity))
-        })
+        injector.inject(kodein)
 
         recyclerView.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
             adapter = appInfoAdapter
+        }
+
+        subTitleToolbar.sortByClickListener {
+            presenter.onSortByClicked()
         }
 
         presenter.onCreate(shouldLoad = false)
@@ -91,7 +98,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         emptyView.visibility = View.GONE
         recyclerView.visibility = View.VISIBLE
         appInfoAdapter.addAll(appInfos)
-        subtitleToolbar.appCount = appInfos.size
+        subTitleToolbar.appCount = appInfos.size
     }
 
     override fun showNoAppInfo() {
@@ -106,6 +113,13 @@ class MainActivity : AppCompatActivity(), MainContract.View {
 
     override fun setSortBy(sortBy: SortBy, order: Order) {
         appInfoAdapter.comparator = appInfoComparators.get(sortBy, order)
-        subtitleToolbar.sortBy(sortBy, order)
+        subTitleToolbar.sortBy(sortBy, order)
+    }
+
+    override fun showSortByChooserDialog(sortBy: SortBy) {
+        if (supportFragmentManager.findFragmentByTag(TAG_FRAGMENT_SORT_BY_CHOOSER) == null) {
+            val df = SortByChooserDialogFragment.newInstance(sortBy)
+            df.show(supportFragmentManager, TAG_FRAGMENT_SORT_BY_CHOOSER)
+        }
     }
 }

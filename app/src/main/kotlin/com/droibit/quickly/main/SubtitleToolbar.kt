@@ -1,7 +1,6 @@
 package com.droibit.quickly.main
 
 import android.content.Context
-import android.support.annotation.DrawableRes
 import android.support.annotation.UiThread
 import android.util.AttributeSet
 import android.view.View
@@ -9,7 +8,6 @@ import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import com.droibit.quickly.R
-import com.droibit.quickly.data.repository.settings.ShowSettingsRepository
 import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.Order
 import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.SortBy
 import com.github.droibit.chopstick.bindView
@@ -48,6 +46,11 @@ class SubtitleToolbar @JvmOverloads constructor(
 
         this.sortByView.setText(sortBy.stringRes)
         this.orderArrowView.setImageResource(order.drawableRes)
+    }
+
+    fun sortByClickListener(listener: (View) -> Unit) {
+        sortByView.setOnClickListener(listener)
+        orderArrowView.setOnClickListener(listener)
     }
 }
 

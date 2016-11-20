@@ -29,6 +29,8 @@ interface MainContract {
         fun setLoadingIndicator(active: Boolean)
 
         fun setSortBy(sortBy: SortBy, order: Order)
+
+        fun showSortByChooserDialog(sortBy: SortBy)
     }
 
     interface Navigator {
@@ -45,6 +47,8 @@ interface MainContract {
         fun onPause()
 
         fun onOptionsItemClicked(menuItem: MenuItem)
+
+        fun onSortByClicked()
     }
 
     interface LoadAppInfoTask {
@@ -60,4 +64,6 @@ interface MainContract {
 
         fun requestLoad(forceReload: Boolean = false)
     }
+
+    class SortByChooseEvevent(sortBy: SortBy, order: Order)
 }

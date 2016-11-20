@@ -1,5 +1,6 @@
 package com.droibit.quickly.main
 
+import com.droibit.quickly.data.provider.eventbus.RxBus
 import com.droibit.quickly.main.MainContract.LoadAppInfoTask.LoadEvent
 import com.github.salomonbrys.kodein.Kodein
 import com.github.salomonbrys.kodein.instance
@@ -35,4 +36,6 @@ fun mainModule(view: MainContract.View) = Kodein.Module {
     bind<BehaviorRelay<Boolean>>() with provider { BehaviorRelay.create<Boolean>() }
 
     bind<BehaviorRelay<LoadEvent>>() with provider { BehaviorRelay.create<LoadEvent>() }
+
+    bind<RxBus>() with provider { RxBus() }
 }
