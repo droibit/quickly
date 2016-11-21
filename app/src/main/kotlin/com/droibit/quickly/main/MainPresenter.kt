@@ -37,6 +37,10 @@ class MainPresenter(
         subscriptions.clear()
     }
 
+    override fun onDestroy() {
+        subscriptions.unsubscribe()
+    }
+
     override fun onOptionsItemClicked(menuItem: MainContract.MenuItem) {
     }
 

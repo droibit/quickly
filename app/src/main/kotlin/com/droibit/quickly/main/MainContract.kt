@@ -46,6 +46,8 @@ interface MainContract {
 
         fun onPause()
 
+        fun onDestroy()
+
         fun onOptionsItemClicked(menuItem: MenuItem)
 
         fun onSortByClicked()
