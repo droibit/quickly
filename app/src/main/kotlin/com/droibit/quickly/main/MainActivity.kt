@@ -128,7 +128,11 @@ class MainActivity : AppCompatActivity(), MainContract.View, KodeinAware {
     }
 
     override fun setSortBy(sortBy: SortBy, order: Order) {
-        appInfoAdapter.comparator = appInfoComparators.get(sortBy, order)
+        appInfoAdapter.apply {
+            comparator = appInfoComparators.get(sortBy, order)
+            refresh()
+        }
+        recyclerView.scrollToPosition(0)
         subTitleToolbar.sortBy(sortBy, order)
     }
 

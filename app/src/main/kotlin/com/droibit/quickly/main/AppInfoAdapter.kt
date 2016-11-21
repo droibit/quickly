@@ -60,11 +60,15 @@ class AppInfoAdapter(
         items.clear()
     }
 
-    fun replace(items: List<AppInfo>) {
+    fun refresh() {
+        val list = ArrayList<AppInfo>(items.size())
+        (0..items.size()-1).mapTo(list) { items.get(it) }
+
         this.items.beginBatchedUpdates()
         try {
             this.items.clear()
-            this.items.addAll(items)
+            this.items.addAll(list)
+            this.notifyDataSetChanged()
         } finally {
             this.items.endBatchedUpdates()
         }
