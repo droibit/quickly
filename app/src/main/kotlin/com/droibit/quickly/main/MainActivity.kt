@@ -11,12 +11,16 @@ import android.view.View
 import android.widget.ProgressBar
 import com.droibit.quickly.R
 import com.droibit.quickly.data.provider.comparators.AppInfoComparators
+import com.droibit.quickly.data.provider.eventbus.RxBus
 import com.droibit.quickly.data.repository.appinfo.AppInfo
 import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.Order
 import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.SortBy
+import com.droibit.quickly.main.MainContract.SortByChooseEvent
 import com.github.droibit.chopstick.bindView
 import com.github.salomonbrys.kodein.*
 import com.github.salomonbrys.kodein.android.appKodein
+import rx.lang.kotlin.addTo
+import rx.subscriptions.CompositeSubscription
 import timber.log.Timber
 
 
@@ -44,6 +48,10 @@ class MainActivity : AppCompatActivity(), MainContract.View, KodeinAware {
     private val presenter: MainContract.Presenter by injector.instance()
 
     private val appInfoComparators: AppInfoComparators by injector.instance()
+
+    private val rxBus: RxBus by injector.instance()
+
+    private val subscriptions: CompositeSubscription by injector.instance()
 
     private val appInfoAdapter: AppInfoAdapter by lazy { AppInfoAdapter(this) }
 
@@ -73,12 +81,20 @@ class MainActivity : AppCompatActivity(), MainContract.View, KodeinAware {
 
     override fun onResume() {
         super.onResume()
+        subscribeSortBy()
         presenter.onResume()
     }
 
     override fun onPause() {
+        subscriptions.clear()
         presenter.onPause()
         super.onPause()
+    }
+
+    override fun onDestroy() {
+        presenter.onDestroy()
+        subscriptions.unsubscribe()
+        super.onDestroy()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -121,5 +137,12 @@ class MainActivity : AppCompatActivity(), MainContract.View, KodeinAware {
             val df = SortByChooserDialogFragment.newInstance(sortBy)
             df.show(supportFragmentManager, TAG_FRAGMENT_SORT_BY_CHOOSER)
         }
+    }
+
+    private fun subscribeSortBy() {
+        rxBus.asObservable()
+                .ofType(SortByChooseEvent::class.java)
+                .subscribe { presenter.onSortByChoose(it.sortBy, it.order) }
+                .addTo(subscriptions)
     }
 }

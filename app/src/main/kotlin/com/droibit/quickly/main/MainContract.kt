@@ -1,11 +1,14 @@
 package com.droibit.quickly.main
 
 import android.support.annotation.IdRes
+import android.support.annotation.UiThread
 import com.droibit.quickly.R
 import com.droibit.quickly.data.repository.appinfo.AppInfo
 import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.Order
 import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.SortBy
+import rx.Completable
 import rx.Observable
+import rx.Single
 
 interface MainContract {
 
@@ -40,17 +43,26 @@ interface MainContract {
 
     interface Presenter {
 
+        @UiThread
         fun onCreate(shouldLoad: Boolean)
 
+        @UiThread
         fun onResume()
 
+        @UiThread
         fun onPause()
 
+        @UiThread
         fun onDestroy()
 
+        @UiThread
         fun onOptionsItemClicked(menuItem: MenuItem)
 
+        @UiThread
         fun onSortByClicked()
+
+        @UiThread
+        fun onSortByChoose(sortBy: SortBy, order: Order)
     }
 
     interface LoadAppInfoTask {
@@ -67,5 +79,12 @@ interface MainContract {
         fun requestLoad(forceReload: Boolean = false)
     }
 
-    class SortByChooseEvevent(sortBy: SortBy, order: Order)
+    interface SortByTask {
+
+        fun load(): Single<Pair<SortBy, Order>>
+
+        fun store(sortBy: SortBy, order: Order): Single<Boolean>
+    }
+
+    class SortByChooseEvent(val sortBy: SortBy, val order: Order)
 }

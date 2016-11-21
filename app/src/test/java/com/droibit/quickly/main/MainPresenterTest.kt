@@ -14,6 +14,7 @@ import org.mockito.Mock
 import org.mockito.Mockito.*
 import org.mockito.junit.MockitoJUnit
 import rx.Observable
+import rx.Single
 import rx.lang.kotlin.toSingletonObservable
 import rx.subscriptions.CompositeSubscription
 
@@ -35,6 +36,9 @@ class MainPresenterTest {
     private lateinit var loadTask: MainContract.LoadAppInfoTask
 
     @Mock
+    private lateinit var sortByTask: MainContract.SortByTask
+
+    @Mock
     private lateinit var showSettingsRepository: ShowSettingsRepository
 
     private lateinit var subscriptions: CompositeSubscription
@@ -47,6 +51,7 @@ class MainPresenterTest {
         presenter = MainPresenter(
                 view,
                 loadTask,
+                sortByTask,
                 showSettingsRepository,
                 subscriptions
         )
@@ -54,6 +59,8 @@ class MainPresenterTest {
 
     @Test
     fun onCreate_requestLoad() {
+        `when`(sortByTask.load()).thenReturn(Single.just(Pair(SortBy.NAME, Order.ASC)))
+
         presenter.onCreate(shouldLoad = true)
         verify(loadTask).requestLoad(true)
 
@@ -65,6 +72,9 @@ class MainPresenterTest {
     fun onCreate_setSortBy() {
         `when`(showSettingsRepository.sortBy).thenReturn(SortBy.LAST_UPDATED)
         `when`(showSettingsRepository.order).thenReturn(Order.DESC)
+
+        val result = Pair(showSettingsRepository.sortBy, showSettingsRepository.order)
+        `when`(sortByTask.load()).thenReturn(Single.just(result))
 
         presenter.onCreate(true)
         verify(view).setSortBy(SortBy.LAST_UPDATED, Order.DESC)

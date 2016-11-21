@@ -11,7 +11,7 @@ import com.droibit.quickly.R
 import com.droibit.quickly.data.provider.eventbus.RxBus
 import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.Order
 import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.SortBy
-import com.droibit.quickly.main.MainContract.SortByChooseEvevent
+import com.droibit.quickly.main.MainContract.SortByChooseEvent
 import com.github.droibit.chopstick.bindStringArray
 import com.github.salomonbrys.kodein.Kodein
 import com.github.salomonbrys.kodein.KodeinAware
@@ -82,7 +82,7 @@ class SortByChooserDialogFragment : DialogFragment(), DialogInterface.OnClickLis
 
         if (which < 0) {
             // clicked positive/negative button
-            rxBus.call(SortByChooseEvevent(sortBy, which.toOrder()))
+            rxBus.call(SortByChooseEvent(sortBy, which.toOrder()))
             return
         }
         sortBy = SortBy.from(index = which)

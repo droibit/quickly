@@ -5,6 +5,7 @@ import com.droibit.quickly.main.MainContract.LoadAppInfoTask.LoadEvent
 import com.github.salomonbrys.kodein.Kodein
 import com.github.salomonbrys.kodein.instance
 import com.github.salomonbrys.kodein.provider
+import com.github.salomonbrys.kodein.singleton
 import com.jakewharton.rxrelay.BehaviorRelay
 import rx.subscriptions.CompositeSubscription
 
@@ -16,10 +17,13 @@ fun mainModule(view: MainContract.View) = Kodein.Module {
         MainPresenter(
                 view = instance(),
                 loadTask = instance(),
+                sortByTask = instance(),
                 showSettingsRepository = instance(),
                 subscriptions = instance()
         )
     }
+
+    bind<MainContract.SortByTask>() with provider { SortByTask(showSettingsRepository = instance()) }
 
     bind<MainContract.LoadAppInfoTask>() with provider {
         LoadAppInfoTask(
@@ -37,5 +41,5 @@ fun mainModule(view: MainContract.View) = Kodein.Module {
 
     bind<BehaviorRelay<LoadEvent>>() with provider { BehaviorRelay.create<LoadEvent>() }
 
-    bind<RxBus>() with provider { RxBus() }
+    bind<RxBus>() with singleton { RxBus() }
 }
