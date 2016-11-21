@@ -10,6 +10,7 @@ import com.jakewharton.rxrelay.BehaviorRelay
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.mockito.Matchers
 import org.mockito.Mock
 import org.mockito.Mockito.*
 import org.mockito.junit.MockitoJUnit
@@ -38,9 +39,6 @@ class MainPresenterTest {
     @Mock
     private lateinit var sortByTask: MainContract.SortByTask
 
-    @Mock
-    private lateinit var showSettingsRepository: ShowSettingsRepository
-
     private lateinit var subscriptions: CompositeSubscription
 
     private lateinit var presenter: MainPresenter
@@ -52,7 +50,6 @@ class MainPresenterTest {
                 view,
                 loadTask,
                 sortByTask,
-                showSettingsRepository,
                 subscriptions
         )
     }
@@ -70,14 +67,11 @@ class MainPresenterTest {
 
     @Test
     fun onCreate_setSortBy() {
-        `when`(showSettingsRepository.sortBy).thenReturn(SortBy.LAST_UPDATED)
-        `when`(showSettingsRepository.order).thenReturn(Order.DESC)
-
-        val result = Pair(showSettingsRepository.sortBy, showSettingsRepository.order)
+        val result = Pair(SortBy.LAST_UPDATED, Order.DESC)
         `when`(sortByTask.load()).thenReturn(Single.just(result))
 
         presenter.onCreate(true)
-        verify(view).setSortBy(SortBy.LAST_UPDATED, Order.DESC)
+        verify(view).setSortBy(result.first, result.second)
     }
 
     @Test
@@ -139,5 +133,23 @@ class MainPresenterTest {
 
         presenter.onResume()
         verify(view).showAppInfoList(mockList)
+    }
+
+    @Test
+    fun onSortByClicked_showSortByChooserDialog() {
+        val result = Pair(SortBy.NAME, Order.ASC)
+        `when`(sortByTask.load()).thenReturn(Single.just(result))
+
+        presenter.onSortByClicked()
+        verify(view).showSortByChooserDialog(sortBy = result.first)
+    }
+
+    @Test
+    fun onSortByChoose_setSortBy() {
+        val result = Pair(SortBy.LAST_UPDATED, Order.DESC)
+        `when`(sortByTask.store(result.first, result.second)).thenReturn(Single.just(true))
+
+        presenter.onSortByChoose(result.first, result.second)
+        verify(view).setSortBy(result.first, result.second)
     }
 }

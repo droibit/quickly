@@ -18,7 +18,6 @@ fun mainModule(view: MainContract.View) = Kodein.Module {
                 view = instance(),
                 loadTask = instance(),
                 sortByTask = instance(),
-                showSettingsRepository = instance(),
                 subscriptions = instance()
         )
     }

@@ -1,7 +1,6 @@
 package com.droibit.quickly.main
 
 import android.support.annotation.UiThread
-import com.droibit.quickly.data.repository.settings.ShowSettingsRepository
 import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.Order
 import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.SortBy
 import com.droibit.quickly.main.MainContract.LoadAppInfoTask.LoadEvent
@@ -15,7 +14,6 @@ class MainPresenter(
         private val view: MainContract.View,
         private val loadTask: MainContract.LoadAppInfoTask,
         private val sortByTask: MainContract.SortByTask,
-        private val showSettingsRepository: ShowSettingsRepository,
         private val subscriptions: CompositeSubscription) : MainContract.Presenter {
 
     private var cacheEvent: LoadEvent? = null
@@ -62,7 +60,11 @@ class MainPresenter(
 
     @UiThread
     override fun onSortByClicked() {
-        view.showSortByChooserDialog(showSettingsRepository.sortBy)
+        sortByTask.load()
+                .subscribeOn(Schedulers.immediate())
+                .subscribe {
+                    view.showSortByChooserDialog(sortBy = it.first)
+                }
     }
 
     @UiThread
