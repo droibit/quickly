@@ -49,11 +49,14 @@ class AppInfoRepositoryImpl(
     private fun getLocalAppInfo(): Observable<List<AppInfo>> {
         return orma.selectFromAppInfo()
                 .executeAsObservable()
+                .doOnNext { cache[it.packageName] = it }
                 .toList()
     }
 
     private fun getStoredAppInfo(): Observable<List<AppInfo>> {
         return appInfoSource.getAll()
+                .doOnNext { cache[it.packageName] = it }
+                .toList()
                 .doOnNext { storeSync(appInfoList = it) }
     }
 
@@ -62,8 +65,5 @@ class AppInfoRepositoryImpl(
             orma.prepareInsertIntoAppInfo(OnConflict.REPLACE)
                     .executeAll(appInfoList)
         }
-
-        cache.clear()
-        appInfoList.forEach { cache[it.packageName] = it }
     }
 }

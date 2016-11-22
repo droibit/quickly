@@ -7,7 +7,7 @@ import rx.Single
 
 interface AppInfoDataSource {
 
-    fun getAll(): Observable<List<AppInfo>>
+    fun getAll(): Observable<AppInfo>
 
     fun get(packageName: String): Single<AppInfo>
 }

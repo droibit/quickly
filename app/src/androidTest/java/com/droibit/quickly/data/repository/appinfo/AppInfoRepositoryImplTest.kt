@@ -62,7 +62,7 @@ class AppInfoRepositoryImplTest {
                         lastUpdateTime = 12
                 )
         )
-        `when`(appInfoSource.getAll()).thenReturn(Observable.just(expectedAppInfoList))
+        `when`(appInfoSource.getAll()).thenReturn(Observable.from(expectedAppInfoList))
 
         val testSubscriber = TestSubscriber.create<List<AppInfo>>()
         repository.loadAll().subscribe(testSubscriber)
@@ -116,7 +116,7 @@ class AppInfoRepositoryImplTest {
                         lastUpdateTime = 8
                 )
         )
-        `when`(appInfoSource.getAll()).thenReturn(Observable.just(notCallAppInfoList))
+        `when`(appInfoSource.getAll()).thenReturn(Observable.from(notCallAppInfoList))
 
         val testSubscriber = TestSubscriber.create<List<AppInfo>>()
         repository.loadAll().subscribe(testSubscriber)
@@ -127,6 +127,8 @@ class AppInfoRepositoryImplTest {
 
         val actualAppInfoList = testSubscriber.onNextEvents.first()
         assertThat(actualAppInfoList).containsExactlyElementsOf(expectedAppInfoList)
+
+        assertThat(repository.cache.keys).hasSize(2)
     }
 
     @Test
@@ -151,7 +153,7 @@ class AppInfoRepositoryImplTest {
                         lastUpdateTime = 8
                 )
         )
-        `when`(appInfoSource.getAll()).thenReturn(Observable.just(expectedAppInfoList))
+        `when`(appInfoSource.getAll()).thenReturn(Observable.from(expectedAppInfoList))
         repository.loadAll().subscribe()
 
         `when`(appInfoSource.getAll()).thenReturn(Observable.empty())
@@ -199,7 +201,7 @@ class AppInfoRepositoryImplTest {
                         lastUpdateTime = 12
                 )
         )
-        `when`(appInfoSource.getAll()).thenReturn(Observable.just(expectedAppInfoList))
+        `when`(appInfoSource.getAll()).thenReturn(Observable.from(expectedAppInfoList))
 
         run {
             val testSubscriber = TestSubscriber.create<List<AppInfo>>()
@@ -238,7 +240,7 @@ class AppInfoRepositoryImplTest {
                     preInstalled = true,
                     lastUpdateTime = 4
             )
-            `when`(appInfoSource.getAll()).thenReturn(Observable.just(listOf(appInfo)))
+            `when`(appInfoSource.getAll()).thenReturn(Observable.from(listOf(appInfo)))
 
             val testSubscriber = TestSubscriber.create<List<AppInfo>>()
             repository.loadAll().subscribe(testSubscriber)
@@ -272,7 +274,7 @@ class AppInfoRepositoryImplTest {
                             lastUpdateTime = 12
                     )
             )
-            `when`(appInfoSource.getAll()).thenReturn(Observable.just(expectedAppInfoList))
+            `when`(appInfoSource.getAll()).thenReturn(Observable.from(expectedAppInfoList))
 
             val testSubscriber = TestSubscriber.create<List<AppInfo>>()
             repository.loadAll(forceReload = true).subscribe(testSubscriber)

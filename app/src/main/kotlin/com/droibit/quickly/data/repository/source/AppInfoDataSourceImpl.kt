@@ -9,10 +9,9 @@ import rx.Single
 
 class AppInfoDataSourceImpl(private val pm: PackageManager) : AppInfoDataSource {
 
-    override fun getAll(): Observable<List<AppInfo>> {
+    override fun getAll(): Observable<AppInfo> {
         return Observable.from(pm.getInstalledPackages(0))
                 .map { it.toAppInfo() }
-                .toList()
     }
 
     override fun get(packageName: String): Single<AppInfo> {
