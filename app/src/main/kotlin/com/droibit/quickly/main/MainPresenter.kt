@@ -1,9 +1,9 @@
 package com.droibit.quickly.main
 
 import android.support.annotation.UiThread
+import com.droibit.quickly.data.repository.appinfo.AppInfo
 import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.Order
 import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.SortBy
-import com.droibit.quickly.main.MainContract.LoadAppInfoTask.LoadEvent
 import rx.android.schedulers.AndroidSchedulers
 import rx.lang.kotlin.addTo
 import rx.schedulers.Schedulers
@@ -16,8 +16,6 @@ class MainPresenter(
         private val sortByTask: MainContract.SortByTask,
         private val subscriptions: CompositeSubscription) : MainContract.Presenter {
 
-    private var cacheEvent: LoadEvent? = null
-
     @UiThread
     override fun onCreate(shouldLoad: Boolean) {
         sortByTask.load()
@@ -26,7 +24,6 @@ class MainPresenter(
                     val (sortBy, order) = it
                     view.setSortBy(sortBy, order)
                 }
-        loadTask.requestLoad(shouldLoad)
     }
 
     @UiThread
@@ -36,11 +33,9 @@ class MainPresenter(
                 .subscribe { view.setLoadingIndicator(active = it) }
                 .addTo(subscriptions)
 
-        loadTask.asObservable()
-                .filter { it !== cacheEvent }
-                .doOnNext { cacheEvent = it }
+        loadTask.requestLoad()
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { onAppsLoaded(event = it) }
+                .subscribe { onAppsLoaded(apps = it) }
                 .addTo(subscriptions)
     }
 
@@ -79,16 +74,11 @@ class MainPresenter(
                 }
     }
 
-    private fun onAppsLoaded(event: LoadEvent) {
-        when (event) {
-            is LoadEvent.OnResult -> {
-                if (event.apps.isNotEmpty()) {
-                    view.showAppInfoList(event.apps)
-                } else {
-                    view.showNoAppInfo()
-                }
-            }
+    private fun onAppsLoaded(apps: List<AppInfo>) {
+        if (apps.isNotEmpty()) {
+            view.showAppInfoList(apps)
+        } else {
+            view.showNoAppInfo()
         }
-        cacheEvent = event
     }
 }

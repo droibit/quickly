@@ -68,16 +68,9 @@ interface MainContract {
 
     interface LoadAppInfoTask {
 
-        sealed class LoadEvent {
-            class OnResult(val apps: List<AppInfo>) : LoadEvent()
-            object Nothing : LoadEvent()
-        }
-
-        fun asObservable(): Observable<LoadEvent>
-
         fun isRunning(): Observable<Boolean>
 
-        fun requestLoad(forceReload: Boolean = false)
+        fun requestLoad(forceReload: Boolean = false): Observable<List<AppInfo>>
     }
 
     interface SortByTask {

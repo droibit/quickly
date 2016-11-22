@@ -1,16 +1,12 @@
 package com.droibit.quickly.main
 
 import com.droibit.quickly.data.repository.appinfo.AppInfo
-import com.droibit.quickly.data.repository.settings.ShowSettingsRepository
 import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.Order
 import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.SortBy
-import com.droibit.quickly.main.MainContract.LoadAppInfoTask.LoadEvent
 import com.droibit.quickly.rules.RxSchedulersOverrideRule
-import com.jakewharton.rxrelay.BehaviorRelay
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.Matchers
 import org.mockito.Mock
 import org.mockito.Mockito.*
 import org.mockito.junit.MockitoJUnit
@@ -55,17 +51,6 @@ class MainPresenterTest {
     }
 
     @Test
-    fun onCreate_requestLoad() {
-        `when`(sortByTask.load()).thenReturn(Single.just(Pair(SortBy.NAME, Order.ASC)))
-
-        presenter.onCreate(shouldLoad = true)
-        verify(loadTask).requestLoad(true)
-
-        presenter.onCreate(shouldLoad = false)
-        verify(loadTask).requestLoad(false)
-    }
-
-    @Test
     fun onCreate_setSortBy() {
         val result = Pair(SortBy.LAST_UPDATED, Order.DESC)
         `when`(sortByTask.load()).thenReturn(Single.just(result))
@@ -76,7 +61,7 @@ class MainPresenterTest {
 
     @Test
     fun onResume_subscribeRunning() {
-        `when`(loadTask.asObservable()).thenReturn(Observable.empty())
+        `when`(loadTask.requestLoad()).thenReturn(Observable.empty())
 
         `when`(loadTask.isRunning()).thenReturn(true.toSingletonObservable())
         presenter.onResume()
@@ -92,47 +77,21 @@ class MainPresenterTest {
         `when`(loadTask.isRunning()).thenReturn(Observable.empty())
 
         val mockList = mock(List::class.java) as List<AppInfo>
-        val relay = BehaviorRelay.create<LoadEvent>()
-        `when`(loadTask.asObservable()).thenReturn(relay)
+        `when`(loadTask.requestLoad()).thenReturn(mockList.toSingletonObservable())
 
         run {
             `when`(mockList.isEmpty()).thenReturn(false)
 
             presenter.onResume()
-            relay.call(LoadEvent.OnResult(mockList))
             verify(view).showAppInfoList(mockList)
-        }
-
-        run {
-            reset(view)
-            presenter.onResume()
-            verify(view, never()).showAppInfoList(anyListOf(AppInfo::class.java))
         }
 
         run {
             `when`(mockList.isEmpty()).thenReturn(true)
 
             presenter.onResume()
-            relay.call(LoadEvent.OnResult(mockList))
             verify(view).showNoAppInfo()
         }
-    }
-
-    @Test
-    fun onResume_resubscribeApps() {
-        `when`(loadTask.isRunning()).thenReturn(Observable.empty())
-
-        val relay = BehaviorRelay.create<LoadEvent>()
-        `when`(loadTask.asObservable()).thenReturn(relay)
-
-        presenter.onResume()
-        presenter.onPause()
-
-        val mockList = mock(List::class.java) as List<AppInfo>
-        relay.call(LoadEvent.OnResult(mockList))
-
-        presenter.onResume()
-        verify(view).showAppInfoList(mockList)
     }
 
     @Test
