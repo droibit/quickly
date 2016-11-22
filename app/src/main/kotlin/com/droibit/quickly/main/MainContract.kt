@@ -13,6 +13,7 @@ import rx.Single
 interface MainContract {
 
     enum class MenuItem(@IdRes val id: Int) {
+        SEARCH(R.id.search),
         REFRESH(R.id.refresh),
         SHOW_SYSTEM(R.id.show_system),
         SETTINGS(R.id.settings);
