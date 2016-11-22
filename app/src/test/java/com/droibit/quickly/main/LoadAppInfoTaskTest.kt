@@ -1,6 +1,5 @@
 package com.droibit.quickly.main
 
-import com.droibit.quickly.data.config.ApplicationConfig
 import com.droibit.quickly.data.repository.appinfo.AppInfo
 import com.droibit.quickly.data.repository.appinfo.AppInfoRepository
 import com.droibit.quickly.data.repository.settings.ShowSettingsRepository
@@ -36,9 +35,6 @@ class LoadAppInfoTaskTest {
     private lateinit var showSettingsRepository: ShowSettingsRepository
 
     @Mock
-    private lateinit var appConfig: ApplicationConfig
-
-    @Mock
     lateinit var runningRelay: BehaviorRelay<Boolean>
 
     private lateinit var appInfosRelay: BehaviorRelay<LoadEvent>
@@ -51,7 +47,6 @@ class LoadAppInfoTaskTest {
         task = LoadAppInfoTask(
                 appInfoRepository,
                 showSettingsRepository,
-                appConfig,
                 appInfosRelay,
                 runningRelay
         )

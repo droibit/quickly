@@ -28,8 +28,7 @@ fun mainModule(view: MainContract.View) = Kodein.Module {
         LoadAppInfoTask(
                 appInfoRepository = instance(),
                 showSettingsRepository = instance(),
-                appConfig = instance(),
-                appInfosRelay = instance(),
+                loadEventRelay = instance(),
                 runningRelay = instance()
         )
     }
