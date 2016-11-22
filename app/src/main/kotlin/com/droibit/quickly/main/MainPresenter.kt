@@ -40,7 +40,7 @@ class MainPresenter(
                 .filter { it !== cacheEvent }
                 .doOnNext { cacheEvent = it }
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { onLoadAppInfos(event = it) }
+                .subscribe { onAppsLoaded(event = it) }
                 .addTo(subscriptions)
     }
 
@@ -79,11 +79,11 @@ class MainPresenter(
                 }
     }
 
-    private fun onLoadAppInfos(event: LoadEvent) {
+    private fun onAppsLoaded(event: LoadEvent) {
         when (event) {
             is LoadEvent.OnResult -> {
-                if (event.appInfos.isNotEmpty()) {
-                    view.showAppInfoList(event.appInfos)
+                if (event.apps.isNotEmpty()) {
+                    view.showAppInfoList(event.apps)
                 } else {
                     view.showNoAppInfo()
                 }

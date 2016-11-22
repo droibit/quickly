@@ -37,17 +37,17 @@ class LoadAppInfoTaskTest {
     @Mock
     lateinit var runningRelay: BehaviorRelay<Boolean>
 
-    private lateinit var appInfosRelay: BehaviorRelay<LoadEvent>
+    private lateinit var loadEventRelay: BehaviorRelay<LoadEvent>
 
     private lateinit var task: LoadAppInfoTask
 
     @Before
     fun setUp() {
-        appInfosRelay = BehaviorRelay.create()
+        loadEventRelay = BehaviorRelay.create()
         task = LoadAppInfoTask(
                 appInfoRepository,
                 showSettingsRepository,
-                appInfosRelay,
+                loadEventRelay,
                 runningRelay
         )
     }
@@ -88,7 +88,7 @@ class LoadAppInfoTaskTest {
         assertThat(loadEvent).isExactlyInstanceOf(LoadEvent.OnResult::class.java)
 
         val onResult = loadEvent as LoadEvent.OnResult
-        assertThat(onResult.appInfos).isEqualTo(expectedAppInfoList)
+        assertThat(onResult.apps).isEqualTo(expectedAppInfoList)
 
         val inOrder = inOrder(runningRelay)
         inOrder.verify(runningRelay).call(true)
@@ -131,7 +131,7 @@ class LoadAppInfoTaskTest {
         assertThat(loadEvent).isExactlyInstanceOf(LoadEvent.OnResult::class.java)
 
         val onResult = loadEvent as LoadEvent.OnResult
-        assertThat(onResult.appInfos).isEqualTo(expectedAppInfoList.filter { !it.preInstalled })
+        assertThat(onResult.apps).isEqualTo(expectedAppInfoList.filter { !it.preInstalled })
 
         val inOrder = inOrder(runningRelay)
         inOrder.verify(runningRelay).call(true)

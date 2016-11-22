@@ -26,7 +26,7 @@ interface MainContract {
 
     interface View {
 
-        fun showAppInfoList(appInfos: List<AppInfo>)
+        fun showAppInfoList(apps: List<AppInfo>)
 
         fun showNoAppInfo()
 
@@ -69,7 +69,7 @@ interface MainContract {
     interface LoadAppInfoTask {
 
         sealed class LoadEvent {
-            class OnResult(val appInfos: List<AppInfo>) : LoadEvent()
+            class OnResult(val apps: List<AppInfo>) : LoadEvent()
             object Nothing : LoadEvent()
         }
 

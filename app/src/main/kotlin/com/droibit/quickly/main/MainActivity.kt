@@ -107,12 +107,12 @@ class MainActivity : AppCompatActivity(), MainContract.View, KodeinAware {
 
     // MainContract.View
 
-    override fun showAppInfoList(appInfos: List<AppInfo>) {
-        Timber.d("showAppInfoList(appInfos=${appInfos.size})")
+    override fun showAppInfoList(apps: List<AppInfo>) {
+        Timber.d("showAppInfoList(apps=${apps.size})")
         emptyView.visibility = View.GONE
         recyclerView.visibility = View.VISIBLE
-        appInfoAdapter.addAll(appInfos)
-        subTitleToolbar.appCount = appInfos.size
+        appInfoAdapter.addAll(apps)
+        subTitleToolbar.appCount = apps.size
     }
 
     override fun showNoAppInfo() {

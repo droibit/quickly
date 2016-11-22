@@ -88,7 +88,7 @@ class MainPresenterTest {
     }
 
     @Test
-    fun onResume_subscribeAppInfos() {
+    fun onResume_subscribeApps() {
         `when`(loadTask.isRunning()).thenReturn(Observable.empty())
 
         val mockList = mock(List::class.java) as List<AppInfo>
@@ -119,7 +119,7 @@ class MainPresenterTest {
     }
 
     @Test
-    fun onResume_resubscribeAppInfos() {
+    fun onResume_resubscribeApps() {
         `when`(loadTask.isRunning()).thenReturn(Observable.empty())
 
         val relay = BehaviorRelay.create<LoadEvent>()
