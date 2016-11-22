@@ -6,7 +6,7 @@ import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.SortB
 import java.util.*
 import kotlin.comparisons.compareBy
 import kotlin.comparisons.compareByDescending
-import kotlin.comparisons.thenByDescending
+import kotlin.comparisons.thenBy
 
 object AppInfoComparators {
 
@@ -24,7 +24,7 @@ object AppInfoComparators {
             }
             SortBy.LAST_UPDATED -> {
                 val comparator = if (order == Order.ASC) compareBy(AppInfo::lastUpdateTime) else compareByDescending(AppInfo::lastUpdateTime)
-                comparator.thenByDescending(AppInfo::name)
+                comparator.thenBy(AppInfo::name)
             }
             SortBy.PACKAGE -> {
                 if (order == Order.ASC) compareBy(AppInfo::packageName) else compareByDescending(AppInfo::packageName)

@@ -86,14 +86,12 @@ class MainActivity : AppCompatActivity(), MainContract.View, KodeinAware {
     }
 
     override fun onPause() {
-        subscriptions.clear()
         presenter.onPause()
         super.onPause()
     }
 
     override fun onDestroy() {
         presenter.onDestroy()
-        subscriptions.unsubscribe()
         super.onDestroy()
     }
 

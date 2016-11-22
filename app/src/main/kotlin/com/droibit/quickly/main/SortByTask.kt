@@ -3,7 +3,6 @@ package com.droibit.quickly.main
 import com.droibit.quickly.data.repository.settings.ShowSettingsRepository
 import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.Order
 import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.SortBy
-import rx.Completable
 import rx.Single
 
 class SortByTask(private val showSettingsRepository: ShowSettingsRepository)

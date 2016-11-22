@@ -34,7 +34,7 @@ fun mainModule(view: MainContract.View) = Kodein.Module {
         )
     }
 
-    bind<CompositeSubscription>() with provider { CompositeSubscription() }
+    bind<CompositeSubscription>() with singleton { CompositeSubscription() }
 
     bind<BehaviorRelay<Boolean>>() with provider { BehaviorRelay.create<Boolean>() }
 
