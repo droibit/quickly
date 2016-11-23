@@ -85,9 +85,9 @@ class MainPresenter(
                 }
     }
 
-    private fun onAppsLoaded(apps: List<AppInfo>) {
+    private fun onAppsLoaded(apps: List<AppInfo>, reloaded: Boolean) {
         if (apps.isNotEmpty()) {
-            view.showAppInfoList(apps)
+            view.showAppInfoList(apps, resetPosition = reloaded)
         } else {
             view.showNoAppInfo()
         }
@@ -97,13 +97,13 @@ class MainPresenter(
         showSettingsTask.storeShowSystem(checked)
                 .andThen(loadTask.requestLoad())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { onAppsLoaded(apps = it) }
+                .subscribe { onAppsLoaded(apps = it, reloaded = true) }
     }
 
     private fun refreshApps(forceLoad: Boolean) {
         loadTask.requestLoad(forceLoad)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { onAppsLoaded(apps = it) }
+                .subscribe { onAppsLoaded(apps = it, reloaded = forceLoad) }
                 .addTo(subscriptions)
     }
 }

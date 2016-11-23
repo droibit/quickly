@@ -131,7 +131,7 @@ class MainActivity : AppCompatActivity(),
 
     // MainContract.View
 
-    override fun showAppInfoList(apps: List<AppInfo>) {
+    override fun showAppInfoList(apps: List<AppInfo>, resetPosition: Boolean) {
         Timber.d("showAppInfoList(apps=${apps.size})")
         emptyView.visibility = View.GONE
         recyclerView.visibility = View.VISIBLE
@@ -141,8 +141,10 @@ class MainActivity : AppCompatActivity(),
         } else {
             appInfoAdapter.replaceAll(apps)
         }
-        recyclerView.scrollToPosition(0)
 
+        if (resetPosition) {
+            recyclerView.scrollToPosition(0)
+        }
         subTitleToolbar.appCount = apps.size
     }
 
