@@ -15,4 +15,5 @@
     <string name="asc">Asc</string>
     <string name="desc">Desc</string>
     <string name="sorted_by_dialog_title_chooser">Sort by</string>
+    <string name="search_app_hint">Search</string>
 </resources>

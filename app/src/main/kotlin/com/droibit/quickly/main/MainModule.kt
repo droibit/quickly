@@ -8,20 +8,25 @@ import com.github.salomonbrys.kodein.singleton
 import com.jakewharton.rxrelay.BehaviorRelay
 import rx.subscriptions.CompositeSubscription
 
-fun mainModule(view: MainContract.View) = Kodein.Module {
+fun mainModule(view: MainContract.View, navigator: MainContract.Navigator) = Kodein.Module {
 
     bind<MainContract.View>() with instance(view)
+
+    bind<MainContract.Navigator>() with instance(navigator)
 
     bind<MainContract.Presenter>() with provider {
         MainPresenter(
                 view = instance(),
+                navigator = instance(),
                 loadTask = instance(),
                 showSettingsTask = instance(),
                 subscriptions = instance()
         )
     }
 
-    bind<MainContract.ShowSettingsTask>() with provider { ShowSettingsTask(showSettingsRepository = instance()) }
+    bind<MainContract.ShowSettingsTask>() with provider {
+        ShowSettingsTask(showSettingsRepository = instance())
+    }
 
     bind<MainContract.LoadAppInfoTask>() with provider {
         LoadAppInfoTask(

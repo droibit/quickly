@@ -16,6 +16,7 @@ import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.Order
 import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.SortBy
 import com.droibit.quickly.main.MainContract.SortByChooseEvent
 import com.droibit.quickly.main.MainContract.MenuItem
+import com.droibit.quickly.main.search.SearchActivity
 import com.github.droibit.chopstick.bindView
 import com.github.salomonbrys.kodein.*
 import com.github.salomonbrys.kodein.android.appKodein
@@ -24,7 +25,10 @@ import rx.subscriptions.CompositeSubscription
 import timber.log.Timber
 
 
-class MainActivity : AppCompatActivity(), MainContract.View, KodeinAware {
+class MainActivity : AppCompatActivity(),
+        MainContract.View,
+        MainContract.Navigator,
+        KodeinAware {
 
     companion object {
 
@@ -59,7 +63,9 @@ class MainActivity : AppCompatActivity(), MainContract.View, KodeinAware {
 
     override val kodein: Kodein by Kodein.lazy {
         extend(appKodein())
-        import(mainModule(view = this@MainActivity))
+
+        val self = this@MainActivity
+        import(mainModule(view = self, navigator = self))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -111,6 +117,16 @@ class MainActivity : AppCompatActivity(), MainContract.View, KodeinAware {
     override fun onOptionsItemSelected(item: android.view.MenuItem): Boolean {
         presenter.onOptionsItemClicked(item.toAppMenuItem())
         return true
+    }
+
+    // MainContract.Navigator
+    override fun navigateSearch(sourceApps: List<AppInfo>) {
+        val intent = SearchActivity.createIntent(this, sourceApps)
+        startActivity(intent)
+    }
+
+    override fun navigateSettings() {
+        TODO()
     }
 
     // MainContract.View
@@ -166,14 +182,16 @@ class MainActivity : AppCompatActivity(), MainContract.View, KodeinAware {
                 .subscribe { presenter.onSortByChoose(it.sortBy, it.order) }
                 .addTo(subscriptions)
     }
-}
 
-private fun android.view.MenuItem.toAppMenuItem(): MenuItem {
-    return when (itemId) {
-        R.id.search -> MenuItem.Search
-        R.id.refresh -> MenuItem.Refresh
-        R.id.show_system -> MenuItem.ShowSystem(!isChecked)
-        R.id.settings -> MenuItem.Settings
-        else -> throw IllegalStateException("unknown menuItem: $title")
+    private fun android.view.MenuItem.toAppMenuItem(): MenuItem {
+        return when (itemId) {
+            R.id.search -> MenuItem.Search(apps = appInfoAdapter.items)
+            R.id.refresh -> MenuItem.Refresh
+            R.id.show_system -> MenuItem.ShowSystem(!isChecked)
+            R.id.settings -> MenuItem.Settings
+            else -> throw IllegalStateException("unknown menuItem: $title")
+        }
     }
 }
+
+

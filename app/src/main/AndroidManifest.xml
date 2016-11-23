@@ -10,7 +10,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".main.MainActivity"
-            android:theme="@style/AppTheme.Main" >
+            android:theme="@style/AppTheme.Main">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -19,10 +19,14 @@
         </activity>
 
         <activity
+            android:name="com.droibit.quickly.main.search.SearchActivity"
+            android:theme="@style/AppTheme.Search"
+            android:exported="false" />
+
+        <activity
             android:name=".settings.SettingsActivity"
             android:exported="false"
-            android:parentActivityName=".main.MainActivity"
-            />
+            android:parentActivityName=".main.MainActivity" />
     </application>
 
 </manifest>

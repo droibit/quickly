@@ -13,6 +13,7 @@ import timber.log.Timber
 
 class MainPresenter(
         private val view: MainContract.View,
+        private val navigator: MainContract.Navigator,
         private val loadTask: MainContract.LoadAppInfoTask,
         private val showSettingsTask: MainContract.ShowSettingsTask,
         private val subscriptions: CompositeSubscription) : MainContract.Presenter {
@@ -57,6 +58,7 @@ class MainPresenter(
     @UiThread
     override fun onOptionsItemClicked(menuItem: MenuItem) {
         when (menuItem) {
+            is MenuItem.Search -> navigator.navigateSearch(sourceApps = menuItem.apps)
             is MenuItem.Refresh -> refreshApps(forceLoad = true)
             is MenuItem.ShowSystem -> toggleShowSystemApps(menuItem.checked)
         }
