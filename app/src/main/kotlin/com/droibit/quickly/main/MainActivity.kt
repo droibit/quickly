@@ -6,7 +6,6 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
 import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import android.widget.ProgressBar
 import com.droibit.quickly.R
@@ -16,6 +15,7 @@ import com.droibit.quickly.data.repository.appinfo.AppInfo
 import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.Order
 import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.SortBy
 import com.droibit.quickly.main.MainContract.SortByChooseEvent
+import com.droibit.quickly.main.MainContract.MenuItem
 import com.github.droibit.chopstick.bindView
 import com.github.salomonbrys.kodein.*
 import com.github.salomonbrys.kodein.android.appKodein
@@ -54,6 +54,8 @@ class MainActivity : AppCompatActivity(), MainContract.View, KodeinAware {
     private val subscriptions: CompositeSubscription by injector.instance()
 
     private val appInfoAdapter: AppInfoAdapter by lazy { AppInfoAdapter(this) }
+
+    private lateinit var showSystemMenuItem: android.view.MenuItem
 
     override val kodein: Kodein by Kodein.lazy {
         extend(appKodein())
@@ -97,11 +99,17 @@ class MainActivity : AppCompatActivity(), MainContract.View, KodeinAware {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.main, menu)
+        showSystemMenuItem = menu.findItem(R.id.show_system)
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        presenter.onOptionsItemClicked(MainContract.MenuItem.from(item.itemId))
+    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+        presenter.onPrepareShowSystemMenu()
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: android.view.MenuItem): Boolean {
+        presenter.onOptionsItemClicked(item.toAppMenuItem())
         return true
     }
 
@@ -111,7 +119,14 @@ class MainActivity : AppCompatActivity(), MainContract.View, KodeinAware {
         Timber.d("showAppInfoList(apps=${apps.size})")
         emptyView.visibility = View.GONE
         recyclerView.visibility = View.VISIBLE
-        appInfoAdapter.addAll(apps)
+
+        if (appInfoAdapter.isEmpty) {
+            appInfoAdapter.addAll(apps)
+        } else {
+            appInfoAdapter.replaceAll(apps)
+        }
+        recyclerView.scrollToPosition(0)
+
         subTitleToolbar.appCount = apps.size
     }
 
@@ -141,10 +156,24 @@ class MainActivity : AppCompatActivity(), MainContract.View, KodeinAware {
         }
     }
 
+    override fun setShowSystem(showSystem: Boolean) {
+        showSystemMenuItem.isChecked = showSystem
+    }
+
     private fun subscribeSortBy() {
         rxBus.asObservable()
                 .ofType(SortByChooseEvent::class.java)
                 .subscribe { presenter.onSortByChoose(it.sortBy, it.order) }
                 .addTo(subscriptions)
+    }
+}
+
+private fun android.view.MenuItem.toAppMenuItem(): MenuItem {
+    return when (itemId) {
+        R.id.search -> MenuItem.Search
+        R.id.refresh -> MenuItem.Refresh
+        R.id.show_system -> MenuItem.ShowSystem(!isChecked)
+        R.id.settings -> MenuItem.Settings
+        else -> throw IllegalStateException("unknown menuItem: $title")
     }
 }

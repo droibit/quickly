@@ -52,8 +52,15 @@ class AppInfoAdapter(
         this.items.addAll(items)
     }
 
-    fun addAll(vararg items: AppInfo) {
-        this.items.addAll(*items)
+    fun replaceAll(items: List<AppInfo>) {
+        this.items.beginBatchedUpdates()
+        try {
+            this.items.clear()
+            this.items.addAll(items)
+            this.notifyDataSetChanged()
+        } finally {
+            this.items.endBatchedUpdates()
+        }
     }
 
     fun clear() {
@@ -61,17 +68,10 @@ class AppInfoAdapter(
     }
 
     fun refresh() {
-        val list = ArrayList<AppInfo>(items.size())
-        (0..items.size()-1).mapTo(list) { items.get(it) }
+        val newItems = ArrayList<AppInfo>(items.size())
+        (0..items.size()-1).mapTo(newItems) { items.get(it) }
 
-        this.items.beginBatchedUpdates()
-        try {
-            this.items.clear()
-            this.items.addAll(list)
-            this.notifyDataSetChanged()
-        } finally {
-            this.items.endBatchedUpdates()
-        }
+        replaceAll(newItems)
     }
 }
 

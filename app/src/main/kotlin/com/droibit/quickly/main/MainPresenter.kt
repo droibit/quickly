@@ -4,6 +4,7 @@ import android.support.annotation.UiThread
 import com.droibit.quickly.data.repository.appinfo.AppInfo
 import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.Order
 import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.SortBy
+import com.droibit.quickly.main.MainContract.MenuItem
 import rx.android.schedulers.AndroidSchedulers
 import rx.lang.kotlin.addTo
 import rx.schedulers.Schedulers
@@ -13,12 +14,12 @@ import timber.log.Timber
 class MainPresenter(
         private val view: MainContract.View,
         private val loadTask: MainContract.LoadAppInfoTask,
-        private val sortByTask: MainContract.SortByTask,
+        private val showSettingsTask: MainContract.ShowSettingsTask,
         private val subscriptions: CompositeSubscription) : MainContract.Presenter {
 
     @UiThread
     override fun onCreate(shouldLoad: Boolean) {
-        sortByTask.load()
+        showSettingsTask.loadSortBy()
                 .observeOn(Schedulers.immediate())
                 .subscribe {
                     val (sortBy, order) = it
@@ -50,12 +51,22 @@ class MainPresenter(
     }
 
     @UiThread
-    override fun onOptionsItemClicked(menuItem: MainContract.MenuItem) {
+    override fun onPrepareShowSystemMenu() {
+        showSettingsTask.loadShowSystem()
+                .subscribeOn(Schedulers.immediate())
+                .subscribe { view.setShowSystem(showSystem = it) }
+    }
+
+    @UiThread
+    override fun onOptionsItemClicked(menuItem: MenuItem) {
+        when (menuItem) {
+            is MenuItem.ShowSystem -> toggleShowSystemApps(menuItem.checked)
+        }
     }
 
     @UiThread
     override fun onSortByClicked() {
-        sortByTask.load()
+        showSettingsTask.loadSortBy()
                 .subscribeOn(Schedulers.immediate())
                 .subscribe {
                     view.showSortByChooserDialog(sortBy = it.first)
@@ -64,7 +75,7 @@ class MainPresenter(
 
     @UiThread
     override fun onSortByChoose(sortBy: SortBy, order: Order) {
-        sortByTask.store(sortBy, order)
+        showSettingsTask.storeSortBy(sortBy, order)
                 .subscribeOn(Schedulers.immediate())
                 .subscribe { updated ->
                     if (updated) {
@@ -81,4 +92,12 @@ class MainPresenter(
             view.showNoAppInfo()
         }
     }
+
+    private fun toggleShowSystemApps(checked: Boolean) {
+        showSettingsTask.storeShowSystem(checked)
+                .andThen(loadTask.requestLoad())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { onAppsLoaded(apps = it) }
+    }
+
 }

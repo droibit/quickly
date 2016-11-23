@@ -1,8 +1,6 @@
 package com.droibit.quickly.main
 
-import android.support.annotation.IdRes
 import android.support.annotation.UiThread
-import com.droibit.quickly.R
 import com.droibit.quickly.data.repository.appinfo.AppInfo
 import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.Order
 import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.SortBy
@@ -12,16 +10,11 @@ import rx.Single
 
 interface MainContract {
 
-    enum class MenuItem(@IdRes val id: Int) {
-        SEARCH(R.id.search),
-        REFRESH(R.id.refresh),
-        SHOW_SYSTEM(R.id.show_system),
-        SETTINGS(R.id.settings);
-
-        companion object {
-            @JvmStatic
-            fun from(@IdRes id: Int) = values().first { it.id == id }
-        }
+    sealed class MenuItem {
+        object Search : MenuItem()
+        object Refresh : MenuItem()
+        class ShowSystem(val checked: Boolean) : MenuItem()
+        object Settings : MenuItem()
     }
 
     interface View {
