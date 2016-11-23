@@ -2,21 +2,21 @@ package com.droibit.quickly.main.search
 
 import android.content.Context
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.Toolbar
-
 import com.droibit.quickly.R
 import com.droibit.quickly.data.repository.appinfo.AppInfo
+import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.Order
+import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.SortBy
 import com.droibit.quickly.main.AppInfoAdapter
 import com.github.droibit.chopstick.bindView
 import com.lapism.searchview.SearchView
 import java.util.*
 import kotlin.comparisons.compareBy
 
-class SearchActivity : AppCompatActivity() {
+class SearchActivity : AppCompatActivity(), SearchContract.View {
 
     companion object {
 
@@ -54,5 +54,11 @@ class SearchActivity : AppCompatActivity() {
 
         searchView.setNavigationIcon(R.drawable.ic_search)
         searchView.open(true)
+    }
+
+    // SearchContract.View
+
+    override fun showApps(apps: List<AppInfo>, sortBy: SortBy, order: Order) {
+        TODO()
     }
 }
