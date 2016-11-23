@@ -34,10 +34,7 @@ class MainPresenter(
                 .subscribe { view.setLoadingIndicator(active = it) }
                 .addTo(subscriptions)
 
-        loadTask.requestLoad()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { onAppsLoaded(apps = it) }
-                .addTo(subscriptions)
+        refreshApps(forceLoad = false)
     }
 
     @UiThread
@@ -60,6 +57,7 @@ class MainPresenter(
     @UiThread
     override fun onOptionsItemClicked(menuItem: MenuItem) {
         when (menuItem) {
+            is MenuItem.Refresh -> refreshApps(forceLoad = true)
             is MenuItem.ShowSystem -> toggleShowSystemApps(menuItem.checked)
         }
     }
@@ -100,4 +98,10 @@ class MainPresenter(
                 .subscribe { onAppsLoaded(apps = it) }
     }
 
+    private fun refreshApps(forceLoad: Boolean) {
+        loadTask.requestLoad(forceLoad)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { onAppsLoaded(apps = it) }
+                .addTo(subscriptions)
+    }
 }

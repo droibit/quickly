@@ -18,6 +18,7 @@ class LoadAppInfoTask(
     override fun isRunning() = runningRelay.distinctUntilChanged()
 
     override fun requestLoad(forceReload: Boolean): Observable<List<AppInfo>> {
+        // TODO: if forceReload, need delay 1sec
         return appInfoRepository.loadAll(forceReload)
                 .map { apps -> apps.filter { filterIfOnlyInstalled(it) } }
                 .filter { it != cachedApps }

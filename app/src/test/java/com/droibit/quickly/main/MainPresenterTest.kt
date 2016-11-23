@@ -106,7 +106,7 @@ class MainPresenterTest {
     }
 
     @Test
-    fun onOptionsItemClicked_showAppInfoList() {
+    fun onOptionsItemClicked_showSystem_showAppInfoList() {
         `when`(showSettingsTask.storeShowSystem(anyBoolean())).thenReturn(Completable.complete())
 
         val mockList = mock(List::class.java) as List<AppInfo>
@@ -114,6 +114,17 @@ class MainPresenterTest {
         `when`(loadTask.requestLoad()).thenReturn(mockList.toSingletonObservable())
 
         presenter.onOptionsItemClicked(MenuItem.ShowSystem(checked = true))
+
+        verify(view).showAppInfoList(mockList)
+    }
+
+    @Test
+    fun onOptionsItemClicked_refresh_showAppInfoList() {
+        val mockList = mock(List::class.java) as List<AppInfo>
+        `when`(mockList.isEmpty()).thenReturn(false)
+        `when`(loadTask.requestLoad(anyBoolean())).thenReturn(mockList.toSingletonObservable())
+
+        presenter.onOptionsItemClicked(MenuItem.Refresh)
 
         verify(view).showAppInfoList(mockList)
     }
