@@ -11,7 +11,7 @@ import org.mockito.Mockito.*
 import org.mockito.junit.MockitoJUnit
 import rx.observers.TestSubscriber
 
-class SortByTaskTest {
+class ShowSettingsTaskTest {
 
     @Rule
     @JvmField
@@ -20,20 +20,20 @@ class SortByTaskTest {
     @Mock
     private lateinit var showSettingsRepository: ShowSettingsRepository
 
-    private lateinit var task: SortByTask
+    private lateinit var task: ShowSettingsTask
 
     @Before
     fun setUp() {
-        task = SortByTask(showSettingsRepository)
+        task = ShowSettingsTask(showSettingsRepository)
     }
 
     @Test
-    fun load_getSortByWithOrder() {
+    fun load_sortByWithOrder() {
         `when`(showSettingsRepository.sortBy).thenReturn(SortBy.LAST_UPDATED)
         `when`(showSettingsRepository.order).thenReturn(Order.DESC)
 
         val testSubscriber = TestSubscriber.create<Pair<SortBy, Order>>()
-        task.load().subscribe(testSubscriber)
+        task.loadSortBy().subscribe(testSubscriber)
 
         testSubscriber.assertNoErrors()
         testSubscriber.assertCompleted()
@@ -42,14 +42,14 @@ class SortByTaskTest {
     }
 
     @Test
-    fun store_setSortByWithOrder() {
+    fun store_sortByWithOrder() {
         // updated sort by
         run {
             `when`(showSettingsRepository.sortBy).thenReturn(SortBy.LAST_UPDATED)
             `when`(showSettingsRepository.order).thenReturn(Order.ASC)
 
             val testSubscriber = TestSubscriber.create<Boolean>()
-            task.store(SortBy.PACKAGE, Order.ASC).subscribe(testSubscriber)
+            task.storeSortBy(SortBy.PACKAGE, Order.ASC).subscribe(testSubscriber)
 
             testSubscriber.assertValues(true)
 
@@ -64,7 +64,7 @@ class SortByTaskTest {
             `when`(showSettingsRepository.order).thenReturn(Order.ASC)
 
             val testSubscriber = TestSubscriber.create<Boolean>()
-            task.store(SortBy.PACKAGE, Order.DESC).subscribe(testSubscriber)
+            task.storeSortBy(SortBy.PACKAGE, Order.DESC).subscribe(testSubscriber)
 
             testSubscriber.assertValues(true)
 
@@ -79,12 +79,36 @@ class SortByTaskTest {
             `when`(showSettingsRepository.order).thenReturn(Order.ASC)
 
             val testSubscriber = TestSubscriber.create<Boolean>()
-            task.store(SortBy.PACKAGE, Order.ASC).subscribe(testSubscriber)
+            task.storeSortBy(SortBy.PACKAGE, Order.ASC).subscribe(testSubscriber)
 
             testSubscriber.assertValues(false)
 
             verify(showSettingsRepository).sortBy = SortBy.PACKAGE
             verify(showSettingsRepository).order = Order.ASC
         }
+    }
+
+    @Test
+    fun load_showSystem() {
+        `when`(showSettingsRepository.isShowSystem).thenReturn(true)
+
+        val testSubscriber = TestSubscriber.create<Boolean>()
+        task.loadShowSystem().subscribe(testSubscriber)
+
+        testSubscriber.assertNoErrors()
+        testSubscriber.assertCompleted()
+        testSubscriber.assertValueCount(1)
+        testSubscriber.assertValue(true)
+    }
+
+    @Test
+    fun store_showSystem() {
+
+        val testSubscriber = TestSubscriber.create<Unit>()
+        task.storeShowSystem(true).subscribe(testSubscriber)
+
+        testSubscriber.assertCompleted()
+
+        verify(showSettingsRepository).isShowSystem = true
     }
 }

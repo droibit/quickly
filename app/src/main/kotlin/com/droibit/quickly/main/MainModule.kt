@@ -16,12 +16,12 @@ fun mainModule(view: MainContract.View) = Kodein.Module {
         MainPresenter(
                 view = instance(),
                 loadTask = instance(),
-                sortByTask = instance(),
+                showSettingsTask = instance(),
                 subscriptions = instance()
         )
     }
 
-    bind<MainContract.SortByTask>() with provider { SortByTask(showSettingsRepository = instance()) }
+    bind<MainContract.ShowSettingsTask>() with provider { ShowSettingsTask(showSettingsRepository = instance()) }
 
     bind<MainContract.LoadAppInfoTask>() with provider {
         LoadAppInfoTask(

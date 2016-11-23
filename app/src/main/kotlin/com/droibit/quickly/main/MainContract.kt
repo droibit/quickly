@@ -35,6 +35,8 @@ interface MainContract {
         fun setSortBy(sortBy: SortBy, order: Order)
 
         fun showSortByChooserDialog(sortBy: SortBy)
+
+        fun setShowSystem(showSystem: Boolean)
     }
 
     interface Navigator {
@@ -60,6 +62,9 @@ interface MainContract {
         fun onOptionsItemClicked(menuItem: MenuItem)
 
         @UiThread
+        fun onPrepareShowSystemMenu()
+
+        @UiThread
         fun onSortByClicked()
 
         @UiThread
@@ -73,11 +78,15 @@ interface MainContract {
         fun requestLoad(forceReload: Boolean = false): Observable<List<AppInfo>>
     }
 
-    interface SortByTask {
+    interface ShowSettingsTask {
 
-        fun load(): Single<Pair<SortBy, Order>>
+        fun loadSortBy(): Single<Pair<SortBy, Order>>
 
-        fun store(sortBy: SortBy, order: Order): Single<Boolean>
+        fun storeSortBy(sortBy: SortBy, order: Order): Single<Boolean>
+
+        fun loadShowSystem(): Single<Boolean>
+
+        fun storeShowSystem(showSystem: Boolean): Completable
     }
 
     class SortByChooseEvent(val sortBy: SortBy, val order: Order)
