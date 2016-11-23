@@ -26,21 +26,28 @@ class AppInfoAdapter(
 
     private val sortedItemsCallback = SortedListCallback(this)
 
-    private val items = SortedList(AppInfo::class.java, sortedItemsCallback)
+    private val rawItems = SortedList(AppInfo::class.java, sortedItemsCallback)
 
     val isEmpty: Boolean
-        get() = items.size() == 0
+        get() = rawItems.size() == 0
+
+    val items: List<AppInfo>
+        get() {
+            return ArrayList<AppInfo>(rawItems.size()).apply {
+                (0..rawItems.size()-1).mapTo(this) { rawItems.get(it) }
+            }
+        }
 
     var comparator: Comparator<AppInfo>
         get() = sortedItemsCallback.comparator
         set(value) { sortedItemsCallback.comparator = value }
 
     override fun getItemCount(): Int {
-        return items.size()
+        return rawItems.size()
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(items[position])
+        holder.bind(rawItems[position])
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -48,30 +55,27 @@ class AppInfoAdapter(
         return ViewHolder(itemView)
     }
 
-    fun addAll(items: List<AppInfo>) {
-        this.items.addAll(items)
+    fun addAll(newItems: List<AppInfo>) {
+        this.rawItems.addAll(newItems)
     }
 
-    fun replaceAll(items: List<AppInfo>) {
-        this.items.beginBatchedUpdates()
+    fun replaceAll(newItems: List<AppInfo>) {
+        this.rawItems.beginBatchedUpdates()
         try {
-            this.items.clear()
-            this.items.addAll(items)
+            this.rawItems.clear()
+            this.rawItems.addAll(newItems)
             this.notifyDataSetChanged()
         } finally {
-            this.items.endBatchedUpdates()
+            this.rawItems.endBatchedUpdates()
         }
     }
 
     fun clear() {
-        items.clear()
+        rawItems.clear()
     }
 
     fun refresh() {
-        val newItems = ArrayList<AppInfo>(items.size())
-        (0..items.size()-1).mapTo(newItems) { items.get(it) }
-
-        replaceAll(newItems)
+        replaceAll(newItems = items)
     }
 }
 
