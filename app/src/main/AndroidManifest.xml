@@ -19,8 +19,8 @@
         </activity>
 
         <activity
-            android:name="com.droibit.quickly.main.search.SearchActivity"
-            android:theme="@style/AppTheme.Search"
+            android:name=".main.search.SearchActivity"
+            android:theme="@style/AppTheme.Main"
             android:exported="false" />
 
         <activity
