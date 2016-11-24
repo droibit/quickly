@@ -5,12 +5,13 @@ import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.Order
 import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.SortBy
 import rx.Completable
 import rx.Single
+import rx.lang.kotlin.singleOf
 
 class ShowSettingsTask(private val showSettingsRepository: ShowSettingsRepository)
     : MainContract.ShowSettingsTask {
 
     override fun loadSortBy(): Single<Pair<SortBy, Order>> {
-        return Single.just(Pair(showSettingsRepository.sortBy, showSettingsRepository.order))
+        return singleOf(Pair(showSettingsRepository.sortBy, showSettingsRepository.order))
     }
 
     override fun storeSortBy(sortBy: SortBy, order: Order): Single<Boolean> {
@@ -25,7 +26,7 @@ class ShowSettingsTask(private val showSettingsRepository: ShowSettingsRepositor
     }
 
     override fun loadShowSystem(): Single<Boolean> {
-        return Single.just(showSettingsRepository.isShowSystem)
+        return singleOf(showSettingsRepository.isShowSystem)
     }
 
     override fun storeShowSystem(showSystem: Boolean): Completable {

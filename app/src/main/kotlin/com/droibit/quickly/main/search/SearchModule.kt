@@ -9,7 +9,7 @@ fun searchModule(view: SearchContract.View) = Kodein.Module {
     bind<SearchContract.View>() with instance(view)
 
     bind<SearchContract.Presenter>() with provider {
-        SearchPresenter(view = instance())
+        SearchPresenter(view = instance(), showSettingsTask = instance())
     }
 
     bind<SearchContract.ShowSettingsTask>() with provider {

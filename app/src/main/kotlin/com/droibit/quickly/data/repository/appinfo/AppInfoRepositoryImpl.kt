@@ -5,6 +5,7 @@ import com.droibit.quickly.data.repository.source.AppInfoDataSource
 import com.github.gfx.android.orma.annotation.OnConflict
 import rx.Observable
 import rx.Single
+import rx.lang.kotlin.toSingletonObservable
 import java.util.*
 
 class AppInfoRepositoryImpl(
@@ -16,7 +17,7 @@ class AppInfoRepositoryImpl(
 
     override fun loadAll(forceReload: Boolean): Observable<List<AppInfo>> {
         if (!forceReload && cache.isNotEmpty()) {
-            return Observable.just(ArrayList(cache.values))
+            return cache.values.toList().toSingletonObservable()
         }
 
         val storedAppInfo = getStoredAppInfo()

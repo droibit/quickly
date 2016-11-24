@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import com.droibit.quickly.data.repository.appinfo.AppInfo
 import rx.Observable
 import rx.Single
+import rx.lang.kotlin.singleOf
 
 class AppInfoDataSourceImpl(private val pm: PackageManager) : AppInfoDataSource {
 
@@ -15,7 +16,7 @@ class AppInfoDataSourceImpl(private val pm: PackageManager) : AppInfoDataSource 
     }
 
     override fun get(packageName: String): Single<AppInfo> {
-        return Single.just(pm.getPackageInfo(packageName, 0))
+        return singleOf(pm.getPackageInfo(packageName, 0))
                 .map { it.toAppInfo() }
     }
 
