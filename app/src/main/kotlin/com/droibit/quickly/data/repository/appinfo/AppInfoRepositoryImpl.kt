@@ -15,6 +15,9 @@ class AppInfoRepositoryImpl(
     @VisibleForTesting
     internal val cache: MutableMap<String, AppInfo> = LinkedHashMap()
 
+    override val hasCache: Boolean
+        get() = cache.isNotEmpty()
+
     override fun loadAll(forceReload: Boolean): Observable<List<AppInfo>> {
         if (!forceReload && cache.isNotEmpty()) {
             return cache.values.toList().toSingletonObservable()

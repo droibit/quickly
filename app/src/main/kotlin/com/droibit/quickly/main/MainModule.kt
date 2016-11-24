@@ -5,7 +5,7 @@ import com.github.salomonbrys.kodein.Kodein
 import com.github.salomonbrys.kodein.instance
 import com.github.salomonbrys.kodein.provider
 import com.github.salomonbrys.kodein.singleton
-import com.jakewharton.rxrelay.BehaviorRelay
+import com.jakewharton.rxrelay.PublishRelay
 import rx.subscriptions.CompositeSubscription
 
 fun mainModule(view: MainContract.View, navigator: MainContract.Navigator) = Kodein.Module {
@@ -38,7 +38,7 @@ fun mainModule(view: MainContract.View, navigator: MainContract.Navigator) = Kod
 
     bind<CompositeSubscription>() with singleton { CompositeSubscription() }
 
-    bind<BehaviorRelay<Boolean>>() with provider { BehaviorRelay.create<Boolean>() }
+    bind<PublishRelay<Boolean>>() with provider { PublishRelay.create<Boolean>() }
 
     bind<RxBus>() with singleton { RxBus() }
 }

@@ -5,6 +5,8 @@ import rx.Single
 
 interface AppInfoRepository {
 
+    val hasCache: Boolean
+
     fun loadAll(forceReload: Boolean = false): Observable<List<AppInfo>>
 
     fun addOrUpdate(packageName: String): Single<Boolean>
