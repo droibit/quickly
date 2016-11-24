@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.view.MenuItem
+import com.droibit.quickly.R
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -17,5 +19,15 @@ class SettingsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_settings)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        val fragment = supportFragmentManager.findFragmentById(R.id.settings)
+        if (fragment != null) {
+            fragment.onOptionsItemSelected(item)
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
 }
