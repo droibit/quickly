@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Quickly</string>
-    <string name="main_no_apps">アプリケーションがありません</string>
+    <string name="main_no_apps">アプリがありません</string>
     <string name="main_menu_refresh">更新</string>
     <string name="main_menu_show_system">システムアプリを表示</string>
     <string name="app_menu_settings">設定</string>
