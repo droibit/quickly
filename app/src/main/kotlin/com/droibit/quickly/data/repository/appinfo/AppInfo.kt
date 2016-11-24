@@ -26,6 +26,10 @@ data class AppInfo @Setter constructor(
         }
     }
 
+    val lowerName: String by lazy { name.toLowerCase() }
+
+    val lowerPackageName: String by lazy { packageName.toLowerCase() }
+
     constructor(source: Parcel) : this(
             source.readString(),
             source.readString(),
