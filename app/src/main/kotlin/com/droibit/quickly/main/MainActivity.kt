@@ -1,6 +1,8 @@
 package com.droibit.quickly.main
 
 import android.os.Bundle
+import android.support.v4.app.ActivityCompat
+import android.support.v4.app.ActivityOptionsCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -122,7 +124,8 @@ class MainActivity : AppCompatActivity(),
     // MainContract.Navigator
     override fun navigateSearch(sourceApps: List<AppInfo>) {
         val intent = SearchActivity.createIntent(this, sourceApps)
-        startActivity(intent)
+        val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this).toBundle()
+        ActivityCompat.startActivity(this, intent, options)
     }
 
     override fun navigateSettings() {

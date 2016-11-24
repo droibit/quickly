@@ -1,22 +1,19 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-    </style>
 
-    <style name="AppTheme.Main" parent="AppTheme">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
+        <!-- Status bar stuff. -->
+        <item name="android:statusBarColor">@color/colorPrimaryDark</item>
     </style>
 
     <style name="AppTheme.Main.Search" parent="AppTheme.Main">
+        <item name="android:windowContentTransitions">true</item>
+        <item name="android:windowEnterTransition">@android:transition/fade</item>
+        <item name="android:windowExitTransition">@android:transition/fade</item>
     </style>
-
-    <style name="AppTheme.Main.AppBarOverlay" parent="ThemeOverlay.AppCompat.ActionBar" />
-    <style name="AppTheme.Main.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-
 </resources>
