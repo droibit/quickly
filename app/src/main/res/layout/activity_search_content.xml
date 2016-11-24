@@ -12,8 +12,6 @@
         android:fadeScrollbars="true"
         android:paddingBottom="4dp"
         android:paddingTop="4dp"
-        android:scrollbars="vertical"
-        android:visibility="visible"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:visibility="visible" />
 
