@@ -64,7 +64,6 @@ class AppInfoAdapter(
         try {
             this.rawItems.clear()
             this.rawItems.addAll(newItems)
-            this.notifyDataSetChanged()
         } finally {
             this.rawItems.endBatchedUpdates()
         }

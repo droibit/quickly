@@ -8,15 +8,27 @@ import rx.Single
 
 interface SearchContract {
 
+    sealed class QueryTextEvent(val query: String) {
+        class Change(query: String) : QueryTextEvent(query)
+        class Submit(query: String) : QueryTextEvent(query)
+    }
+
     interface View {
 
-        fun showApps(apps: List<AppInfo>, sortBy: SortBy, order: Order)
+        fun showApps(apps: List<AppInfo>)
+
+        fun setSortBy(sortBy: SortBy, order: Order)
+
+        fun closeSearch()
     }
 
     interface Presenter {
 
         @UiThread
-        fun onCreate(sourceApps: List<AppInfo>)
+        fun onCreate()
+
+        @UiThread
+        fun onQueryTextEventEmitted(event: QueryTextEvent)
     }
 
     interface ShowSettingsTask {
