@@ -20,6 +20,7 @@ import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.SortB
 import com.droibit.quickly.main.MainContract.SortByChooseEvent
 import com.droibit.quickly.main.MainContract.MenuItem
 import com.droibit.quickly.main.search.SearchActivity
+import com.droibit.quickly.settings.SettingsActivity
 import com.github.droibit.chopstick.bindView
 import com.github.salomonbrys.kodein.*
 import com.github.salomonbrys.kodein.android.appKodein
@@ -134,7 +135,7 @@ class MainActivity : AppCompatActivity(),
     }
 
     override fun navigateSettings() {
-        TODO()
+        startActivity(SettingsActivity.createIntent(this))
     }
 
     // MainContract.View

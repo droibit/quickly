@@ -25,7 +25,9 @@
 
         <activity
             android:name=".settings.SettingsActivity"
+            android:theme="@style/AppTheme.Settings"
             android:exported="false"
+            android:label="@string/settings_title"
             android:parentActivityName=".main.MainActivity" />
     </application>
 

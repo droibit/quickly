@@ -134,6 +134,13 @@ class MainPresenterTest {
     }
 
     @Test
+    fun onOptionsItemClicked_settings_navigateSettings() {
+        presenter.onOptionsItemClicked(MenuItem.Settings)
+
+        verify(navigator).navigateSettings()
+    }
+
+    @Test
     fun onSortByClicked_showSortByChooserDialog() {
         val result = Pair(SortBy.NAME, Order.ASC)
         `when`(showSettingsTask.loadSortBy()).thenReturn(singleOf(result))

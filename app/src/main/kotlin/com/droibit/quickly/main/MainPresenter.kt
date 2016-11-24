@@ -60,6 +60,7 @@ class MainPresenter(
         when (menuItem) {
             is MenuItem.Refresh -> refreshApps(forceLoad = true)
             is MenuItem.ShowSystem -> toggleShowSystemApps(menuItem.checked)
+            is MenuItem.Settings -> navigator.navigateSettings()
         }
     }
 

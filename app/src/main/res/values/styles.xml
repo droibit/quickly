@@ -13,7 +13,10 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="AppTheme.Main.Search" parent="AppTheme.Main">
+    <style name="AppTheme.Main.Search" parent="AppTheme.Main" />
+
+    <style name="AppTheme.Settings" parent="AppTheme">
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
     </style>
 
     <style name="AppTheme.Main.AppBarOverlay" parent="ThemeOverlay.AppCompat.ActionBar" />
