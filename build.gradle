@@ -6,7 +6,7 @@ buildscript {
         supportLibraryVersion = '25.0.1'
         kodeinAndroidVersion = '3.1.0'
         ormaVersion = '3.1.1'
-        rxJavaVersion = '1.2.1'
+        rxJavaVersion = '1.2.3'
         rxKotlinVersion = '0.60.0'
         rxAndroidVersion = '1.2.1'
         rxRelayVersion = '1.2.0'
