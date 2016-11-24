@@ -19,7 +19,7 @@ interface MainContract {
 
     interface View {
 
-        fun showAppInfoList(apps: List<AppInfo>, resetPosition: Boolean=false)
+        fun showAppInfoList(apps: List<AppInfo>, resetPosition: Boolean = false)
 
         fun showNoAppInfo()
 

@@ -8,13 +8,13 @@ import com.droibit.quickly.rules.RxSchedulersOverrideRule
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.Matchers
 import org.mockito.Mock
 import org.mockito.Mockito.*
 import org.mockito.junit.MockitoJUnit
 import rx.Completable
 import rx.Observable
 import rx.Single
+import rx.lang.kotlin.singleOf
 import rx.lang.kotlin.toSingletonObservable
 import rx.subscriptions.CompositeSubscription
 
@@ -33,6 +33,9 @@ class MainPresenterTest {
     private lateinit var view: MainContract.View
 
     @Mock
+    private lateinit var navigator: MainContract.Navigator
+
+    @Mock
     private lateinit var loadTask: MainContract.LoadAppInfoTask
 
     @Mock
@@ -47,6 +50,7 @@ class MainPresenterTest {
         subscriptions = CompositeSubscription()
         presenter = MainPresenter(
                 view,
+                navigator,
                 loadTask,
                 showSettingsTask,
                 subscriptions
@@ -56,7 +60,7 @@ class MainPresenterTest {
     @Test
     fun onCreate_setSortBy() {
         val result = Pair(SortBy.LAST_UPDATED, Order.DESC)
-        `when`(showSettingsTask.loadSortBy()).thenReturn(Single.just(result))
+        `when`(showSettingsTask.loadSortBy()).thenReturn(singleOf(result))
 
         presenter.onCreate(true)
         verify(view).setSortBy(result.first, result.second)
@@ -99,7 +103,7 @@ class MainPresenterTest {
 
     @Test
     fun onPrepareShowSystemMenu_setShowSystem() {
-        `when`(showSettingsTask.loadShowSystem()).thenReturn(Single.just(true))
+        `when`(showSettingsTask.loadShowSystem()).thenReturn(singleOf(true))
 
         presenter.onPrepareShowSystemMenu()
         verify(view).setShowSystem(true)
@@ -115,7 +119,7 @@ class MainPresenterTest {
 
         presenter.onOptionsItemClicked(MenuItem.ShowSystem(checked = true))
 
-        verify(view).showAppInfoList(mockList)
+        verify(view).showAppInfoList(mockList, true)
     }
 
     @Test
@@ -126,13 +130,13 @@ class MainPresenterTest {
 
         presenter.onOptionsItemClicked(MenuItem.Refresh)
 
-        verify(view).showAppInfoList(mockList)
+        verify(view).showAppInfoList(mockList, true)
     }
 
     @Test
     fun onSortByClicked_showSortByChooserDialog() {
         val result = Pair(SortBy.NAME, Order.ASC)
-        `when`(showSettingsTask.loadSortBy()).thenReturn(Single.just(result))
+        `when`(showSettingsTask.loadSortBy()).thenReturn(singleOf(result))
 
         presenter.onSortByClicked()
         verify(view).showSortByChooserDialog(sortBy = result.first)
@@ -141,7 +145,7 @@ class MainPresenterTest {
     @Test
     fun onSortByChoose_setSortBy() {
         val result = Pair(SortBy.LAST_UPDATED, Order.DESC)
-        `when`(showSettingsTask.storeSortBy(result.first, result.second)).thenReturn(Single.just(true))
+        `when`(showSettingsTask.storeSortBy(result.first, result.second)).thenReturn(singleOf(true))
 
         presenter.onSortByChoose(result.first, result.second)
         verify(view).setSortBy(result.first, result.second)
