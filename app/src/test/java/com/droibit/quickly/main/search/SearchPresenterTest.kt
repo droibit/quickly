@@ -82,7 +82,6 @@ class SearchPresenterTest {
         val event = QueryTextEvent.Submit(query = "quickly")
         presenter.onQueryTextEventEmitted(event)
 
-        verify(view).showApps(listOf(SOURCE_APPS.first()))
         verify(view).closeSearch()
     }
 }

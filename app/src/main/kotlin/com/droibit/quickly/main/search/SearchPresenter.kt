@@ -22,13 +22,8 @@ class SearchPresenter(
     @UiThread
     override fun onQueryTextEventEmitted(event: QueryTextEvent) {
         when (event) {
-            is QueryTextEvent.Change -> {
-                showFilteredApps(event.query)
-            }
-            is QueryTextEvent.Submit -> {
-                view.closeSearch()
-                showFilteredApps(event.query)
-            }
+            is QueryTextEvent.Change -> showFilteredApps(event.query)
+            is QueryTextEvent.Submit -> view.closeSearch()
         }
     }
 
