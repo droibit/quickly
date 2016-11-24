@@ -11,7 +11,6 @@ import rx.Single
 interface MainContract {
 
     sealed class MenuItem {
-        class Search(val apps: List<AppInfo>) : MenuItem()
         object Refresh : MenuItem()
         class ShowSystem(val checked: Boolean) : MenuItem()
         object Settings : MenuItem()
@@ -34,7 +33,7 @@ interface MainContract {
 
     interface Navigator {
 
-        fun navigateSearch(sourceApps: List<AppInfo>)
+        fun navigateSearch()
 
         fun navigateSettings()
     }
@@ -61,6 +60,9 @@ interface MainContract {
 
         @UiThread
         fun onSortByClicked()
+
+        @UiThread
+        fun onSearchButtonClicked()
 
         @UiThread
         fun onSortByChoose(sortBy: SortBy, order: Order)

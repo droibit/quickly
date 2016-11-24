@@ -8,12 +8,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <!-- paddingBottom = fabHeight * fabMarginBottom + fabMarginTop -->
         <android.support.v7.widget.RecyclerView
             android:id="@+id/list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scrollbars="vertical"
-            android:fadeScrollbars="true" />
+            android:clipToPadding="false"
+            android:fadeScrollbars="true"
+            android:paddingBottom="88dp"
+            android:scrollbars="vertical" />
 
         <LinearLayout
             android:id="@+id/empty"
@@ -44,8 +47,8 @@
     </FrameLayout>
 
     <ProgressBar
-        style="@style/Base.Widget.AppCompat.ProgressBar"
         android:id="@+id/progress"
+        style="@style/Base.Widget.AppCompat.ProgressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

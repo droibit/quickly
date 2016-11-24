@@ -58,7 +58,6 @@ class MainPresenter(
     @UiThread
     override fun onOptionsItemClicked(menuItem: MenuItem) {
         when (menuItem) {
-            is MenuItem.Search -> navigator.navigateSearch(sourceApps = menuItem.apps)
             is MenuItem.Refresh -> refreshApps(forceLoad = true)
             is MenuItem.ShowSystem -> toggleShowSystemApps(menuItem.checked)
         }
@@ -71,6 +70,11 @@ class MainPresenter(
                 .subscribe {
                     view.showSortByChooserDialog(sortBy = it.first)
                 }
+    }
+
+    @UiThread
+    override fun onSearchButtonClicked() {
+        navigator.navigateSearch()
     }
 
     @UiThread

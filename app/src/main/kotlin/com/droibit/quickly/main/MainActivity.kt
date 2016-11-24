@@ -1,6 +1,7 @@
 package com.droibit.quickly.main
 
 import android.os.Bundle
+import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.ActivityOptionsCompat
 import android.support.v7.app.AppCompatActivity
@@ -49,6 +50,8 @@ class MainActivity : AppCompatActivity(),
 
     private val subTitleToolbar: SubtitleToolbar by bindView(R.id.subtitle)
 
+    private val fab: FloatingActionButton by bindView(R.id.fab)
+
     private val injector = KodeinInjector()
 
     private val presenter: MainContract.Presenter by injector.instance()
@@ -85,7 +88,9 @@ class MainActivity : AppCompatActivity(),
         subTitleToolbar.sortByClickListener {
             presenter.onSortByClicked()
         }
-
+        fab.setOnClickListener {
+            presenter.onSearchButtonClicked()
+        }
         presenter.onCreate(shouldLoad = false)
     }
 
@@ -122,8 +127,8 @@ class MainActivity : AppCompatActivity(),
     }
 
     // MainContract.Navigator
-    override fun navigateSearch(sourceApps: List<AppInfo>) {
-        val intent = SearchActivity.createIntent(this, sourceApps)
+    override fun navigateSearch() {
+        val intent = SearchActivity.createIntent(this, sourceApps = appInfoAdapter.items)
         val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this).toBundle()
         ActivityCompat.startActivity(this, intent, options)
     }
@@ -190,7 +195,6 @@ class MainActivity : AppCompatActivity(),
 
     private fun android.view.MenuItem.toAppMenuItem(): MenuItem {
         return when (itemId) {
-            R.id.search -> MenuItem.Search(apps = appInfoAdapter.items)
             R.id.refresh -> MenuItem.Refresh
             R.id.show_system -> MenuItem.ShowSystem(!isChecked)
             R.id.settings -> MenuItem.Settings

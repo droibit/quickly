@@ -20,7 +20,14 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/activity_search_content" />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <include layout="@layout/activity_search_content" />
+
+    </FrameLayout>
 
     <com.lapism.searchview.SearchView
         android:id="@+id/search_app"

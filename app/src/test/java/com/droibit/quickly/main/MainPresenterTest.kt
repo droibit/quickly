@@ -143,6 +143,13 @@ class MainPresenterTest {
     }
 
     @Test
+    fun onSearchButtonClicked_navigateSearch() {
+        presenter.onSearchButtonClicked()
+
+        verify(navigator).navigateSearch()
+    }
+
+    @Test
     fun onSortByChoose_setSortBy() {
         val result = Pair(SortBy.LAST_UPDATED, Order.DESC)
         `when`(showSettingsTask.storeSortBy(result.first, result.second)).thenReturn(singleOf(true))
