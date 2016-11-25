@@ -6,4 +6,6 @@ interface ApplicationConfig {
     val minTaskDurationMillis: Long
 
     val showSettingsPrefsName: String
+
+    val openSourceLicensesUrl: String
 }

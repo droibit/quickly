@@ -7,6 +7,7 @@ import android.view.MenuItem
 import android.view.View
 import com.droibit.quickly.BuildConfig
 import com.droibit.quickly.R
+import com.droibit.quickly.settings.oss.OpenSourceLicensesActivity
 import com.github.droibit.chopstick.bindPreference
 import com.github.salomonbrys.kodein.Kodein
 import com.github.salomonbrys.kodein.KodeinInjector
@@ -57,6 +58,8 @@ class SettingsFragment : PreferenceFragmentCompat(), SettingsContract.Navigator 
     // SettingsContract.Navigator
 
     override fun startOpenSourceLicenses() {
+        val intent = OpenSourceLicensesActivity.createIntent(context)
+        startActivity(intent)
     }
 
     override fun finish() {

@@ -20,15 +20,21 @@
 
         <activity
             android:name=".main.search.SearchActivity"
-            android:theme="@style/AppTheme.Main.Search"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/AppTheme.Main.Search" />
 
         <activity
             android:name=".settings.SettingsActivity"
-            android:theme="@style/AppTheme.Settings"
             android:exported="false"
             android:label="@string/settings_title"
-            android:parentActivityName=".main.MainActivity" />
+            android:parentActivityName=".main.MainActivity"
+            android:theme="@style/AppTheme.Settings" />
+
+        <activity
+            android:name=".settings.oss.OpenSourceLicensesActivity"
+            android:exported="false"
+            android:parentActivityName=".settings.SettingsActivity" />
+
     </application>
 
 </manifest>
