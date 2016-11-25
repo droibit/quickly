@@ -38,6 +38,10 @@ class AppInfoAdapter(
             }
         }
 
+    var itemClickListener: ((AppInfo) -> Unit)? = null
+
+    var moreItemClickListener: ((AppInfo) -> Unit)? = null
+
     var comparator: Comparator<AppInfo>
         get() = sortedItemsCallback.comparator
         set(value) { sortedItemsCallback.comparator = value }
@@ -52,7 +56,14 @@ class AppInfoAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView = LayoutInflater.from(context).inflate(R.layout.recycler_item_app_info, parent, false)
-        return ViewHolder(itemView)
+        return ViewHolder(itemView).apply {
+            clickLisener {
+                itemClickListener?.invoke(rawItems[adapterPosition])
+            }
+            moreClickListener {
+                moreItemClickListener?.invoke(rawItems[adapterPosition])
+            }
+        }
     }
 
     fun addAll(newItems: List<AppInfo>) {
@@ -124,6 +135,8 @@ class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     private val lastUpdateTimeView: TextView by bindView(R.id.app_last_update_time)
 
+    private val moreView: View by bindView(R.id.more)
+
     private val injector = KodeinInjector()
 
     private val dateFormatter: DateFormatter by injector.instance()
@@ -145,6 +158,10 @@ class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         packageView.text = appInfo.packageName
         lastUpdateTimeView.text = dateFormatter.format(timeMillis = appInfo.lastUpdateTime)
     }
+
+    fun clickLisener(listener: (View) -> Unit) = itemView.setOnClickListener(listener)
+
+    fun moreClickListener(listener: (View) -> Unit) = moreView.setOnClickListener(listener)
 }
 
 private val AppInfo.iconUri: Uri

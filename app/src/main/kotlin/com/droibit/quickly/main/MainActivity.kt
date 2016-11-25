@@ -19,6 +19,7 @@ import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.Order
 import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.SortBy
 import com.droibit.quickly.main.MainContract.SortByChooseEvent
 import com.droibit.quickly.main.MainContract.MenuItem
+import com.droibit.quickly.main.action.QuickActionDialogFragment
 import com.droibit.quickly.main.search.SearchActivity
 import com.droibit.quickly.settings.SettingsActivity
 import com.github.droibit.chopstick.bindView
@@ -37,6 +38,8 @@ class MainActivity : AppCompatActivity(),
     companion object {
 
         private val TAG_FRAGMENT_SORT_BY_CHOOSER = "TAG_FRAGMENT_SORT_BY_CHOOSER"
+
+        private val TAG_FRAGMENT_QUICK_ACTION = "TAG_FRAGMENT_QUICK_ACTION"
     }
 
     private val toolbar: Toolbar by bindView(R.id.toolbar)
@@ -85,6 +88,17 @@ class MainActivity : AppCompatActivity(),
             layoutManager = LinearLayoutManager(this@MainActivity)
             adapter = appInfoAdapter
         }
+        presenter.onCreate(shouldLoad = false)
+    }
+
+    override fun onPostCreate(savedInstanceState: Bundle?) {
+        super.onPostCreate(savedInstanceState)
+
+        appInfoAdapter.apply {
+            moreItemClickListener = {
+                // TODO:
+            }
+        }
 
         subTitleToolbar.sortByClickListener {
             presenter.onSortByClicked()
@@ -92,7 +106,6 @@ class MainActivity : AppCompatActivity(),
         fab.setOnClickListener {
             presenter.onSearchButtonClicked()
         }
-        presenter.onCreate(shouldLoad = false)
     }
 
     override fun onResume() {
