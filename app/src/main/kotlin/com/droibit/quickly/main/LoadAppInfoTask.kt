@@ -3,7 +3,6 @@ package com.droibit.quickly.main
 import com.droibit.quickly.data.repository.appinfo.AppInfo
 import com.droibit.quickly.data.repository.appinfo.AppInfoRepository
 import com.droibit.quickly.data.repository.settings.ShowSettingsRepository
-import com.jakewharton.rxrelay.BehaviorRelay
 import com.jakewharton.rxrelay.PublishRelay
 import rx.Observable
 import rx.schedulers.Schedulers

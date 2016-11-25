@@ -2,10 +2,8 @@ package com.droibit.quickly.data.repository.settings
 
 import com.chibatching.kotpref.KotprefModel
 import com.droibit.quickly.data.config.ApplicationConfig
-import com.droibit.quickly.data.repository.appinfo.AppInfo
 import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.Order
 import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.SortBy
-import java.util.*
 
 class ShowSettingsRepositoryImpl(appConfig: ApplicationConfig) : KotprefModel(), ShowSettingsRepository {
 

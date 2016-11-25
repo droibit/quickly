@@ -1,4 +1,4 @@
-package com.droibit.quickly.main
+package com.droibit.quickly.main.apps
 
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
@@ -17,9 +17,9 @@ import com.droibit.quickly.data.provider.eventbus.RxBus
 import com.droibit.quickly.data.repository.appinfo.AppInfo
 import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.Order
 import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.SortBy
-import com.droibit.quickly.main.MainContract.SortByChooseEvent
-import com.droibit.quickly.main.MainContract.MenuItem
-import com.droibit.quickly.main.action.QuickActionDialogFragment
+import com.droibit.quickly.main.AppInfoAdapter
+import com.droibit.quickly.main.apps.AppsContract.MenuItem
+import com.droibit.quickly.main.apps.AppsContract.SortByChooseEvent
 import com.droibit.quickly.main.search.SearchActivity
 import com.droibit.quickly.settings.SettingsActivity
 import com.github.droibit.chopstick.bindView
@@ -30,9 +30,9 @@ import rx.subscriptions.CompositeSubscription
 import timber.log.Timber
 
 
-class MainActivity : AppCompatActivity(),
-        MainContract.View,
-        MainContract.Navigator,
+class AppsActivity : AppCompatActivity(),
+        AppsContract.View,
+        AppsContract.Navigator,
         KodeinAware {
 
     companion object {
@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity(),
 
     private val injector = KodeinInjector()
 
-    private val presenter: MainContract.Presenter by injector.instance()
+    private val presenter: AppsContract.Presenter by injector.instance()
 
     private val appInfoComparators: AppInfoComparators by injector.instance()
 
@@ -73,8 +73,8 @@ class MainActivity : AppCompatActivity(),
     override val kodein: Kodein by Kodein.lazy {
         extend(appKodein())
 
-        val self = this@MainActivity
-        import(mainModule(view = self, navigator = self))
+        val self = this@AppsActivity
+        import(appsModule(view = self, navigator = self))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -85,7 +85,7 @@ class MainActivity : AppCompatActivity(),
         injector.inject(kodein)
 
         recyclerView.apply {
-            layoutManager = LinearLayoutManager(this@MainActivity)
+            layoutManager = LinearLayoutManager(this@AppsActivity)
             adapter = appInfoAdapter
         }
         presenter.onCreate(shouldLoad = false)
@@ -140,7 +140,7 @@ class MainActivity : AppCompatActivity(),
         return true
     }
 
-    // MainContract.Navigator
+    // AppsContract.Navigator
     override fun navigateSearch() {
         val intent = SearchActivity.createIntent(this, sourceApps = appInfoAdapter.items)
         val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this).toBundle()
@@ -151,10 +151,10 @@ class MainActivity : AppCompatActivity(),
         startActivity(SettingsActivity.createIntent(this))
     }
 
-    // MainContract.View
+    // AppsContract.View
 
-    override fun showAppInfoList(apps: List<AppInfo>, resetPosition: Boolean) {
-        Timber.d("showAppInfoList(apps=${apps.size})")
+    override fun showApps(apps: List<AppInfo>, resetPosition: Boolean) {
+        Timber.d("showApps(apps=${apps.size})")
         emptyView.visibility = View.GONE
         recyclerView.visibility = View.VISIBLE
 

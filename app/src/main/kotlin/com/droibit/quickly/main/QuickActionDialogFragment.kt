@@ -1,4 +1,4 @@
-package com.droibit.quickly.main.action
+package com.droibit.quickly.main
 
 import android.app.Dialog
 import android.content.Context

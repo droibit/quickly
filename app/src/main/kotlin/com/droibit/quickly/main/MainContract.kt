@@ -1,72 +1,12 @@
 package com.droibit.quickly.main
 
-import android.support.annotation.UiThread
 import com.droibit.quickly.data.repository.appinfo.AppInfo
-import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.Order
-import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.SortBy
+import com.droibit.quickly.data.repository.settings.ShowSettingsRepository
 import rx.Completable
 import rx.Observable
 import rx.Single
 
 interface MainContract {
-
-    sealed class MenuItem {
-        object Refresh : MenuItem()
-        class ShowSystem(val checked: Boolean) : MenuItem()
-        object Settings : MenuItem()
-    }
-
-    interface View {
-
-        fun showAppInfoList(apps: List<AppInfo>, resetPosition: Boolean = false)
-
-        fun showNoAppInfo()
-
-        fun setLoadingIndicator(active: Boolean)
-
-        fun setSortBy(sortBy: SortBy, order: Order)
-
-        fun showSortByChooserDialog(sortBy: SortBy)
-
-        fun setShowSystem(showSystem: Boolean)
-    }
-
-    interface Navigator {
-
-        fun navigateSearch()
-
-        fun navigateSettings()
-    }
-
-    interface Presenter {
-
-        @UiThread
-        fun onCreate(shouldLoad: Boolean)
-
-        @UiThread
-        fun onResume()
-
-        @UiThread
-        fun onPause()
-
-        @UiThread
-        fun onDestroy()
-
-        @UiThread
-        fun onOptionsItemClicked(menuItem: MenuItem)
-
-        @UiThread
-        fun onPrepareShowSystemMenu()
-
-        @UiThread
-        fun onSortByClicked()
-
-        @UiThread
-        fun onSearchButtonClicked()
-
-        @UiThread
-        fun onSortByChoose(sortBy: SortBy, order: Order)
-    }
 
     interface LoadAppInfoTask {
 
@@ -77,14 +17,12 @@ interface MainContract {
 
     interface ShowSettingsTask {
 
-        fun loadSortBy(): Single<Pair<SortBy, Order>>
+        fun loadSortBy(): Single<Pair<ShowSettingsRepository.SortBy, ShowSettingsRepository.Order>>
 
-        fun storeSortBy(sortBy: SortBy, order: Order): Single<Boolean>
+        fun storeSortBy(sortBy: ShowSettingsRepository.SortBy, order: ShowSettingsRepository.Order): Single<Boolean>
 
         fun loadShowSystem(): Single<Boolean>
 
         fun storeShowSystem(showSystem: Boolean): Completable
     }
-
-    class SortByChooseEvent(val sortBy: SortBy, val order: Order)
 }

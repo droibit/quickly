@@ -1,6 +1,8 @@
 package com.droibit.quickly.main.search
 
 import com.droibit.quickly.data.repository.appinfo.AppInfo
+import com.droibit.quickly.main.MainContract
+import com.droibit.quickly.main.ShowSettingsTask
 import com.github.salomonbrys.kodein.Kodein
 import com.github.salomonbrys.kodein.instance
 import com.github.salomonbrys.kodein.provider
@@ -19,7 +21,7 @@ fun searchModule(view: SearchContract.View, sourceApps: List<AppInfo>) = Kodein.
         )
     }
 
-    bind<SearchContract.ShowSettingsTask>() with provider {
+    bind<MainContract.ShowSettingsTask>() with provider {
         ShowSettingsTask(showSettingsRepository = instance())
     }
 

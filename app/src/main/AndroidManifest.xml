@@ -9,7 +9,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".main.MainActivity"
+            android:name=".main.apps.AppsActivity"
             android:theme="@style/AppTheme.Main">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,7 +27,7 @@
             android:name=".settings.SettingsActivity"
             android:exported="false"
             android:label="@string/settings_title"
-            android:parentActivityName=".main.MainActivity"
+            android:parentActivityName=".main.apps.AppsActivity"
             android:theme="@style/AppTheme.Settings" />
 
         <activity

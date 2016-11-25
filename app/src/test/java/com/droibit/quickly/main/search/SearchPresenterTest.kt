@@ -3,6 +3,7 @@ package com.droibit.quickly.main.search
 import com.droibit.quickly.data.repository.appinfo.AppInfo
 import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.Order
 import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.SortBy
+import com.droibit.quickly.main.MainContract
 import com.droibit.quickly.main.search.SearchContract.QueryTextEvent
 import org.junit.Before
 import org.junit.Rule
@@ -31,7 +32,7 @@ class SearchPresenterTest {
     private lateinit var view: SearchContract.View
 
     @Mock
-    private lateinit var showSettingsTask: SearchContract.ShowSettingsTask
+    private lateinit var showSettingsTask: MainContract.ShowSettingsTask
 
     private lateinit var presenter: SearchPresenter
 
@@ -42,7 +43,7 @@ class SearchPresenterTest {
 
     @Test
     fun onCreate_setSortBy() {
-        `when`(showSettingsTask.load())
+        `when`(showSettingsTask.loadSortBy())
                 .thenReturn(singleOf(Pair(SortBy.LAST_UPDATED, Order.DESC)))
 
         presenter.onCreate()

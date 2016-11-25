@@ -1,22 +1,23 @@
-package com.droibit.quickly.main
+package com.droibit.quickly.main.apps
 
 import android.support.annotation.UiThread
 import com.droibit.quickly.data.repository.appinfo.AppInfo
 import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.Order
 import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.SortBy
-import com.droibit.quickly.main.MainContract.MenuItem
+import com.droibit.quickly.main.MainContract
+import com.droibit.quickly.main.apps.AppsContract.MenuItem
 import rx.android.schedulers.AndroidSchedulers
 import rx.lang.kotlin.addTo
 import rx.schedulers.Schedulers
 import rx.subscriptions.CompositeSubscription
 import timber.log.Timber
 
-class MainPresenter(
-        private val view: MainContract.View,
-        private val navigator: MainContract.Navigator,
+class AppsPresenter(
+        private val view: AppsContract.View,
+        private val navigator: AppsContract.Navigator,
         private val loadTask: MainContract.LoadAppInfoTask,
         private val showSettingsTask: MainContract.ShowSettingsTask,
-        private val subscriptions: CompositeSubscription) : MainContract.Presenter {
+        private val subscriptions: CompositeSubscription) : AppsContract.Presenter {
 
     @UiThread
     override fun onCreate(shouldLoad: Boolean) {
@@ -92,7 +93,7 @@ class MainPresenter(
 
     private fun onAppsLoaded(apps: List<AppInfo>, reloaded: Boolean) {
         if (apps.isNotEmpty()) {
-            view.showAppInfoList(apps, resetPosition = reloaded)
+            view.showApps(apps, resetPosition = reloaded)
         } else {
             view.showNoAppInfo()
         }

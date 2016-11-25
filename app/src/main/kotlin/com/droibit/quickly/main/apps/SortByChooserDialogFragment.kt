@@ -1,4 +1,4 @@
-package com.droibit.quickly.main
+package com.droibit.quickly.main.apps
 
 import android.app.Dialog
 import android.content.Context
@@ -11,7 +11,7 @@ import com.droibit.quickly.R
 import com.droibit.quickly.data.provider.eventbus.RxBus
 import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.Order
 import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.SortBy
-import com.droibit.quickly.main.MainContract.SortByChooseEvent
+import com.droibit.quickly.main.apps.AppsContract.SortByChooseEvent
 import com.github.droibit.chopstick.bindStringArray
 import com.github.salomonbrys.kodein.Kodein
 import com.github.salomonbrys.kodein.KodeinAware

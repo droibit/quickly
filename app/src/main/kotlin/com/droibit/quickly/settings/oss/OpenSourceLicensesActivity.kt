@@ -2,11 +2,10 @@ package com.droibit.quickly.settings.oss
 
 import android.content.Context
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import android.webkit.WebView
-
 import com.droibit.quickly.R
 import com.droibit.quickly.data.config.ApplicationConfig
 import com.github.droibit.chopstick.bindView

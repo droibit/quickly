@@ -2,6 +2,7 @@ package com.droibit.quickly.main.search
 
 import android.support.annotation.UiThread
 import com.droibit.quickly.data.repository.appinfo.AppInfo
+import com.droibit.quickly.main.MainContract
 import com.droibit.quickly.main.search.SearchContract.QueryTextEvent
 import rx.schedulers.Schedulers
 import timber.log.Timber
@@ -9,12 +10,12 @@ import java.util.*
 
 class SearchPresenter(
         private val view: SearchContract.View,
-        private val showSettingsTask: SearchContract.ShowSettingsTask,
+        private val showSettingsTask: MainContract.ShowSettingsTask,
         private val sourceApps: List<AppInfo>) : SearchContract.Presenter {
 
     @UiThread
     override fun onCreate() {
-        showSettingsTask.load()
+        showSettingsTask.loadSortBy()
                 .observeOn(Schedulers.immediate())
                 .subscribe { view.setSortBy(sortBy = it.first, order = it.second) }
     }

@@ -1,9 +1,12 @@
-package com.droibit.quickly.main
+package com.droibit.quickly.main.apps
 
 import com.droibit.quickly.data.repository.appinfo.AppInfo
 import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.Order
 import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.SortBy
-import com.droibit.quickly.main.MainContract.MenuItem
+import com.droibit.quickly.main.MainContract
+import com.droibit.quickly.main.apps.AppsContract
+import com.droibit.quickly.main.apps.AppsContract.MenuItem
+import com.droibit.quickly.main.apps.AppsPresenter
 import com.droibit.quickly.rules.RxSchedulersOverrideRule
 import org.junit.Before
 import org.junit.Rule
@@ -19,7 +22,7 @@ import rx.lang.kotlin.toSingletonObservable
 import rx.subscriptions.CompositeSubscription
 
 @Suppress("UNCHECKED_CAST")
-class MainPresenterTest {
+class AppsPresenterTest {
 
     @Rule
     @JvmField
@@ -30,10 +33,10 @@ class MainPresenterTest {
     val overrideSchedulers = RxSchedulersOverrideRule()
 
     @Mock
-    private lateinit var view: MainContract.View
+    private lateinit var view: AppsContract.View
 
     @Mock
-    private lateinit var navigator: MainContract.Navigator
+    private lateinit var navigator: AppsContract.Navigator
 
     @Mock
     private lateinit var loadTask: MainContract.LoadAppInfoTask
@@ -43,12 +46,12 @@ class MainPresenterTest {
 
     private lateinit var subscriptions: CompositeSubscription
 
-    private lateinit var presenter: MainPresenter
+    private lateinit var presenter: AppsPresenter
 
     @Before
     fun setUp() {
         subscriptions = CompositeSubscription()
-        presenter = MainPresenter(
+        presenter = AppsPresenter(
                 view,
                 navigator,
                 loadTask,
@@ -90,7 +93,7 @@ class MainPresenterTest {
             `when`(mockList.isEmpty()).thenReturn(false)
 
             presenter.onResume()
-            verify(view).showAppInfoList(mockList)
+            verify(view).showApps(mockList)
         }
 
         run {
@@ -110,7 +113,7 @@ class MainPresenterTest {
     }
 
     @Test
-    fun onOptionsItemClicked_showSystem_showAppInfoList() {
+    fun onOptionsItemClicked_showSystem_showApps() {
         `when`(showSettingsTask.storeShowSystem(anyBoolean())).thenReturn(Completable.complete())
 
         val mockList = mock(List::class.java) as List<AppInfo>
@@ -119,18 +122,18 @@ class MainPresenterTest {
 
         presenter.onOptionsItemClicked(MenuItem.ShowSystem(checked = true))
 
-        verify(view).showAppInfoList(mockList, true)
+        verify(view).showApps(mockList, true)
     }
 
     @Test
-    fun onOptionsItemClicked_refresh_showAppInfoList() {
+    fun onOptionsItemClicked_refresh_showApps() {
         val mockList = mock(List::class.java) as List<AppInfo>
         `when`(mockList.isEmpty()).thenReturn(false)
         `when`(loadTask.requestLoad(anyBoolean())).thenReturn(mockList.toSingletonObservable())
 
         presenter.onOptionsItemClicked(MenuItem.Refresh)
 
-        verify(view).showAppInfoList(mockList, true)
+        verify(view).showApps(mockList, true)
     }
 
     @Test

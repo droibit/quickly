@@ -1,6 +1,9 @@
-package com.droibit.quickly.main
+package com.droibit.quickly.main.apps
 
 import com.droibit.quickly.data.provider.eventbus.RxBus
+import com.droibit.quickly.main.LoadAppInfoTask
+import com.droibit.quickly.main.MainContract
+import com.droibit.quickly.main.ShowSettingsTask
 import com.github.salomonbrys.kodein.Kodein
 import com.github.salomonbrys.kodein.instance
 import com.github.salomonbrys.kodein.provider
@@ -8,14 +11,14 @@ import com.github.salomonbrys.kodein.singleton
 import com.jakewharton.rxrelay.PublishRelay
 import rx.subscriptions.CompositeSubscription
 
-fun mainModule(view: MainContract.View, navigator: MainContract.Navigator) = Kodein.Module {
+fun appsModule(view: AppsContract.View, navigator: AppsContract.Navigator) = Kodein.Module {
 
-    bind<MainContract.View>() with instance(view)
+    bind<AppsContract.View>() with instance(view)
 
-    bind<MainContract.Navigator>() with instance(navigator)
+    bind<AppsContract.Navigator>() with instance(navigator)
 
-    bind<MainContract.Presenter>() with provider {
-        MainPresenter(
+    bind<AppsContract.Presenter>() with provider {
+        AppsPresenter(
                 view = instance(),
                 navigator = instance(),
                 loadTask = instance(),

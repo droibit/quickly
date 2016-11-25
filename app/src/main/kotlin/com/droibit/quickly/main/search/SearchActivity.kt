@@ -101,7 +101,7 @@ class SearchActivity : AppCompatActivity(), SearchContract.View {
     // SearchContract.View
 
     override fun showApps(apps: List<AppInfo>) {
-        Timber.d("showAppInfoList(apps=${apps.size})")
+        Timber.d("showApps(apps=${apps.size})")
 
         if (apps.isEmpty()) {
             emptyView.visibility = View.VISIBLE

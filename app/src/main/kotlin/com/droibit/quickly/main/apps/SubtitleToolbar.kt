@@ -1,4 +1,4 @@
-package com.droibit.quickly.main
+package com.droibit.quickly.main.apps
 
 import android.content.Context
 import android.support.annotation.UiThread
