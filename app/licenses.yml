@@ -1,29 +1,29 @@
 - artifact: com.android.support:animated-vector-drawable:+
-  name: animated-vector-drawable
+  name: support-animated-vector-drawable
   copyrightHolder: Android Open Source Project
   license: The Apache Software License, Version 2.0
 - artifact: com.android.support:appcompat-v7:+
-  name: appcompat-v7
+  name: support-appcompat-v7
   copyrightHolder: Android Open Source Project
   license: The Apache Software License, Version 2.0
 - artifact: com.android.support:cardview-v7:+
-  name: cardview-v7
+  name: support-cardview-v7
   copyrightHolder: Android Open Source Project
   license: The Apache Software License, Version 2.0
 - artifact: com.android.support:design:+
-  name: design
+  name: support-design
   copyrightHolder: Android Open Source Project
   license: The Apache Software License, Version 2.0
 - artifact: com.android.support:preference-v14:+
-  name: preference-v14
+  name: support-preference-v14
   copyrightHolder: Android Open Source Project
   license: The Apache Software License, Version 2.0
 - artifact: com.android.support:preference-v7:+
-  name: preference-v7
+  name: support-preference-v7
   copyrightHolder: Android Open Source Project
   license: The Apache Software License, Version 2.0
 - artifact: com.android.support:recyclerview-v7:+
-  name: recyclerview-v7
+  name: support-recyclerview-v7
   copyrightHolder: Android Open Source Project
   license: The Apache Software License, Version 2.0
 - artifact: com.android.support:support-annotations:+
@@ -34,22 +34,27 @@
   name: support-compat
   copyrightHolder: Android Open Source Project
   license: The Apache Software License, Version 2.0
+  skip: true
 - artifact: com.android.support:support-core-ui:+
   name: support-core-ui
   copyrightHolder: Android Open Source Project
   license: The Apache Software License, Version 2.0
+  skip: true
 - artifact: com.android.support:support-core-utils:+
   name: support-core-utils
   copyrightHolder: Android Open Source Project
   license: The Apache Software License, Version 2.0
+  skip: true
 - artifact: com.android.support:support-fragment:+
   name: support-fragment
   copyrightHolder: Android Open Source Project
   license: The Apache Software License, Version 2.0
+  skip: true
 - artifact: com.android.support:support-media-compat:+
   name: support-media-compat
   copyrightHolder: Android Open Source Project
   license: The Apache Software License, Version 2.0
+  skip: true
 - artifact: com.android.support:support-v4:+
   name: support-v4
   copyrightHolder: Android Open Source Project
@@ -59,36 +64,39 @@
   copyrightHolder: Android Open Source Project
   license: The Apache Software License, Version 2.0
 - artifact: com.android.support:transition:+
-  name: transition
+  name: support-transition
   copyrightHolder: Android Open Source Project
   license: The Apache Software License, Version 2.0
+  skip: true
 - artifact: com.chibatching:kotpref:+
   name: Kotpref
-  copyrightHolder: Takao Chiba
+  copyrightHolder: 2015 Takao Chiba
   license: The Apache Software License, Version 2.0
   licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
   url: https://github.com/chibatching/kotpref
 - artifact: com.github.bumptech.glide:glide:+
   name: Glide
-  copyrightHolder: Google, Inc
+  copyrightHolder: 2014 Google, Inc
   license: Simplified BSD License
   licenseUrl: http://www.opensource.org/licenses/bsd-license
   url: https://github.com/bumptech/glide
 - artifact: com.github.droibit.chopsticks:chopstick-preference:+
-  name: droibit/chopsticks
+  name: chopsticks-preference
   copyrightHolder: Shinya Kumagai
   license: Apache License 2.0
   licenseUrl: https://api.github.com/licenses/apache-2.0
   url: https://github.com/droibit/chopsticks
+  skip: true
 - artifact: com.github.droibit.chopsticks:chopstick-resource:+
-  name: droibit/chopsticks
-  copyrightHolder: Shinya Kumagai
+  name: chopsticks-resource
+  copyrightHolder: 2016 Shinya Kumagai
   license: Apache License 2.0
   licenseUrl: https://api.github.com/licenses/apache-2.0
   url: https://github.com/droibit/chopsticks
+  skip: true
 - artifact: com.github.droibit.chopsticks:chopstick:+
-  name: droibit/chopsticks
-  copyrightHolder: Shinya Kumagai
+  name: Chopsticks
+  copyrightHolder: 2016 Shinya Kumagai
   license: Apache License 2.0
   licenseUrl: https://api.github.com/licenses/apache-2.0
   url: https://github.com/droibit/chopsticks
@@ -96,68 +104,79 @@
   name: orma-annotations
   copyrightHolder: FUJI Goro (gfx)
   license: Apache License 2.0
+  skip: true
 - artifact: com.github.gfx.android.orma:orma-migration:+
   name: orma-migration
   copyrightHolder: FUJI Goro (gfx)
   license: Apache License 2.0
+  skip: true
 - artifact: com.github.gfx.android.orma:orma:+
-  name: orma
-  copyrightHolder: FUJI Goro (gfx)
+  name: Android Orma
+  copyrightHolder: 2015 FUJI Goro (gfx)
   license: Apache License 2.0
+  url: https://github.com/gfx/Android-Orma
 - artifact: com.github.salomonbrys.kodein:kodein-android:+
   name: Kodein-Android
   copyrightHolder: Salomon BRYS
   license: MIT
   licenseUrl: http://opensource.org/licenses/MIT
   url: https://github.com/SalomonBrys/Kodein
+  skip: true
 - artifact: com.github.salomonbrys.kodein:kodein:+
   name: Kodein
-  copyrightHolder: Salomon BRYS
+  copyrightHolder: 2015 Salomon BRYS
   license: MIT
   licenseUrl: http://opensource.org/licenses/MIT
   url: https://github.com/SalomonBrys/Kodein
 - artifact: com.jakewharton.rxrelay:rxrelay:+
   name: RxRelay
-  copyrightHolder: Netflix, Inc. Jake Wharton
+  copyrightHolder: 2014 Netflix, Inc. 2015 Jake Wharton
   license: Apache License Version 2.0
   licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: https://github.com/JakeWharton/RxRelay
 - artifact: com.jakewharton.timber:timber:+
   name: Timber
-  copyrightHolder: Jake Wharton
+  copyrightHolder: 2013 Jake Wharton
   license: The Apache Software License, Version 2.0
   licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
   url: https://github.com/JakeWharton/timber
 - artifact: com.lapism:searchview:+
-  name: searchview
+  name: SearchView
   copyrightHolder: lapism
   license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: https://github.com/lapism/SearchView
 - artifact: io.reactivex:rxandroid:+
   name: RxAndroid
-  copyrightHolder: The RxAndroid authors
+  copyrightHolder: 2015 The RxAndroid authors
   license: The Apache Software License, Version 2.0
   licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
   url: https://github.com/ReactiveX/RxAndroid
 - artifact: io.reactivex:rxjava:+
-  name: rxjava
-  copyrightHolder: Netflix, Inc
+  name: RxJava
+  copyrightHolder: 2013 Netflix, Inc
   license: The Apache Software License, Version 2.0
   licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
   url: https://github.com/ReactiveX/RxJava
 - artifact: io.reactivex:rxkotlin:+
-  name: rxkotlin
-  copyrightHolder: Netflix, Inc
+  name: RxKotlin
+  copyrightHolder: 2014 Netflix, Inc
   license: The Apache Software License, Version 2.0
   licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
   url: https://github.com/ReactiveX/RxKotlin
 - artifact: org.antlr:antlr4-runtime:+
   name: ANTLR 4 Runtime
-  copyrightHolder: Terence Parr, Sam Harwell
-  license: BSD license
+  copyrightHolder: 2012 Terence Parr and Sam Harwell3
+  license: The BSD 3-Clause License
+  licenseUrl: https://opensource.org/licenses/BSD-3-Clause
+  url: https://github.com/antlr/antlr4
 - artifact: org.jetbrains.kotlin:kotlin-runtime:+
   name: kotlin-runtime
   copyrightHolder: JetBrains s.r.o
   license: The Apache Software License, Version 2.0
+  skip: true
 - artifact: org.jetbrains.kotlin:kotlin-stdlib:+
-  name: kotlin-stdlib
-  copyrightHolder: JetBrains s.r.o
+  name: Kotlin
+  copyrightHolder: 2010-2016 JetBrains s.r.o
   license: The Apache Software License, Version 2.0
+  url: https://github.com/JetBrains/kotlin
