@@ -22,7 +22,48 @@ import com.github.salomonbrys.kodein.instance
 import java.util.*
 
 class AppInfoAdapter(
-        private val context: Context) : RecyclerView.Adapter<ViewHolder>() {
+        private val context: Context) : RecyclerView.Adapter<AppInfoAdapter.ViewHolder>() {
+
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
+        private val iconView: ImageView by bindView(R.id.app_icon)
+
+        private val nameView: TextView by bindView(R.id.app_name)
+
+        private val versionView: TextView by bindView(R.id.app_version)
+
+        private val packageView: TextView by bindView(R.id.app_package)
+
+        private val lastUpdateTimeView: TextView by bindView(R.id.app_last_update_time)
+
+        private val moreView: View by bindView(R.id.more)
+
+        private val injector = KodeinInjector()
+
+        private val dateFormatter: DateFormatter by injector.instance()
+
+        init {
+            injector.inject(Kodein {
+                extend(itemView.context.appKodein())
+            })
+        }
+
+        fun bind(appInfo: AppInfo) {
+            Glide.with(itemView.context)
+                    .load(appInfo.iconUri)
+                    .error(R.mipmap.ic_launcher)
+                    .into(iconView)
+
+            nameView.text = appInfo.name
+            versionView.text = appInfo.version
+            packageView.text = appInfo.packageName
+            lastUpdateTimeView.text = dateFormatter.format(timeMillis = appInfo.lastUpdateTime)
+        }
+
+        fun clickListener(listener: (View) -> Unit) = itemView.setOnClickListener(listener)
+
+        fun moreClickListener(listener: (View) -> Unit) = moreView.setOnClickListener(listener)
+    }
 
     private val sortedItemsCallback = SortedListCallback(this)
 
@@ -121,47 +162,6 @@ private class SortedListCallback(private val adapter: AppInfoAdapter)
     override fun onInserted(position: Int, count: Int) {
         adapter.notifyItemRangeInserted(position, count)
     }
-}
-
-class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-    private val iconView: ImageView by bindView(R.id.app_icon)
-
-    private val nameView: TextView by bindView(R.id.app_name)
-
-    private val versionView: TextView by bindView(R.id.app_version)
-
-    private val packageView: TextView by bindView(R.id.app_package)
-
-    private val lastUpdateTimeView: TextView by bindView(R.id.app_last_update_time)
-
-    private val moreView: View by bindView(R.id.more)
-
-    private val injector = KodeinInjector()
-
-    private val dateFormatter: DateFormatter by injector.instance()
-
-    init {
-        injector.inject(Kodein {
-            extend(itemView.context.appKodein())
-        })
-    }
-
-    fun bind(appInfo: AppInfo) {
-        Glide.with(itemView.context)
-                .load(appInfo.iconUri)
-                .error(R.mipmap.ic_launcher)
-                .into(iconView)
-
-        nameView.text = appInfo.name
-        versionView.text = appInfo.version
-        packageView.text = appInfo.packageName
-        lastUpdateTimeView.text = dateFormatter.format(timeMillis = appInfo.lastUpdateTime)
-    }
-
-    fun clickListener(listener: (View) -> Unit) = itemView.setOnClickListener(listener)
-
-    fun moreClickListener(listener: (View) -> Unit) = moreView.setOnClickListener(listener)
 }
 
 private val AppInfo.iconUri: Uri
