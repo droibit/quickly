@@ -51,7 +51,7 @@ class AppInfoAdapter(
         fun bind(appInfo: AppInfo) {
             Glide.with(itemView.context)
                     .load(appInfo.iconUri)
-                    .error(R.mipmap.ic_launcher)
+                    .error(R.drawable.ic_no_icon)
                     .into(iconView)
 
             nameView.text = appInfo.name
