@@ -11,7 +11,12 @@ import android.util.AttributeSet
 import android.view.View
 import android.widget.LinearLayout
 import com.droibit.quickly.R
+import com.droibit.quickly.data.provider.eventbus.RxBus
 import com.droibit.quickly.data.repository.appinfo.AppInfo
+import com.github.salomonbrys.kodein.Kodein
+import com.github.salomonbrys.kodein.KodeinAware
+import com.github.salomonbrys.kodein.KodeinInjector
+import com.github.salomonbrys.kodein.instance
 
 
 class QuickActionDialogFragment : BottomSheetDialogFragment() {
@@ -51,6 +56,19 @@ class QuickActionDialogFragment : BottomSheetDialogFragment() {
         }
     }
 
+    private val injector = KodeinInjector()
+
+    private val rxBus: RxBus by injector.instance()
+
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+
+        injector.inject(Kodein {
+            val parentKodein = context as? KodeinAware
+                    ?: throw IllegalStateException("KodeinAware is not implemented.")
+            extend(parentKodein.kodein)
+        })
+    }
     override fun setupDialog(dialog: Dialog, style: Int) {
         super.setupDialog(dialog, style)
         val contentView = QuickActionLayout(context).apply {

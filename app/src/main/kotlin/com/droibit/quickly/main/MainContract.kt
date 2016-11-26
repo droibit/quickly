@@ -25,4 +25,9 @@ interface MainContract {
 
         fun storeShowSystem(showSystem: Boolean): Completable
     }
+
+    sealed class QuickActionEvent(val app: AppInfo) {
+        class Uninstall(app: AppInfo) : QuickActionEvent(app)
+        class SharePackage(app: AppInfo) : QuickActionEvent(app)
+    }
 }
