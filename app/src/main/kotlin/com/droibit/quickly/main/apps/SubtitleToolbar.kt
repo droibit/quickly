@@ -25,13 +25,13 @@ class SubtitleToolbar @JvmOverloads constructor(
     private val orderArrowView: ImageView by bindView(R.id.order_icon)
 
     init {
-        View.inflate(context, R.layout.activity_main_subtitle, this)
+        View.inflate(context, R.layout.activity_apps_subtitle, this)
     }
 
     var appCount: Int = 0
         set(value) {
             if (value > 0) {
-                appCountView.text = context.getString(R.string.main_subtitle_app_count_format, value)
+                appCountView.text = context.getString(R.string.apps_subtitle_app_count_format, value)
             }
         }
 

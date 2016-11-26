@@ -1,14 +1,14 @@
 <resources>
     <string name="app_name">Quickly</string>
 
-    <string name="main_no_apps">No applications</string>
+    <string name="apps_no_apps">No applications</string>
     <string name="app_date_format" translatable="false">%1$s %2$s</string>
-    <string name="main_menu_refresh">Refresh</string>
-    <string name="main_menu_show_system">Show system</string>
-    <string name="app_menu_settings" translatable="false">@string/settings_title</string>
-    <string name="main_subtitle_app_count_format">%1$d apps</string>
+    <string name="apps_menu_refresh">Refresh</string>
+    <string name="apps_menu_show_system">Show system</string>
+    <string name="apps_menu_settings" translatable="false">@string/settings_title</string>
+    <string name="apps_subtitle_app_count_format">%1$d apps</string>
     <string name="sorted_by_name">Name</string>
-    <string name="main_menu_search">Search</string>
+    <string name="apps_menu_search">Search</string>
     <string name="sorted_by_package">Package</string>
     <string name="sorted_by_last_updated">Last updated</string>
     <string name="asc">Asc</string>
@@ -23,4 +23,5 @@
     <string name="settings_pref_about_app_version_key" translatable="false">settings_pref_about_app_version</string>
     <string name="quick_action_uninstall">Uninstall</string>
     <string name="quick_action_share_package">Share package</string>
+    <string name="apps_title">Apps</string>
 </resources>

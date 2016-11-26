@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Quickly</string>
-    <string name="main_no_apps">アプリがありません</string>
-    <string name="main_menu_refresh">更新</string>
-    <string name="main_menu_show_system">システムアプリを表示</string>
-    <string name="main_subtitle_app_count_format">%1$d アプリ</string>
+    <string name="apps_no_apps">アプリがありません</string>
+    <string name="apps_menu_refresh">更新</string>
+    <string name="apps_menu_show_system">システムアプリを表示</string>
+    <string name="apps_subtitle_app_count_format">%1$d アプリ</string>
     <string name="sorted_by_name">名前</string>
-    <string name="main_menu_search">検索</string>
+    <string name="apps_menu_search">検索</string>
     <string name="sorted_by_package">パッケージ</string>
     <string name="sorted_by_last_updated">最終更新日</string>
     <string name="asc">昇順</string>
@@ -19,4 +19,5 @@
     <string name="settings_pref_about_app_version_title">Quicklyのバージョン</string>
     <string name="quick_action_uninstall">アンインストール</string>
     <string name="quick_action_share_package">パッケージの共有</string>
+    <string name="apps_title">アプリ</string>
 </resources>

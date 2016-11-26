@@ -80,7 +80,7 @@ class AppsActivity : AppCompatActivity(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_apps)
         setSupportActionBar(toolbar)
 
         injector.inject(kodein)
@@ -128,7 +128,7 @@ class AppsActivity : AppCompatActivity(),
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.main, menu)
+        menuInflater.inflate(R.menu.apps, menu)
         showSystemMenuItem = menu.findItem(R.id.show_system)
         return true
     }
