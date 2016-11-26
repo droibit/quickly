@@ -7,4 +7,5 @@
     <color name="colorGrey100">#eceff1</color>
     <color name="colorGrey200">#eeeeee</color>
     <color name="colorGrey300">#90a4ae</color>
+    <color name="colorGray600">#757575</color>
 </resources>

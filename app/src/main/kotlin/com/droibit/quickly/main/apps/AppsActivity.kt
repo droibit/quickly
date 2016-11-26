@@ -18,6 +18,7 @@ import com.droibit.quickly.data.repository.appinfo.AppInfo
 import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.Order
 import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.SortBy
 import com.droibit.quickly.main.AppInfoAdapter
+import com.droibit.quickly.main.QuickActionDialogFragment
 import com.droibit.quickly.main.apps.AppsContract.MenuItem
 import com.droibit.quickly.main.apps.AppsContract.SortByChooseEvent
 import com.droibit.quickly.main.search.SearchActivity
@@ -96,7 +97,9 @@ class AppsActivity : AppCompatActivity(),
 
         appInfoAdapter.apply {
             moreItemClickListener = {
-                // TODO:
+                QuickActionDialogFragment.newInstance(app = it)
+                        .show(supportFragmentManager, TAG_FRAGMENT_QUICK_ACTION)
+
             }
         }
 

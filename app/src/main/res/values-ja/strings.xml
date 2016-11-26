@@ -17,4 +17,6 @@
     <string name="settings_pref_about_category_title">概要</string>
     <string name="settings_pref_about_oss_title">オープンソースライセンス</string>
     <string name="settings_pref_about_app_version_title">Quicklyのバージョン</string>
+    <string name="quick_action_uninstall">アンインストール</string>
+    <string name="quick_action_share_package">パッケージの共有</string>
 </resources>

@@ -1,5 +1,8 @@
 package com.droibit.quickly.main
 
+import android.support.annotation.DrawableRes
+import android.support.annotation.StringRes
+import com.droibit.quickly.R
 import com.droibit.quickly.data.repository.appinfo.AppInfo
 import com.droibit.quickly.data.repository.settings.ShowSettingsRepository
 import rx.Completable
@@ -24,6 +27,11 @@ interface MainContract {
         fun loadShowSystem(): Single<Boolean>
 
         fun storeShowSystem(showSystem: Boolean): Completable
+    }
+
+    enum class QuickActionItem(@DrawableRes val iconRes: Int, @StringRes val labelRes: Int) {
+        UNINSTALL(iconRes = R.drawable.ic_uninstall, labelRes = R.string.quick_action_uninstall),
+        SHARE_PACKAGE(iconRes = R.drawable.ic_share, labelRes = R.string.quick_action_share_package);
     }
 
     sealed class QuickActionEvent(val app: AppInfo) {

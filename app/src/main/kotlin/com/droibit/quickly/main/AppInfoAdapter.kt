@@ -57,7 +57,7 @@ class AppInfoAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView = LayoutInflater.from(context).inflate(R.layout.list_item_app_info, parent, false)
         return ViewHolder(itemView).apply {
-            clickLisener {
+            clickListener {
                 itemClickListener?.invoke(rawItems[adapterPosition])
             }
             moreClickListener {
@@ -159,7 +159,7 @@ class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         lastUpdateTimeView.text = dateFormatter.format(timeMillis = appInfo.lastUpdateTime)
     }
 
-    fun clickLisener(listener: (View) -> Unit) = itemView.setOnClickListener(listener)
+    fun clickListener(listener: (View) -> Unit) = itemView.setOnClickListener(listener)
 
     fun moreClickListener(listener: (View) -> Unit) = moreView.setOnClickListener(listener)
 }
