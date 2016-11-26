@@ -55,7 +55,7 @@ class AppInfoAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val itemView = LayoutInflater.from(context).inflate(R.layout.recycler_item_app_info, parent, false)
+        val itemView = LayoutInflater.from(context).inflate(R.layout.list_item_app_info, parent, false)
         return ViewHolder(itemView).apply {
             clickLisener {
                 itemClickListener?.invoke(rawItems[adapterPosition])
