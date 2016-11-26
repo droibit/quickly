@@ -6,6 +6,7 @@ import com.droibit.quickly.data.repository.settings.ShowSettingsRepository
 import com.jakewharton.rxrelay.PublishRelay
 import rx.Observable
 import rx.schedulers.Schedulers
+import timber.log.Timber
 
 class LoadAppInfoTask(
         private val appInfoRepository: AppInfoRepository,
@@ -18,6 +19,7 @@ class LoadAppInfoTask(
     override fun isRunning() = runningRelay.distinctUntilChanged()
 
     override fun requestLoad(forceReload: Boolean): Observable<List<AppInfo>> {
+        Timber.d("requestLoad(forceReload=$forceReload)")
         // TODO: if forceReload, need delay 1sec
         val shouldRunningCall = forceReload || !appInfoRepository.hasCache
         return appInfoRepository.loadAll(forceReload)

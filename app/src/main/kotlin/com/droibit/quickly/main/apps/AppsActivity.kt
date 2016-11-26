@@ -184,6 +184,7 @@ class AppsActivity : AppCompatActivity(),
     }
 
     override fun setSortBy(sortBy: SortBy, order: Order) {
+        Timber.d("setSortBy($sortBy, $order")
         appInfoAdapter.apply {
             comparator = appInfoComparators.get(sortBy, order)
             refresh()
@@ -193,6 +194,7 @@ class AppsActivity : AppCompatActivity(),
     }
 
     override fun showSortByChooserDialog(sortBy: SortBy) {
+        Timber.d("showSortByChooserDialog($sortBy)")
         if (supportFragmentManager.findFragmentByTag(TAG_FRAGMENT_SORT_BY_CHOOSER) == null) {
             val df = SortByChooserDialogFragment.newInstance(sortBy)
             df.show(supportFragmentManager, TAG_FRAGMENT_SORT_BY_CHOOSER)
@@ -200,6 +202,7 @@ class AppsActivity : AppCompatActivity(),
     }
 
     override fun setShowSystem(showSystem: Boolean) {
+        Timber.d("setShowSystem(showSystem=$showSystem)")
         showSystemMenuItem.isChecked = showSystem
     }
 
