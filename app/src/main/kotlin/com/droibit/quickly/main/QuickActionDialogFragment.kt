@@ -18,8 +18,7 @@ import com.droibit.quickly.data.provider.eventbus.RxBus
 import com.droibit.quickly.data.repository.appinfo.AppInfo
 import com.droibit.quickly.main.MainContract.QuickActionEvent
 import com.droibit.quickly.main.MainContract.QuickActionItem
-import com.droibit.quickly.main.MainContract.QuickActionItem.SHARE_PACKAGE
-import com.droibit.quickly.main.MainContract.QuickActionItem.UNINSTALL
+import com.droibit.quickly.main.MainContract.QuickActionItem.*
 import com.github.droibit.chopstick.bindView
 import com.github.droibit.chopstick.findView
 import com.github.salomonbrys.kodein.Kodein
@@ -103,7 +102,7 @@ private fun QuickActionItem.toEvent(app: AppInfo): QuickActionEvent {
     return when (this) {
         UNINSTALL -> QuickActionEvent.Uninstall(app)
         SHARE_PACKAGE -> QuickActionEvent.SharePackage(app)
-
+        OPEN_APP_INFO -> QuickActionEvent.OpenAppInfo(app)
     }
 }
 
