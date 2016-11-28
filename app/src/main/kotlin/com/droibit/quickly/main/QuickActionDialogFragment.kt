@@ -138,6 +138,7 @@ private class QuickActionLayout @JvmOverloads constructor(
     }
 }
 
+// TODO: Hide uninstall item if preinstall app
 private class QuickActionAdapter(context: Context)
     : ArrayAdapter<QuickActionItem>(context, -1, QuickActionItem.values()) {
 

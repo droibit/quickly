@@ -4,6 +4,8 @@ import android.support.annotation.UiThread
 import com.droibit.quickly.data.repository.appinfo.AppInfo
 import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.Order
 import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.SortBy
+import com.droibit.quickly.main.MainContract
+import com.droibit.quickly.main.MainContract.QuickActionEvent
 
 interface AppsContract {
 
@@ -26,6 +28,10 @@ interface AppsContract {
         fun showSortByChooserDialog(sortBy: SortBy)
 
         fun setShowSystem(showSystem: Boolean)
+
+        fun performUninstall(packageName: String)
+
+        fun performSharePackage(packageName: String)
     }
 
     interface Navigator {
@@ -33,6 +39,8 @@ interface AppsContract {
         fun navigateSearch()
 
         fun navigateSettings()
+
+        fun navigateAppInfoInSettings(packageName: String)
     }
 
     interface Presenter {
@@ -63,6 +71,9 @@ interface AppsContract {
 
         @UiThread
         fun onSortByChoose(sortBy: SortBy, order: Order)
+
+        @UiThread
+        fun onQuickActionSelected(event: QuickActionEvent)
     }
 
     class SortByChooseEvent(val sortBy: SortBy, val order: Order)

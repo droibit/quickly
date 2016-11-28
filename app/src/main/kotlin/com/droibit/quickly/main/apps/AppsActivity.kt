@@ -14,10 +14,12 @@ import android.widget.ProgressBar
 import com.droibit.quickly.R
 import com.droibit.quickly.data.provider.comparators.AppInfoComparators
 import com.droibit.quickly.data.provider.eventbus.RxBus
+import com.droibit.quickly.data.provider.intent.IntentCreator
 import com.droibit.quickly.data.repository.appinfo.AppInfo
 import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.Order
 import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.SortBy
 import com.droibit.quickly.main.AppInfoAdapter
+import com.droibit.quickly.main.MainContract.QuickActionEvent
 import com.droibit.quickly.main.QuickActionDialogFragment
 import com.droibit.quickly.main.apps.AppsContract.MenuItem
 import com.droibit.quickly.main.apps.AppsContract.SortByChooseEvent
@@ -41,6 +43,8 @@ class AppsActivity : AppCompatActivity(),
         private val TAG_FRAGMENT_SORT_BY_CHOOSER = "TAG_FRAGMENT_SORT_BY_CHOOSER"
 
         private val TAG_FRAGMENT_QUICK_ACTION = "TAG_FRAGMENT_QUICK_ACTION"
+
+        private val REQUEST_UNINSTALL_APP = 1
     }
 
     private val toolbar: Toolbar by bindView(R.id.toolbar)
@@ -62,6 +66,8 @@ class AppsActivity : AppCompatActivity(),
     private val presenter: AppsContract.Presenter by injector.instance()
 
     private val appInfoComparators: AppInfoComparators by injector.instance()
+
+    private val intentCreator: IntentCreator by injector.instance()
 
     private val rxBus: RxBus by injector.instance()
 
@@ -114,6 +120,7 @@ class AppsActivity : AppCompatActivity(),
     override fun onResume() {
         super.onResume()
         subscribeSortBy()
+        subscribeQuickAction()
         presenter.onResume()
     }
 
@@ -144,6 +151,7 @@ class AppsActivity : AppCompatActivity(),
     }
 
     // AppsContract.Navigator
+
     override fun navigateSearch() {
         val intent = SearchActivity.createIntent(this, sourceApps = appInfoAdapter.items)
         val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this).toBundle()
@@ -152,6 +160,11 @@ class AppsActivity : AppCompatActivity(),
 
     override fun navigateSettings() {
         startActivity(SettingsActivity.createIntent(this))
+    }
+
+    override fun navigateAppInfoInSettings(packageName: String) {
+        val intent = intentCreator.newAppInfoIntent(packageName)
+        startActivity(intent)
     }
 
     // AppsContract.View
@@ -206,10 +219,27 @@ class AppsActivity : AppCompatActivity(),
         showSystemMenuItem.isChecked = showSystem
     }
 
+    override fun performUninstall(packageName: String) {
+        val intent = intentCreator.newUninstallIntent(packageName)
+        startActivityForResult(intent, REQUEST_UNINSTALL_APP)
+    }
+
+    override fun performSharePackage(packageName: String) {
+        val intent = intentCreator.newShareIntent(text = packageName)
+        startActivity(intent)
+    }
+
     private fun subscribeSortBy() {
         rxBus.asObservable()
                 .ofType(SortByChooseEvent::class.java)
                 .subscribe { presenter.onSortByChoose(it.sortBy, it.order) }
+                .addTo(subscriptions)
+    }
+
+    private fun subscribeQuickAction() {
+        rxBus.asObservable()
+                .ofType(QuickActionEvent::class.java)
+                .subscribe { presenter.onQuickActionSelected(event = it) }
                 .addTo(subscriptions)
     }
 

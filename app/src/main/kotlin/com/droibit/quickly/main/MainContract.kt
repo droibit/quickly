@@ -39,5 +39,7 @@ interface MainContract {
         class Uninstall(app: AppInfo) : QuickActionEvent(app)
         class SharePackage(app: AppInfo) : QuickActionEvent(app)
         class OpenAppInfo(app: AppInfo) : QuickActionEvent(app)
+
+        val packageName = app.packageName
     }
 }

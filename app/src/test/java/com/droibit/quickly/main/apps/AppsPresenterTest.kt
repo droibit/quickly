@@ -167,4 +167,19 @@ class AppsPresenterTest {
         presenter.onSortByChoose(result.first, result.second)
         verify(view).setSortBy(result.first, result.second)
     }
+
+    @Test
+    fun onQuickActionSelected_performUninstall() {
+        TODO()
+    }
+
+    @Test
+    fun onQuickActionSelected_performSharePackage() {
+        TODO()
+    }
+
+    @Test
+    fun onQuickActionSelected_navigateAppInfoInSettings() {
+        TODO()
+    }
 }

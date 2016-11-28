@@ -5,6 +5,7 @@ import com.droibit.quickly.data.repository.appinfo.AppInfo
 import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.Order
 import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.SortBy
 import com.droibit.quickly.main.MainContract
+import com.droibit.quickly.main.MainContract.QuickActionEvent
 import com.droibit.quickly.main.apps.AppsContract.MenuItem
 import rx.android.schedulers.AndroidSchedulers
 import rx.lang.kotlin.addTo
@@ -89,6 +90,15 @@ class AppsPresenter(
                     }
                     Timber.d("Sort by updated: $updated, $sortBy, $order")
                 }
+    }
+
+    @UiThread
+    override fun onQuickActionSelected(event: QuickActionEvent) {
+        when (event) {
+            is QuickActionEvent.Uninstall -> view.performUninstall(event.packageName)
+            is QuickActionEvent.SharePackage -> view.performSharePackage(event.packageName)
+            is QuickActionEvent.OpenAppInfo -> navigator.navigateAppInfoInSettings(event.packageName)
+        }
     }
 
     private fun onAppsLoaded(apps: List<AppInfo>, reloaded: Boolean) {
