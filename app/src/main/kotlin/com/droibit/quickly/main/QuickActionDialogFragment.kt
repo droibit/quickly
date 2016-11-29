@@ -2,6 +2,8 @@ package com.droibit.quickly.main
 
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager.MATCH_DEFAULT_ONLY
 import android.os.Bundle
 import android.support.design.widget.BottomSheetBehavior
 import android.support.design.widget.BottomSheetBehavior.BottomSheetCallback
@@ -13,8 +15,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import android.widget.AdapterView.OnItemClickListener
+import com.droibit.quickly.BuildConfig
 import com.droibit.quickly.R
 import com.droibit.quickly.data.provider.eventbus.RxBus
+import com.droibit.quickly.data.provider.intent.IntentCreator
 import com.droibit.quickly.data.repository.appinfo.AppInfo
 import com.droibit.quickly.main.MainContract.QuickActionEvent
 import com.droibit.quickly.main.MainContract.QuickActionItem
@@ -25,6 +29,7 @@ import com.github.salomonbrys.kodein.Kodein
 import com.github.salomonbrys.kodein.KodeinAware
 import com.github.salomonbrys.kodein.KodeinInjector
 import com.github.salomonbrys.kodein.instance
+import java.util.*
 
 
 class QuickActionDialogFragment : BottomSheetDialogFragment(),
@@ -57,7 +62,11 @@ class QuickActionDialogFragment : BottomSheetDialogFragment(),
 
     private val injector = KodeinInjector()
 
+    private val intentCreator: IntentCreator by injector.instance()
+
     private val rxBus: RxBus by injector.instance()
+
+    private lateinit var listAdapter: QuickActionAdapter
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
@@ -71,9 +80,11 @@ class QuickActionDialogFragment : BottomSheetDialogFragment(),
 
     override fun setupDialog(dialog: Dialog, style: Int) {
         super.setupDialog(dialog, style)
+        listAdapter = QuickActionAdapter(context, items = createQuickActions())
+
         val contentView = QuickActionLayout(context).apply {
             appName = app.name
-            listAdapter = QuickActionAdapter(context)
+            listAdapter = this@QuickActionDialogFragment.listAdapter
             onItemClickListener = this@QuickActionDialogFragment
 
             dialog.setContentView(this)
@@ -91,10 +102,33 @@ class QuickActionDialogFragment : BottomSheetDialogFragment(),
     // OnItemClickListener
 
     override fun onItemClick(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-        val item = QuickActionItem.values()[position]
+        val item = listAdapter.getItem(position)
         rxBus.call(item.toEvent(app))
 
         dismiss()
+    }
+
+    // Private
+
+    private fun createQuickActions(): List<QuickActionItem> {
+        return ArrayList<QuickActionItem>(3).apply {
+            if (!app.preInstalled
+                    && BuildConfig.APPLICATION_ID != app.packageName
+                    && resolveActivity(intentCreator.newUninstallIntent(app.packageName))) {
+                add(UNINSTALL)
+            }
+
+            add(SHARE_PACKAGE)
+
+            if (resolveActivity(intentCreator.newAppInfoIntent(app.packageName))) {
+                add(OPEN_APP_INFO)
+            }
+        }
+    }
+
+    private fun resolveActivity(intent: Intent): Boolean {
+        val resolveInfos = context.packageManager.queryIntentActivities(intent, MATCH_DEFAULT_ONLY)
+        return resolveInfos.isNotEmpty()
     }
 }
 
@@ -139,8 +173,8 @@ private class QuickActionLayout @JvmOverloads constructor(
 }
 
 // TODO: Hide uninstall item if preinstall app
-private class QuickActionAdapter(context: Context)
-    : ArrayAdapter<QuickActionItem>(context, -1, QuickActionItem.values()) {
+private class QuickActionAdapter(context: Context, items: List<QuickActionItem>)
+    : ArrayAdapter<QuickActionItem>(context, -1, items) {
 
     private val inflater = LayoutInflater.from(context)
 
