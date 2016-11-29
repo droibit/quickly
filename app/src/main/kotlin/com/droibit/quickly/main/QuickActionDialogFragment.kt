@@ -87,6 +87,8 @@ class QuickActionDialogFragment : BottomSheetDialogFragment(),
             listAdapter = this@QuickActionDialogFragment.listAdapter
             onItemClickListener = this@QuickActionDialogFragment
 
+            showLocked(visible = app.preInstalled)
+
             dialog.setContentView(this)
         }
 
@@ -112,8 +114,7 @@ class QuickActionDialogFragment : BottomSheetDialogFragment(),
 
     private fun createQuickActions(): List<QuickActionItem> {
         return ArrayList<QuickActionItem>(3).apply {
-            if (!app.preInstalled
-                    && BuildConfig.APPLICATION_ID != app.packageName
+            if (BuildConfig.APPLICATION_ID != app.packageName
                     && resolveActivity(intentCreator.newUninstallIntent(app.packageName))) {
                 add(UNINSTALL)
             }
@@ -167,8 +168,14 @@ private class QuickActionLayout @JvmOverloads constructor(
 
     private val listView: ListView by bindView(R.id.list)
 
+    private val lockedView: View by bindView(R.id.lock_icon)
+
     init {
         View.inflate(context, R.layout.fragment_dialog_quick_action, this)
+    }
+
+    fun showLocked(visible: Boolean) {
+        lockedView.visibility = if (visible) View.VISIBLE else View.GONE
     }
 }
 
