@@ -17,7 +17,7 @@
     <string name="search_app_hint">Search</string>
     <string name="settings_title">Settings</string>
     <string name="settings_pref_about_category_title">About</string>
-    <string name="settings_pref_about_oss_title">Open source licenses</string>
+    <string name="settings_pref_about_oss_title" translatable="false">@string/oss_license_title</string>
     <string name="settings_pref_about_oss_key" translatable="false">settings_pref_about_oss</string>
     <string name="settings_pref_about_app_version_title">Quickly version</string>
     <string name="settings_pref_about_app_version_key" translatable="false">settings_pref_about_app_version</string>
@@ -25,4 +25,5 @@
     <string name="quick_action_share_package">Share package</string>
     <string name="apps_title">Apps</string>
     <string name="quick_action_open_app_info">Open app info</string>
+    <string name="oss_license_title">Open source licenses</string>
 </resources>

@@ -15,10 +15,10 @@
     <string name="search_app_hint">検索</string>
     <string name="settings_title">設定</string>
     <string name="settings_pref_about_category_title">概要</string>
-    <string name="settings_pref_about_oss_title">オープンソースライセンス</string>
     <string name="settings_pref_about_app_version_title">Quicklyのバージョン</string>
     <string name="quick_action_uninstall">アンインストール</string>
     <string name="quick_action_share_package">パッケージの共有</string>
     <string name="apps_title">アプリ</string>
     <string name="quick_action_open_app_info">アプリ情報を表示</string>
+    <string name="oss_license_title">オープンソースライセンス</string>
 </resources>
