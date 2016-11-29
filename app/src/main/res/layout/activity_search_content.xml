@@ -15,16 +15,30 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:visibility="visible" />
 
-    <TextView
+    <LinearLayout
         android:id="@+id/empty"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
         android:layout_gravity="center"
-        android:layout_marginTop="8dp"
-        android:drawablePadding="10dp"
-        android:drawableTop="@drawable/ic_no_apps"
-        android:maxLines="1"
-        android:text="@string/apps_no_apps"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+        tools:ignore="UseCompoundDrawables">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/ic_no_apps"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            android:maxLines="1"
+            android:text="@string/apps_no_apps"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+    </LinearLayout>
 
 </merge>
