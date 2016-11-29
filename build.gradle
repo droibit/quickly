@@ -16,6 +16,7 @@ buildscript {
         timberVersion = '4.3.0'
         chopsticksVersion = '0.5.1'
         kotprefVersion = '1.5.0'
+        leakCanaryVersion = '1.5'
         stethoVersion = '1.4.1'
         junitVersion = '4.12'
         assertjVersion = '3.4.1'

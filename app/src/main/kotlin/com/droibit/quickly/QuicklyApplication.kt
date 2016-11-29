@@ -4,6 +4,7 @@ import android.app.Application
 import com.droibit.quickly.data.config.provideConfigModule
 import com.droibit.quickly.data.provider.providerModule
 import com.droibit.quickly.data.repository.repositoryModule
+import com.droibit.quickly.utils.LeakCanary
 import com.github.salomonbrys.kodein.*
 import timber.log.Timber
 
@@ -22,11 +23,14 @@ class QuicklyApplication : Application(), KodeinAware {
 
     private val timberTree: Timber.Tree by injector.instance()
 
+    private val leakCanary: LeakCanary by injector.instance()
+
     override fun onCreate() {
         super.onCreate()
 
         injector.inject(Kodein { extend(kodein) })
 
         Timber.plant(timberTree)
+        leakCanary.initialize(this)
     }
 }

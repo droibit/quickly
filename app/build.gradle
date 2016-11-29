@@ -72,6 +72,10 @@ dependencies {
 
     debugCompile "com.facebook.stetho:stetho:$stethoVersion"
 
+    debugCompile "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion"
+    releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
+    testCompile "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
+
     androidTestCompile "org.mockito:mockito-core:$mockitoVersion"
     androidTestCompile "com.squareup.assertj:assertj-android:$assertjAndroidVersion"
     androidTestCompile "com.google.dexmaker:dexmaker:$dexmakerVersion"

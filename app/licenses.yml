@@ -11,7 +11,7 @@
   copyrightHolder: Android Open Source Project
   license: The Apache Software License, Version 2.0
 - artifact: com.android.support:design:+
-  name: support-design
+  name: support-designs
   copyrightHolder: Android Open Source Project
   license: The Apache Software License, Version 2.0
 - artifact: com.android.support:preference-v14:+
@@ -180,3 +180,9 @@
   copyrightHolder: 2010-2016 JetBrains s.r.o
   license: The Apache Software License, Version 2.0
   url: https://github.com/JetBrains/kotlin
+- artifact: com.squareup.leakcanary:leakcanary-android-no-op:+
+  name: LeakCanary for Android
+  copyrightHolder: 2015 Square, Inc
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: http://github.com/square/leakcanary/
