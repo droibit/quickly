@@ -113,7 +113,7 @@ class QuickActionDialogFragment : BottomSheetDialogFragment(),
     // Private
 
     private fun createQuickActions(): List<QuickActionItem> {
-        return ArrayList<QuickActionItem>(3).apply {
+        return ArrayList<QuickActionItem>().apply {
             if (BuildConfig.APPLICATION_ID != app.packageName
                     && resolveActivity(intentCreator.newUninstallIntent(app.packageName))) {
                 add(UNINSTALL)
