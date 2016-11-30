@@ -38,7 +38,7 @@ class PackageActionReceiver : BroadcastReceiver(), PackageContract.Receiver {
         }
     }
 
-    override fun performPackageAction(action: PackageContract.Action, packageName: String) {
+    override fun startPackageAction(action: PackageContract.Action, packageName: String) {
         val intent = PackageActionService.newIntent(context, action, packageName)
         context.startService(intent)
     }

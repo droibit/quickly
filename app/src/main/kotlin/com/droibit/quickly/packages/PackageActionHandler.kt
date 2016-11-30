@@ -8,19 +8,19 @@ class PackageActionHandler(private val receiver: PackageContract.Receiver)
 
     override fun onPackageAdded(packageName: String) {
         Timber.d("ACTION_PACKAGE_ADDED: $packageName")
-        receiver.performPackageAction(PACKAGE_ADDED, packageName)
+        receiver.startPackageAction(PACKAGE_ADDED, packageName)
     }
 
     override fun onPackageReplaced(packageName: String) {
         Timber.d("ACTION_PACKAGE_REPLACED: $packageName")
-        receiver.performPackageAction(PACKAGE_REPLACED, packageName)
+        receiver.startPackageAction(PACKAGE_REPLACED, packageName)
     }
 
     override fun onPackageRemoved(packageName: String, replacing: Boolean) {
         Timber.d("ACTION_PACKAGE_REMOVED: $packageName, REPLACING=$replacing")
 
         if (!replacing) {
-            receiver.performPackageAction(PACKAGE_REMOVED, packageName)
+            receiver.startPackageAction(PACKAGE_REMOVED, packageName)
         }
     }
 }

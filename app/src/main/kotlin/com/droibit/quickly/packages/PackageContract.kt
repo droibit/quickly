@@ -1,5 +1,7 @@
 package com.droibit.quickly.packages
 
+import rx.Single
+
 interface PackageContract {
 
     enum class Action {
@@ -10,7 +12,7 @@ interface PackageContract {
 
     interface Receiver {
 
-        fun performPackageAction(action: Action, packageName: String)
+        fun startPackageAction(action: Action, packageName: String)
     }
 
     interface ActionHandler {
@@ -20,5 +22,19 @@ interface PackageContract {
         fun onPackageReplaced(packageName: String)
 
         fun onPackageRemoved(packageName: String, replacing: Boolean)
+    }
+
+    interface ActionPerformer {
+
+        fun performPackageAction(action: Action, packageName: String)
+    }
+
+    interface PackageTask {
+
+        fun add(packageName: String): Single<Boolean>
+
+        fun update(packageName: String): Single<Boolean>
+
+        fun remove(packageName: String): Single<Boolean>
     }
 }
