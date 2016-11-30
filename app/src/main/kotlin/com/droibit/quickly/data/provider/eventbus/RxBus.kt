@@ -1,19 +1,12 @@
 package com.droibit.quickly.data.provider.eventbus
 
-import com.jakewharton.rxrelay.BehaviorRelay
 import rx.Observable
 
+interface RxBus {
 
-class RxBus {
+    val hasObservers: Boolean
 
-    object Nothing
+    fun asObservable(): Observable<Any>
 
-    private val subject: BehaviorRelay<Any> = BehaviorRelay.create()
-
-    fun asObservable(): Observable<Any> {
-        return subject.filter { it != Nothing }
-                .doOnNext { subject.call(Nothing) }
-    }
-
-    fun call(value: Any) = subject.call(value)
+    fun call(value: Any)
 }

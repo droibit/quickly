@@ -35,7 +35,7 @@ class SortByChooserDialogFragment : DialogFragment(), DialogInterface.OnClickLis
 
     private val injector = KodeinInjector()
 
-    private val rxBus: RxBus by injector.instance()
+    private val localEventBus: RxBus by injector.instance("localEventBus")
 
     private val sortByItems: Array<String> by bindStringArray(R.array.sort_by_items)
 
@@ -82,7 +82,7 @@ class SortByChooserDialogFragment : DialogFragment(), DialogInterface.OnClickLis
 
         if (which < 0) {
             // clicked positive/negative button
-            rxBus.call(SortByChooseEvent(sortBy, which.toOrder()))
+            localEventBus.call(SortByChooseEvent(sortBy, which.toOrder()))
             return
         }
         sortBy = SortBy.from(index = which)

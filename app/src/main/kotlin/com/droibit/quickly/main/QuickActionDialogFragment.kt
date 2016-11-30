@@ -64,7 +64,7 @@ class QuickActionDialogFragment : BottomSheetDialogFragment(),
 
     private val intentCreator: IntentCreator by injector.instance()
 
-    private val rxBus: RxBus by injector.instance()
+    private val localEventBus: RxBus by injector.instance("localEventBus")
 
     private lateinit var listAdapter: QuickActionAdapter
 
@@ -105,7 +105,7 @@ class QuickActionDialogFragment : BottomSheetDialogFragment(),
 
     override fun onItemClick(parent: AdapterView<*>, view: View, position: Int, id: Long) {
         val item = listAdapter.getItem(position)
-        rxBus.call(item.toEvent(app))
+        localEventBus.call(item.toEvent(app))
 
         dismiss()
     }

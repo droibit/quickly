@@ -69,7 +69,7 @@ class AppsActivity : AppCompatActivity(),
 
     private val intentCreator: IntentCreator by injector.instance()
 
-    private val rxBus: RxBus by injector.instance()
+    private val localEventBus: RxBus by injector.instance("localEventBus")
 
     private val subscriptions: CompositeSubscription by injector.instance()
 
@@ -230,14 +230,14 @@ class AppsActivity : AppCompatActivity(),
     }
 
     private fun subscribeSortBy() {
-        rxBus.asObservable()
+        localEventBus.asObservable()
                 .ofType(SortByChooseEvent::class.java)
                 .subscribe { presenter.onSortByChoose(it.sortBy, it.order) }
                 .addTo(subscriptions)
     }
 
     private fun subscribeQuickAction() {
-        rxBus.asObservable()
+        localEventBus.asObservable()
                 .ofType(QuickActionEvent::class.java)
                 .subscribe { presenter.onQuickActionSelected(event = it) }
                 .addTo(subscriptions)

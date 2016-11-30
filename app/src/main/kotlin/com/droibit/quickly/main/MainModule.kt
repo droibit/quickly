@@ -1,12 +1,12 @@
 package com.droibit.quickly.main
 
+import com.droibit.quickly.data.provider.eventbus.BehaviorBus
 import com.droibit.quickly.data.provider.eventbus.RxBus
 import com.github.salomonbrys.kodein.Kodein
 import com.github.salomonbrys.kodein.instance
 import com.github.salomonbrys.kodein.provider
 import com.github.salomonbrys.kodein.singleton
 import com.jakewharton.rxrelay.BehaviorRelay
-import com.jakewharton.rxrelay.PublishRelay
 
 fun mainModule() = Kodein.Module {
 
@@ -24,5 +24,5 @@ fun mainModule() = Kodein.Module {
 
     bind<BehaviorRelay<Boolean>>() with provider { BehaviorRelay.create<Boolean>() }
 
-    bind<RxBus>() with singleton { RxBus() }
+    bind<RxBus>("localEventBus") with singleton { BehaviorBus() }
 }

@@ -8,7 +8,8 @@ fun packageModule() = Kodein.Module {
 
     bind<PackageContract.ActionHandler>() with provider {
         PackageActionHandler(
-                appInfoRepository = instance()
+                appInfoRepository = instance(),
+                appEventBus = instance("appEventBus")
         )
     }
 }
