@@ -4,6 +4,7 @@ import com.droibit.quickly.data.repository.appinfo.AppInfo
 import com.droibit.quickly.data.repository.appinfo.AppInfoRepository
 import com.droibit.quickly.data.repository.settings.ShowSettingsRepository
 import com.droibit.quickly.rules.RxSchedulersOverrideRule
+import com.jakewharton.rxrelay.BehaviorRelay
 import com.jakewharton.rxrelay.PublishRelay
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
@@ -34,7 +35,7 @@ class LoadAppInfoTaskTest {
     private lateinit var showSettingsRepository: ShowSettingsRepository
 
     @Mock
-    lateinit var runningRelay: PublishRelay<Boolean>
+    lateinit var runningRelay: BehaviorRelay<Boolean>
 
     private lateinit var task: LoadAppInfoTask
 

@@ -5,6 +5,7 @@ import com.github.salomonbrys.kodein.Kodein
 import com.github.salomonbrys.kodein.instance
 import com.github.salomonbrys.kodein.provider
 import com.github.salomonbrys.kodein.singleton
+import com.jakewharton.rxrelay.BehaviorRelay
 import com.jakewharton.rxrelay.PublishRelay
 
 fun mainModule() = Kodein.Module {
@@ -21,7 +22,7 @@ fun mainModule() = Kodein.Module {
         )
     }
 
-    bind<PublishRelay<Boolean>>() with provider { PublishRelay.create<Boolean>() }
+    bind<BehaviorRelay<Boolean>>() with provider { BehaviorRelay.create<Boolean>() }
 
     bind<RxBus>() with singleton { RxBus() }
 }
