@@ -34,7 +34,7 @@
             android:parentActivityName=".settings.SettingsActivity" />
 
         <receiver
-            android:name=".packages.PackageActionReceiver"
+            android:name=".packages.receiver.PackageActionReceiver"
             android:exported="false">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />

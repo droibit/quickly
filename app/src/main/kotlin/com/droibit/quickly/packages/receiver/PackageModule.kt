@@ -1,6 +1,7 @@
-package com.droibit.quickly.packages
+package com.droibit.quickly.packages.receiver
 
 import android.content.Context
+import com.droibit.quickly.packages.PackageContract
 import com.github.salomonbrys.kodein.Kodein
 import com.github.salomonbrys.kodein.instance
 import com.github.salomonbrys.kodein.provider

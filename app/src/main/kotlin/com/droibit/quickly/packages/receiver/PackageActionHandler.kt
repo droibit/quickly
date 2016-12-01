@@ -1,5 +1,6 @@
-package com.droibit.quickly.packages
+package com.droibit.quickly.packages.receiver
 
+import com.droibit.quickly.packages.PackageContract
 import com.droibit.quickly.packages.PackageContract.Action.*
 import timber.log.Timber
 
