@@ -4,7 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.Intent.*
-import com.droibit.quickly.packages.PackageActionService
+import com.droibit.quickly.packages.service.PackageActionService
 import com.droibit.quickly.packages.PackageContract
 import com.github.salomonbrys.kodein.Kodein
 import com.github.salomonbrys.kodein.KodeinInjector

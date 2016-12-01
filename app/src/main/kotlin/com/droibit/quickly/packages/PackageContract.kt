@@ -1,6 +1,6 @@
 package com.droibit.quickly.packages
 
-import rx.Single
+import android.support.annotation.WorkerThread
 
 interface PackageContract {
 
@@ -26,15 +26,7 @@ interface PackageContract {
 
     interface ActionPerformer {
 
+        @WorkerThread
         fun performPackageAction(action: Action, packageName: String)
-    }
-
-    interface PackageTask {
-
-        fun add(packageName: String): Single<Boolean>
-
-        fun update(packageName: String): Single<Boolean>
-
-        fun remove(packageName: String): Single<Boolean>
     }
 }

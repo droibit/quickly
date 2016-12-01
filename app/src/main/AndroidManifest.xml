@@ -53,7 +53,7 @@
         </receiver>
 
         <service
-            android:name=".packages.PackageActionService"
+            android:name=".packages.service.PackageActionService"
             android:exported="false" />
     </application>
 
