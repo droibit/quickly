@@ -32,15 +32,16 @@ class PackageActionService : IntentService(PackageActionService::class.java.simp
     private val performer: PackageContract.ActionPerformer by injector.instance()
 
     init {
-        injector.inject(Kodein {
-            extend(appKodein())
-            import(packageModule())
-        })
         setIntentRedelivery(true)
     }
 
     override fun onHandleIntent(intent: Intent) {
         Timber.d("onHandleIntent(intent=$intent)")
+
+        injector.inject(Kodein {
+            extend(appKodein())
+            import(packageModule())
+        })
 
         performer.performPackageAction(
                 action = intent.getSerializableExtra(EXTRA_ACTION) as PackageContract.Action,

@@ -10,7 +10,7 @@ fun packageModule(context: Context, receiver: PackageContract.Receiver) = Kodein
 
     bind<Context>() with instance(context)
 
-    bind<PackageContract.Receiver>(overrides = true) with instance(receiver)
+    bind<PackageContract.Receiver>() with instance(receiver)
 
     bind<PackageContract.ActionHandler>() with provider {
         PackageActionHandler(receiver = instance())
