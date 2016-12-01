@@ -4,9 +4,7 @@ import com.droibit.quickly.data.repository.appinfo.AppInfo
 import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.Order
 import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.SortBy
 import com.droibit.quickly.main.MainContract
-import com.droibit.quickly.main.apps.AppsContract
 import com.droibit.quickly.main.apps.AppsContract.MenuItem
-import com.droibit.quickly.main.apps.AppsPresenter
 import com.droibit.quickly.rules.RxSchedulersOverrideRule
 import org.junit.Before
 import org.junit.Rule
@@ -16,7 +14,6 @@ import org.mockito.Mockito.*
 import org.mockito.junit.MockitoJUnit
 import rx.Completable
 import rx.Observable
-import rx.Single
 import rx.lang.kotlin.singleOf
 import rx.lang.kotlin.toSingletonObservable
 import rx.subscriptions.CompositeSubscription
@@ -71,14 +68,14 @@ class AppsPresenterTest {
 
     @Test
     fun onResume_subscribeRunning() {
-        `when`(loadTask.requestLoad()).thenReturn(Observable.empty())
+        `when`(loadTask.requestLoad(anyBoolean())).thenReturn(Observable.empty())
 
         `when`(loadTask.isRunning()).thenReturn(true.toSingletonObservable())
-        presenter.onResume()
+        presenter.onResume(false)
         verify(view).setLoadingIndicator(true)
 
         `when`(loadTask.isRunning()).thenReturn(false.toSingletonObservable())
-        presenter.onResume()
+        presenter.onResume(false)
         verify(view).setLoadingIndicator(false)
     }
 
@@ -87,19 +84,19 @@ class AppsPresenterTest {
         `when`(loadTask.isRunning()).thenReturn(Observable.empty())
 
         val mockList = mock(List::class.java) as List<AppInfo>
-        `when`(loadTask.requestLoad()).thenReturn(mockList.toSingletonObservable())
+        `when`(loadTask.requestLoad(anyBoolean())).thenReturn(mockList.toSingletonObservable())
 
         run {
             `when`(mockList.isEmpty()).thenReturn(false)
 
-            presenter.onResume()
-            verify(view).showApps(mockList)
+            presenter.onResume(true)
+            verify(view).showApps(mockList, true)
         }
 
         run {
             `when`(mockList.isEmpty()).thenReturn(true)
 
-            presenter.onResume()
+            presenter.onResume(true)
             verify(view).showNoAppInfo()
         }
     }

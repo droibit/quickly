@@ -103,6 +103,7 @@ class AppsActivity : AppCompatActivity(),
 
         appInfoAdapter.apply {
             moreItemClickListener = {
+                // TODO: delegate presenter
                 QuickActionDialogFragment.newInstance(app = it)
                         .show(supportFragmentManager, TAG_FRAGMENT_QUICK_ACTION)
 
@@ -121,7 +122,7 @@ class AppsActivity : AppCompatActivity(),
         super.onResume()
         subscribeSortBy()
         subscribeQuickAction()
-        presenter.onResume()
+        presenter.onResume(forceLoad = appInfoAdapter.isEmpty)
     }
 
     override fun onPause() {

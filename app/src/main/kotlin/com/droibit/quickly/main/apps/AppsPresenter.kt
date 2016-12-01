@@ -31,13 +31,13 @@ class AppsPresenter(
     }
 
     @UiThread
-    override fun onResume() {
+    override fun onResume(forceLoad: Boolean) {
         loadTask.isRunning()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { view.setLoadingIndicator(active = it) }
                 .addTo(subscriptions)
 
-        refreshApps(forceLoad = false)
+        refreshApps(forceLoad)
     }
 
     @UiThread
