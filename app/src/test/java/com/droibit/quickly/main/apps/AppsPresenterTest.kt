@@ -4,11 +4,13 @@ import com.droibit.quickly.data.repository.appinfo.AppInfo
 import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.Order
 import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.SortBy
 import com.droibit.quickly.main.MainContract
+import com.droibit.quickly.main.MainContract.QuickActionEvent
 import com.droibit.quickly.main.apps.AppsContract.MenuItem
 import com.droibit.quickly.rules.RxSchedulersOverrideRule
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.mockito.Matchers
 import org.mockito.Mock
 import org.mockito.Mockito.*
 import org.mockito.junit.MockitoJUnit
@@ -141,6 +143,14 @@ class AppsPresenterTest {
     }
 
     @Test
+    fun onMoreItemClicked_showQuickActionSheet() {
+        val app = createAppInfo(id = 1)
+        presenter.onMoreItemClicked(app)
+
+        verify(view).showQuickActionSheet(app)
+    }
+
+    @Test
     fun onSortByClicked_showSortByChooserDialog() {
         val result = Pair(SortBy.NAME, Order.ASC)
         `when`(showSettingsTask.loadSortBy()).thenReturn(singleOf(result))
@@ -167,16 +177,43 @@ class AppsPresenterTest {
 
     @Test
     fun onQuickActionSelected_performUninstall() {
-        TODO()
+        val app = createAppInfo(id = 1)
+        presenter.onQuickActionSelected(QuickActionEvent.Uninstall(app))
+
+        verify(view).performUninstall(app.packageName)
+        verify(view, never()).performSharePackage(anyString())
+        verify(navigator, never()).navigateAppInfoInSettings(anyString())
     }
 
     @Test
     fun onQuickActionSelected_performSharePackage() {
-        TODO()
+        val app = createAppInfo(id = 2)
+        presenter.onQuickActionSelected(QuickActionEvent.SharePackage(app))
+
+        verify(view).performSharePackage(app.packageName)
+        verify(view, never()).performUninstall(Matchers.anyString())
+        verify(navigator, never()).navigateAppInfoInSettings(anyString())
     }
 
     @Test
     fun onQuickActionSelected_navigateAppInfoInSettings() {
-        TODO()
+        val app = createAppInfo(id = 3)
+        presenter.onQuickActionSelected(QuickActionEvent.OpenAppInfo(app))
+
+        verify(navigator).navigateAppInfoInSettings(anyString())
+        verify(view, never()).performSharePackage(app.packageName)
+        verify(view, never()).performUninstall(Matchers.anyString())
     }
+}
+
+private fun createAppInfo(id: Int): AppInfo {
+    return AppInfo(
+            packageName = "app.$id",
+            name = "app-$id",
+            versionName = "v$id",
+            versionCode = id,
+            icon = id + 1,
+            preInstalled = (id % 2 == 0),
+            lastUpdateTime = id + 2L
+    )
 }

@@ -66,6 +66,7 @@ class AppsPresenter(
         }
     }
 
+    @UiThread
     override fun onMoreItemClicked(app: AppInfo) {
         view.showQuickActionSheet(app)
     }
