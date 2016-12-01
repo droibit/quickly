@@ -27,6 +27,8 @@ interface AppsContract {
 
         fun showSortByChooserDialog(sortBy: SortBy)
 
+        fun showQuickActionSheet(app: AppInfo)
+
         fun setShowSystem(showSystem: Boolean)
 
         fun performUninstall(packageName: String)
@@ -68,6 +70,9 @@ interface AppsContract {
 
         @UiThread
         fun onSearchButtonClicked()
+
+        @UiThread
+        fun onMoreItemClicked(app: AppInfo)
 
         @UiThread
         fun onSortByChoose(sortBy: SortBy, order: Order)

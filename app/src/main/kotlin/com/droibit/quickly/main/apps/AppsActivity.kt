@@ -103,10 +103,7 @@ class AppsActivity : AppCompatActivity(),
 
         appInfoAdapter.apply {
             moreItemClickListener = {
-                // TODO: delegate presenter
-                QuickActionDialogFragment.newInstance(app = it)
-                        .show(supportFragmentManager, TAG_FRAGMENT_QUICK_ACTION)
-
+                presenter.onMoreItemClicked(app = it)
             }
         }
 
@@ -213,6 +210,11 @@ class AppsActivity : AppCompatActivity(),
             val df = SortByChooserDialogFragment.newInstance(sortBy)
             df.show(supportFragmentManager, TAG_FRAGMENT_SORT_BY_CHOOSER)
         }
+    }
+
+    override fun showQuickActionSheet(app: AppInfo) {
+        QuickActionDialogFragment.newInstance(app)
+                .show(supportFragmentManager, TAG_FRAGMENT_QUICK_ACTION)
     }
 
     override fun setShowSystem(showSystem: Boolean) {

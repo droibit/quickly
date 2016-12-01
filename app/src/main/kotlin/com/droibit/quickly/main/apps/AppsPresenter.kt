@@ -66,6 +66,10 @@ class AppsPresenter(
         }
     }
 
+    override fun onMoreItemClicked(app: AppInfo) {
+        view.showQuickActionSheet(app)
+    }
+
     @UiThread
     override fun onSortByClicked() {
         showSettingsTask.loadSortBy()
