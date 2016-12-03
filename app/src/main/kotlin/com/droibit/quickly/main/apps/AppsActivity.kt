@@ -219,8 +219,10 @@ class AppsActivity : AppCompatActivity(),
     }
 
     override fun showQuickActionSheet(app: AppInfo) {
-        QuickActionDialogFragment.newInstance(app)
-                .show(supportFragmentManager, TAG_FRAGMENT_QUICK_ACTION)
+        if (supportFragmentManager.findFragmentByTag(TAG_FRAGMENT_QUICK_ACTION) == null) {
+            QuickActionDialogFragment.newInstance(app)
+                    .show(supportFragmentManager, TAG_FRAGMENT_QUICK_ACTION)
+        }
     }
 
     override fun setShowSystem(showSystem: Boolean) {
