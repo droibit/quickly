@@ -5,6 +5,7 @@ import android.support.annotation.VisibleForTesting
 import com.droibit.quickly.data.repository.appinfo.AppInfo
 import com.droibit.quickly.main.LoadAppInfoTask
 import com.droibit.quickly.main.MainContract
+import com.droibit.quickly.main.MainContract.QuickActionEvent
 import com.droibit.quickly.main.search.SearchContract.QueryTextEvent
 import rx.android.schedulers.AndroidSchedulers
 import rx.lang.kotlin.addTo
@@ -15,6 +16,7 @@ import java.util.*
 
 class SearchPresenter(
         private val view: SearchContract.View,
+        private val navigator: SearchContract.Navigator,
         private val loadTask: MainContract.LoadAppInfoTask,
         private val showSettingsTask: MainContract.ShowSettingsTask,
         private val subscriptions: CompositeSubscription,
@@ -52,6 +54,23 @@ class SearchPresenter(
         }
     }
 
+    @UiThread
+    override fun onMoreItemClicked(app: AppInfo) {
+        view.showQuickActionSheet(app)
+    }
+
+    override fun onQuickActionSelected(event: QuickActionEvent) {
+        when (event) {
+            is QuickActionEvent.Uninstall -> view.performUninstall(event.packageName)
+            is QuickActionEvent.SharePackage -> view.performSharePackage(event.packageName)
+            is QuickActionEvent.OpenAppInfo -> navigator.navigateAppInfoInSettings(event.packageName)
+        }
+    }
+
+    override fun onPackageChanged() {
+        loadApps()
+    }
+
     // Private
 
     private fun loadApps() {
@@ -66,13 +85,15 @@ class SearchPresenter(
             sourceApps.clear()
         }
         sourceApps.addAll(apps)
+
+        showFilteredApps(view.searchQuery)
     }
 
     private fun showFilteredApps(query: String) {
         Timber.d("Search: $query")
 
         if (query.isEmpty()) {
-            view.showApps(Collections.emptyList())
+            view.showNoApps()
             return
         }
 
@@ -80,6 +101,10 @@ class SearchPresenter(
         val filteredApps = sourceApps.filter {
             it.lowerName.contains(lowerQuery) || it.lowerPackageName.contains(lowerQuery)
         }
-        view.showApps(filteredApps)
+        if (filteredApps.isEmpty()) {
+            view.showNoApps()
+        } else {
+            view.showApps(filteredApps)
+        }
     }
 }
