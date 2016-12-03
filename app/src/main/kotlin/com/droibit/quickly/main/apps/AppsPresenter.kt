@@ -106,6 +106,13 @@ class AppsPresenter(
         }
     }
 
+    @UiThread
+    override fun onPackageChanged() {
+        refreshApps(forceLoad = false)
+    }
+
+    // Private
+
     private fun onAppsLoaded(apps: List<AppInfo>, reloaded: Boolean) {
         if (apps.isNotEmpty()) {
             view.showApps(apps, resetPosition = reloaded)

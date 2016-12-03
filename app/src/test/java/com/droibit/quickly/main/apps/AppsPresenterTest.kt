@@ -204,6 +204,17 @@ class AppsPresenterTest {
         verify(view, never()).performSharePackage(app.packageName)
         verify(view, never()).performUninstall(Matchers.anyString())
     }
+
+    @Test
+    fun onPackageChanged_showApps() {
+        val mockList = mock(List::class.java) as List<AppInfo>
+        `when`(mockList.isEmpty()).thenReturn(false)
+        `when`(loadTask.requestLoad(anyBoolean())).thenReturn(mockList.toSingletonObservable())
+
+        presenter.onPackageChanged()
+
+        verify(view).showApps(mockList, false)
+    }
 }
 
 private fun createAppInfo(id: Int): AppInfo {

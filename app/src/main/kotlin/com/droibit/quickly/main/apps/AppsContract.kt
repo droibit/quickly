@@ -79,6 +79,9 @@ interface AppsContract {
 
         @UiThread
         fun onQuickActionSelected(event: QuickActionEvent)
+
+        @UiThread
+        fun onPackageChanged()
     }
 
     class SortByChooseEvent(val sortBy: SortBy, val order: Order)

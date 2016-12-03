@@ -16,6 +16,7 @@ import com.droibit.quickly.data.provider.comparators.AppInfoComparators
 import com.droibit.quickly.data.provider.eventbus.RxBus
 import com.droibit.quickly.data.provider.intent.IntentCreator
 import com.droibit.quickly.data.repository.appinfo.AppInfo
+import com.droibit.quickly.data.repository.appinfo.AppInfoContract
 import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.Order
 import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.SortBy
 import com.droibit.quickly.main.AppInfoAdapter
@@ -71,6 +72,8 @@ class AppsActivity : AppCompatActivity(),
 
     private val localEventBus: RxBus by injector.instance("localEventBus")
 
+    private val appEventBus: RxBus by injector.instance("appEventBus")
+
     private val subscriptions: CompositeSubscription by injector.instance()
 
     private val appInfoAdapter: AppInfoAdapter by lazy { AppInfoAdapter(this) }
@@ -119,6 +122,7 @@ class AppsActivity : AppCompatActivity(),
         super.onResume()
         subscribeSortBy()
         subscribeQuickAction()
+        subscribePackageAction()
         presenter.onResume()
     }
 
@@ -172,15 +176,17 @@ class AppsActivity : AppCompatActivity(),
         emptyView.visibility = View.GONE
         recyclerView.visibility = View.VISIBLE
 
+        val firstItemPosition = (recyclerView.layoutManager as LinearLayoutManager)
+                .findFirstVisibleItemPosition()
+        Timber.d("firstVisibleItemPosition: $firstItemPosition")
+
         if (appInfoAdapter.isEmpty) {
             appInfoAdapter.addAll(apps)
         } else {
             appInfoAdapter.replaceAll(apps)
         }
 
-        if (resetPosition) {
-            recyclerView.scrollToPosition(0)
-        }
+        recyclerView.scrollToPosition(if (resetPosition) 0 else Math.max(0, firstItemPosition))
         subTitleToolbar.appCount = apps.size
     }
 
@@ -243,6 +249,13 @@ class AppsActivity : AppCompatActivity(),
         localEventBus.asObservable()
                 .ofType(QuickActionEvent::class.java)
                 .subscribe { presenter.onQuickActionSelected(event = it) }
+                .addTo(subscriptions)
+    }
+
+    private fun subscribePackageAction() {
+        appEventBus.asObservable()
+                .ofType(AppInfoContract.OnChangedEvent::class.java)
+                .subscribe { presenter.onPackageChanged() }
                 .addTo(subscriptions)
     }
 
