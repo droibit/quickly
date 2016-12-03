@@ -139,13 +139,17 @@ class SearchActivity : AppCompatActivity(),
 
     // SearchContract.View
 
-    override fun showApps(apps: List<AppInfo>) {
-        Timber.d("showApps(apps=${apps.size})")
-
+    override fun showApps(apps: List<AppInfo>, resetPosition: Boolean) {
+        Timber.d("showApps(apps=${apps.size}, resetPosition=$resetPosition)")
         emptyView.visibility = View.GONE
 
+        val firstItemPosition = (recyclerView.layoutManager as LinearLayoutManager)
+                .findFirstVisibleItemPosition()
+        Timber.d("firstVisibleItemPosition: $firstItemPosition")
+
         appInfoAdapter.replaceAll(apps)
-        recyclerView.scrollToPosition(0)
+
+        recyclerView.scrollToPosition(if (resetPosition) 0 else Math.max(0, firstItemPosition))
     }
 
     override fun showNoApps() {

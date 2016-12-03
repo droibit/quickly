@@ -20,7 +20,7 @@ interface SearchContract {
 
         fun setLoadingIndicator(active: Boolean)
 
-        fun showApps(apps: List<AppInfo>)
+        fun showApps(apps: List<AppInfo>, resetPosition: Boolean)
 
         fun showNoApps()
 

@@ -49,7 +49,7 @@ class SearchPresenter(
     @UiThread
     override fun onQueryTextEventEmitted(event: QueryTextEvent) {
         when (event) {
-            is QueryTextEvent.Change -> showFilteredApps(event.query)
+            is QueryTextEvent.Change -> showFilteredApps(event.query, loaded = false)
             is QueryTextEvent.Submit -> view.closeSearch()
         }
     }
@@ -86,10 +86,10 @@ class SearchPresenter(
         }
         sourceApps.addAll(apps)
 
-        showFilteredApps(view.searchQuery)
+        showFilteredApps(view.searchQuery, loaded = true)
     }
 
-    private fun showFilteredApps(query: String) {
+    private fun showFilteredApps(query: String, loaded: Boolean) {
         Timber.d("Search: $query")
 
         if (query.isEmpty()) {
@@ -104,7 +104,7 @@ class SearchPresenter(
         if (filteredApps.isEmpty()) {
             view.showNoApps()
         } else {
-            view.showApps(filteredApps)
+            view.showApps(filteredApps, resetPosition = !loaded)
         }
     }
 }
