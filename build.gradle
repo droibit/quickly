@@ -10,7 +10,6 @@ buildscript {
         rxKotlinVersion = '0.60.0'
         rxAndroidVersion = '1.2.1'
         rxRelayVersion = '1.2.0'
-        rxActivitylauncherVersion = '0.5.0'
         glideVersion = '3.7.0'
         searchViewVersion = '4.0'
         timberVersion = '4.3.0'
