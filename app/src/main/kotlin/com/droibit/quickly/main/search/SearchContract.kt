@@ -15,6 +15,8 @@ interface SearchContract {
 
     interface View {
 
+        fun setLoadingIndicator(active: Boolean)
+
         fun showApps(apps: List<AppInfo>)
 
         fun setSortBy(sortBy: SortBy, order: Order)
@@ -29,6 +31,16 @@ interface SearchContract {
 
         @UiThread
         fun onQueryTextEventEmitted(event: QueryTextEvent)
+
+        @UiThread
+        fun onResume()
+
+        @UiThread
+        fun onPause()
+
+        @UiThread
+        fun onDestroy()
+
     }
 
     interface ShowSettingsTask {

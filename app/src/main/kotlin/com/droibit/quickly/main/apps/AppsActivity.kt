@@ -155,7 +155,7 @@ class AppsActivity : AppCompatActivity(),
     // AppsContract.Navigator
 
     override fun navigateSearch() {
-        val intent = SearchActivity.createIntent(this, sourceApps = appInfoAdapter.items)
+        val intent = SearchActivity.createIntent(this)
         val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this).toBundle()
         ActivityCompat.startActivity(this, intent, options)
     }

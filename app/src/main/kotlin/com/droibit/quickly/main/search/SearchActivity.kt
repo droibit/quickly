@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
+import android.widget.ProgressBar
 import com.droibit.quickly.R
 import com.droibit.quickly.data.provider.comparators.AppInfoComparators
 import com.droibit.quickly.data.repository.appinfo.AppInfo
@@ -32,13 +33,9 @@ class SearchActivity : AppCompatActivity(), SearchContract.View {
     companion object {
 
         @JvmStatic
-        fun createIntent(context: Context, sourceApps: List<AppInfo>): Intent {
-            return Intent(context, SearchActivity::class.java).apply {
-                putExtra(EXTRA_SOURCE_APPS, ArrayList(sourceApps))
-            }
+        fun createIntent(context: Context): Intent {
+            return Intent(context, SearchActivity::class.java)
         }
-
-        private val EXTRA_SOURCE_APPS = "EXTRA_SOURCE_APPS"
     }
 
     private val searchView: SearchView by bindView(R.id.search_app)
@@ -46,6 +43,8 @@ class SearchActivity : AppCompatActivity(), SearchContract.View {
     private val recyclerView: RecyclerView by bindView(R.id.list)
 
     private val emptyView: View by bindView(R.id.empty)
+
+    private val progressBar: ProgressBar by bindView(R.id.progress)
 
     private val injector = KodeinInjector()
 
@@ -64,10 +63,8 @@ class SearchActivity : AppCompatActivity(), SearchContract.View {
         injector.inject(Kodein {
             extend(appKodein())
 
-            val apps = savedInstanceState?.getParcelableArrayList<AppInfo>(EXTRA_SOURCE_APPS)
-                    ?: intent.getParcelableArrayListExtra(EXTRA_SOURCE_APPS)
-            val self = this@SearchActivity
-            import(searchModule(view = self, sourceApps = apps))
+             val self = this@SearchActivity
+            import(searchModule(view = self))
         })
 
         recyclerView.apply {
@@ -85,16 +82,17 @@ class SearchActivity : AppCompatActivity(), SearchContract.View {
 
     override fun onResume() {
         super.onResume()
+        presenter.onResume()
         subscribeSearchQueryText()
     }
 
     override fun onPause() {
-        subscriptions.clear()
+        presenter.onPause()
         super.onPause()
     }
 
     override fun onDestroy() {
-        subscriptions.unsubscribe()
+        presenter.onDestroy()
         super.onDestroy()
     }
 
@@ -112,8 +110,15 @@ class SearchActivity : AppCompatActivity(), SearchContract.View {
 
         emptyView.visibility = View.GONE
         recyclerView.visibility = View.VISIBLE
+
         appInfoAdapter.replaceAll(apps)
         recyclerView.scrollToPosition(0)
+    }
+
+    override fun setLoadingIndicator(active: Boolean) {
+        Timber.d("setLoadingIndicator(active=%b)", active)
+        progressBar.visibility = if (active) View.VISIBLE else View.GONE
+        emptyView.visibility = if (active) View.GONE else View.VISIBLE
     }
 
     override fun setSortBy(sortBy: SortBy, order: Order) {

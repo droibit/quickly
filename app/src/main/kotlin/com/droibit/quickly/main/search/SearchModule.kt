@@ -7,8 +7,9 @@ import com.github.salomonbrys.kodein.instance
 import com.github.salomonbrys.kodein.provider
 import com.github.salomonbrys.kodein.singleton
 import rx.subscriptions.CompositeSubscription
+import java.util.*
 
-fun searchModule(view: SearchContract.View, sourceApps: List<AppInfo>) = Kodein.Module {
+fun searchModule(view: SearchContract.View) = Kodein.Module {
     import(mainModule())
 
     bind<SearchContract.View>() with instance(view)
@@ -16,10 +17,14 @@ fun searchModule(view: SearchContract.View, sourceApps: List<AppInfo>) = Kodein.
     bind<SearchContract.Presenter>() with provider {
         SearchPresenter(
                 view = instance(),
+                loadTask = instance(),
                 showSettingsTask = instance(),
-                sourceApps = sourceApps
+                subscriptions = instance(),
+                sourceApps = instance()
         )
     }
 
     bind<CompositeSubscription>() with singleton { CompositeSubscription() }
+
+    bind<MutableList<AppInfo>>() with provider { ArrayList<AppInfo>() }
 }

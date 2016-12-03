@@ -5,19 +5,24 @@ import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.Order
 import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.SortBy
 import com.droibit.quickly.main.MainContract
 import com.droibit.quickly.main.search.SearchContract.QueryTextEvent
+import com.droibit.quickly.rules.RxSchedulersOverrideRule
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mock
 import org.mockito.Mockito.*
 import org.mockito.junit.MockitoJUnit
+import rx.Observable
 import rx.lang.kotlin.singleOf
+import rx.lang.kotlin.toSingletonObservable
+import rx.subscriptions.CompositeSubscription
 
+@Suppress("UNCHECKED_CAST")
 class SearchPresenterTest {
 
     companion object {
 
-        private val SOURCE_APPS = listOf(
+        private val SOURCE_APPS = mutableListOf(
                 createAppInfo(packageName = "com.droibit.quickly", name = "Quickly"),
                 createAppInfo(packageName = "com.droibit.news", name = "Daily"),
                 createAppInfo(packageName = "com.droibit.books", name = "Magazine")
@@ -28,17 +33,36 @@ class SearchPresenterTest {
     @JvmField
     val mockito = MockitoJUnit.rule()
 
+    @Rule
+    @JvmField
+    val overrideSchedulers = RxSchedulersOverrideRule()
+
     @Mock
     private lateinit var view: SearchContract.View
 
     @Mock
+    private lateinit var loadTask: MainContract.LoadAppInfoTask
+
+    @Mock
     private lateinit var showSettingsTask: MainContract.ShowSettingsTask
+
+    @Mock
+    private lateinit var sourceApps: MutableList<AppInfo>
+
+    private lateinit var subscriptions: CompositeSubscription
 
     private lateinit var presenter: SearchPresenter
 
     @Before
     fun setUp() {
-        presenter = SearchPresenter(view, showSettingsTask, SOURCE_APPS)
+        subscriptions = CompositeSubscription()
+        presenter = SearchPresenter(
+                view,
+                loadTask,
+                showSettingsTask,
+                subscriptions,
+                sourceApps
+        )
     }
 
     @Test
@@ -51,17 +75,48 @@ class SearchPresenterTest {
     }
 
     @Test
+    fun onResume_subscribeRunning() {
+        `when`(loadTask.requestLoad()).thenReturn(Observable.empty())
+
+        `when`(loadTask.isRunning()).thenReturn(true.toSingletonObservable())
+        presenter.onResume()
+        verify(view).setLoadingIndicator(true)
+
+        `when`(loadTask.isRunning()).thenReturn(false.toSingletonObservable())
+        presenter.onResume()
+        verify(view).setLoadingIndicator(false)
+    }
+
+    @Test
+    fun onResume_subscribeApps() {
+        `when`(loadTask.isRunning()).thenReturn(Observable.empty())
+
+        // sourceApps has items
+        run {
+            val mockList = mock(List::class.java) as List<AppInfo>
+            `when`(loadTask.requestLoad()).thenReturn(mockList.toSingletonObservable())
+            `when`(sourceApps.isEmpty()).thenReturn(true)
+
+            presenter.onResume()
+            verify(sourceApps).addAll(mockList)
+        }
+    }
+
+    @Test
     fun onQueryTextEventEmitted_change_showApps() {
         // hit both
         run {
+            `when`(sourceApps.iterator()).thenReturn(SOURCE_APPS.iterator())
             val event = QueryTextEvent.Change(query = "Quickly")
             presenter.onQueryTextEventEmitted(event)
 
             verify(view).showApps(listOf(SOURCE_APPS[0]))
         }
+        reset(view)
 
         // hit app name
         run {
+            `when`(sourceApps.iterator()).thenReturn(SOURCE_APPS.iterator())
             val event = QueryTextEvent.Change(query = "daily")
             presenter.onQueryTextEventEmitted(event)
 
@@ -71,6 +126,7 @@ class SearchPresenterTest {
 
         // hit package name
         run {
+            `when`(sourceApps.iterator()).thenReturn(SOURCE_APPS.iterator())
             val event = QueryTextEvent.Change(query = "books")
             presenter.onQueryTextEventEmitted(event)
 
