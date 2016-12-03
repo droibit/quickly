@@ -15,6 +15,7 @@ class AppInfoRepositoryImpl(
     @VisibleForTesting
     internal val cache: MutableMap<String, AppInfo> = LinkedHashMap()
 
+    // TODO: need lock
     override val hasCache: Boolean
         get() = cache.isNotEmpty()
 
@@ -38,7 +39,7 @@ class AppInfoRepositoryImpl(
                     orma.prepareInsertIntoAppInfoAsObservable(OnConflict.REPLACE)
                             .flatMap { it.executeAsObservable(appInfo) }
                             .map { it > 0 }
-                            .doOnSuccess { if (it) cache[packageName] = appInfo }
+                            .doOnSuccess { if (cache.isNotEmpty()) cache.clear() }
                 }
     }
 
@@ -47,7 +48,7 @@ class AppInfoRepositoryImpl(
                 .packageNameEq(packageName)
                 .executeAsObservable()
                 .map { it > 0 }
-                .doOnSuccess { if (it) cache.remove(packageName) }
+                .doOnSuccess { if (cache.isNotEmpty()) cache.clear() }
     }
 
     private fun getLocalAppInfo(): Observable<List<AppInfo>> {

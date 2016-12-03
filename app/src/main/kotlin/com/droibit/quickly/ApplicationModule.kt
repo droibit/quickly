@@ -18,7 +18,7 @@ fun applicationModule(context: Context, debuggable: Boolean) = Kodein.Module {
 
     bind<OrmaDatabase>() with singleton {
         OrmaDatabase.Builder(instance())
-                .name(null)
+//                .name(null)
                 .build()
     }
 

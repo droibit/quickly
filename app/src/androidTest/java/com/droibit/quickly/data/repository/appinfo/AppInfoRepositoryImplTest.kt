@@ -318,7 +318,7 @@ class AppInfoRepositoryImplTest {
             repository.addOrUpdate(appInfo.packageName)
                     .subscribe { added ->
                         assertThat(added).isTrue()
-                        assertThat(repository.cache).containsEntry(appInfo.packageName, appInfo)
+                        assertThat(repository.cache).isEmpty()
                     }
         }
         assertThat(orma.selectFromAppInfo().toList()).containsExactlyElementsOf(expectedAppInfoList)
@@ -340,7 +340,7 @@ class AppInfoRepositoryImplTest {
             repository.addOrUpdate(packageName)
                     .subscribe { assertThat(it).isTrue() }
             assertThat(orma.selectFromAppInfo().toList()).containsExactly(this)
-            assertThat(repository.cache).containsEntry(packageName, this)
+            assertThat(repository.cache).isEmpty()
         }
 
         AppInfo(
@@ -357,7 +357,7 @@ class AppInfoRepositoryImplTest {
             repository.addOrUpdate(packageName)
                     .subscribe { assertThat(it).isTrue() }
             assertThat(orma.selectFromAppInfo().toList()).containsExactly(this)
-            assertThat(repository.cache).containsEntry(packageName, this)
+            assertThat(repository.cache).isEmpty()
         }
     }
 
