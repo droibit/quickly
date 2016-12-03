@@ -20,14 +20,23 @@ object AppInfoComparators {
     private fun create(sortBy: SortBy, order: Order): Comparator<AppInfo> {
         return when (sortBy) {
             SortBy.NAME -> {
-                if (order == Order.ASC) compareBy(AppInfo::name) else compareByDescending(AppInfo::name)
+                if (order == Order.ASC)
+                    compareBy(AppInfo::lowerName)
+                else
+                    compareByDescending(AppInfo::lowerName)
             }
             SortBy.LAST_UPDATED -> {
-                val comparator = if (order == Order.ASC) compareBy(AppInfo::lastUpdateTime) else compareByDescending(AppInfo::lastUpdateTime)
-                comparator.thenBy(AppInfo::name)
+                val comparator = if (order == Order.ASC)
+                    compareBy(AppInfo::lastUpdateTime)
+                else
+                    compareByDescending(AppInfo::lastUpdateTime)
+                comparator.thenBy(AppInfo::lowerName)
             }
             SortBy.PACKAGE -> {
-                if (order == Order.ASC) compareBy(AppInfo::packageName) else compareByDescending(AppInfo::packageName)
+                if (order == Order.ASC)
+                    compareBy(AppInfo::lowerPackageName)
+                else
+                    compareByDescending(AppInfo::lowerPackageName)
             }
         }
     }
