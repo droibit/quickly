@@ -51,7 +51,7 @@ interface AppsContract {
         fun onCreate(shouldLoad: Boolean)
 
         @UiThread
-        fun onResume(forceLoad: Boolean)
+        fun onResume()
 
         @UiThread
         fun onPause()

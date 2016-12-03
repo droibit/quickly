@@ -119,7 +119,7 @@ class AppsActivity : AppCompatActivity(),
         super.onResume()
         subscribeSortBy()
         subscribeQuickAction()
-        presenter.onResume(forceLoad = appInfoAdapter.isEmpty)
+        presenter.onResume()
     }
 
     override fun onPause() {
