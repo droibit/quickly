@@ -11,11 +11,9 @@ class PublishBus : RxBus {
     override val hasObservers: Boolean
         get() = relay.hasObservers()
 
-    override fun asObservable(): Observable<Any> {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun asObservable() = relay
 
     override fun call(value: Any) {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+        relay.call(value)
     }
 }
