@@ -4,4 +4,6 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
 
     <dimen name="card_content_side_margin">16dp</dimen>
+
+    <dimen name="large_actionbar_size">64dp</dimen>
 </resources>
