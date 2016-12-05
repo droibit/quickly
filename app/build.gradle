@@ -26,6 +26,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    signingConfigs {
+        debug {
+            storeFile rootProject.file('keystore/debug.keystore')
+        }
+    }
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
     }
