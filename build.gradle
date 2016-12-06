@@ -23,6 +23,7 @@ buildscript {
         mockitoVersion = '1.10.19'
         dexmakerVersion = '1.2'
         espressoVersion = '2.2.2'
+        robolectricVersion = '3.1.4'
     }
     repositories {
         jcenter()

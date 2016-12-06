@@ -1,7 +1,7 @@
 package com.droibit.quickly.data.repository.appinfo
 
-import android.support.test.InstrumentationRegistry
-import android.support.test.runner.AndroidJUnit4
+import android.os.Build
+import com.droibit.quickly.BuildConfig
 import com.droibit.quickly.data.repository.source.AppInfoDataSource
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
@@ -9,16 +9,19 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
+import org.robolectric.RobolectricTestRunner
+import org.robolectric.RuntimeEnvironment
+import org.robolectric.annotation.Config
 import rx.Observable
-import rx.Single
 import rx.lang.kotlin.singleOf
 import rx.lang.kotlin.toObservable
 import rx.observers.TestSubscriber
 
-@RunWith(AndroidJUnit4::class)
+@RunWith(RobolectricTestRunner::class)
+@Config(constants = BuildConfig::class, sdk = intArrayOf(Build.VERSION_CODES.LOLLIPOP))
 class AppInfoRepositoryImplTest {
 
-    private val context = InstrumentationRegistry.getTargetContext()
+    private val context = RuntimeEnvironment.application
 
     private lateinit var orma: OrmaDatabase
 

@@ -80,13 +80,10 @@ dependencies {
     releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
     testCompile "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
 
-    androidTestCompile "org.mockito:mockito-core:$mockitoVersion"
-    androidTestCompile "com.squareup.assertj:assertj-android:$assertjAndroidVersion"
-    androidTestCompile "com.google.dexmaker:dexmaker:$dexmakerVersion"
-    androidTestCompile "com.google.dexmaker:dexmaker-mockito:$dexmakerVersion"
     androidTestCompile "com.android.support.test.espresso:espresso-core:$espressoVersion"
     androidTestCompile "com.android.support:support-annotations:$supportLibraryVersion"
 
+    testCompile "org.robolectric:robolectric:$robolectricVersion"
     testCompile "junit:junit:$junitVersion"
     testCompile "org.assertj:assertj-core:$assertjVersion"
     testCompile "org.mockito:mockito-core:$mockitoVersion"
