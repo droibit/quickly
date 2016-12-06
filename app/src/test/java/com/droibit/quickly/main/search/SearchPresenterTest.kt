@@ -114,7 +114,7 @@ class SearchPresenterTest {
             val event = QueryTextEvent.Change(query = "Quickly")
             presenter.onQueryTextEventEmitted(event)
 
-            verify(view).showApps(listOf(SOURCE_APPS[0]))
+            verify(view).showApps(listOf(SOURCE_APPS[0]), resetPosition = true)
         }
         reset(view)
 
@@ -124,7 +124,7 @@ class SearchPresenterTest {
             val event = QueryTextEvent.Change(query = "daily")
             presenter.onQueryTextEventEmitted(event)
 
-            verify(view).showApps(listOf(SOURCE_APPS[1]))
+            verify(view).showApps(listOf(SOURCE_APPS[1]), resetPosition = true)
         }
         reset(view)
 
@@ -134,7 +134,7 @@ class SearchPresenterTest {
             val event = QueryTextEvent.Change(query = "books")
             presenter.onQueryTextEventEmitted(event)
 
-            verify(view).showApps(listOf(SOURCE_APPS[2]))
+            verify(view).showApps(listOf(SOURCE_APPS[2]), resetPosition = true)
         }
     }
 
