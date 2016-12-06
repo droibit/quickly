@@ -26,11 +26,10 @@ object AppInfoComparators {
                     compareByDescending(AppInfo::lowerName)
             }
             SortBy.LAST_UPDATED -> {
-                val comparator = if (order == Order.ASC)
-                    compareBy(AppInfo::lastUpdateTime)
+                if (order == Order.ASC)
+                    compareBy(AppInfo::lastUpdateTime).thenBy(AppInfo::lowerName)
                 else
-                    compareByDescending(AppInfo::lastUpdateTime)
-                comparator.thenBy(AppInfo::lowerName)
+                    compareByDescending(AppInfo::lastUpdateTime).thenBy(AppInfo::lowerName)
             }
             SortBy.PACKAGE -> {
                 if (order == Order.ASC)
