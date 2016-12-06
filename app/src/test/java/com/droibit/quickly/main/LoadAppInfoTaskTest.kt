@@ -5,14 +5,13 @@ import com.droibit.quickly.data.repository.appinfo.AppInfoRepository
 import com.droibit.quickly.data.repository.settings.ShowSettingsRepository
 import com.droibit.quickly.rules.RxSchedulersOverrideRule
 import com.jakewharton.rxrelay.BehaviorRelay
-import com.jakewharton.rxrelay.PublishRelay
+import com.nhaarman.mockito_kotlin.any
+import com.nhaarman.mockito_kotlin.whenever
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.Matchers.anyBoolean
 import org.mockito.Mock
-import org.mockito.Mockito.`when`
 import org.mockito.Mockito.inOrder
 import org.mockito.junit.MockitoJUnit
 import rx.lang.kotlin.toSingletonObservable
@@ -70,8 +69,9 @@ class LoadAppInfoTaskTest {
                         lastUpdateTime = 12
                 )
         )
-        `when`(appInfoRepository.loadAll(anyBoolean())).thenReturn(expectedAppInfoList.toSingletonObservable())
-        `when`(showSettingsRepository.isShowSystem).thenReturn(true)
+        whenever(appInfoRepository.loadAll(any()))
+                .thenReturn(expectedAppInfoList.toSingletonObservable())
+        whenever(showSettingsRepository.isShowSystem).thenReturn(true)
 
         val testSubscriber = TestSubscriber.create<List<AppInfo>>()
         task.requestLoad().subscribe(testSubscriber)
@@ -109,8 +109,8 @@ class LoadAppInfoTaskTest {
                         lastUpdateTime = 12
                 )
         )
-        `when`(appInfoRepository.loadAll(anyBoolean())).thenReturn(expectedAppInfoList.toSingletonObservable())
-        `when`(showSettingsRepository.isShowSystem).thenReturn(false)
+        whenever(appInfoRepository.loadAll(any())).thenReturn(expectedAppInfoList.toSingletonObservable())
+        whenever(showSettingsRepository.isShowSystem).thenReturn(false)
 
         val testSubscriber = TestSubscriber.create<List<AppInfo>>()
         task.requestLoad().subscribe(testSubscriber)
@@ -148,8 +148,8 @@ class LoadAppInfoTaskTest {
                         lastUpdateTime = 12
                 )
         )
-        `when`(appInfoRepository.loadAll(anyBoolean())).thenReturn(expectedAppInfoList.toSingletonObservable())
-        `when`(showSettingsRepository.isShowSystem).thenReturn(true)
+        whenever(appInfoRepository.loadAll(any())).thenReturn(expectedAppInfoList.toSingletonObservable())
+        whenever(showSettingsRepository.isShowSystem).thenReturn(true)
 
         run {
             val testSubscriber = TestSubscriber.create<List<AppInfo>>()
@@ -172,7 +172,7 @@ class LoadAppInfoTaskTest {
         }
 
         // new apps
-        `when`(showSettingsRepository.isShowSystem).thenReturn(false)
+        whenever(showSettingsRepository.isShowSystem).thenReturn(false)
         run {
             val testSubscriber = TestSubscriber.create<List<AppInfo>>()
             task.requestLoad().subscribe(testSubscriber)

@@ -3,12 +3,12 @@ package com.droibit.quickly.data.repository.appinfo
 import android.os.Build
 import com.droibit.quickly.BuildConfig
 import com.droibit.quickly.data.repository.source.AppInfoDataSource
+import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.whenever
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.mock
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
@@ -32,7 +32,7 @@ class AppInfoRepositoryImplTest {
     @Before
     fun setUp() {
         orma = OrmaDatabase.Builder(context).name(null).build()
-        appInfoSource = mock(AppInfoDataSource::class.java)
+        appInfoSource = mock()
         repository = AppInfoRepositoryImpl(orma, appInfoSource)
     }
 
@@ -67,7 +67,7 @@ class AppInfoRepositoryImplTest {
                         lastUpdateTime = 12
                 )
         )
-        `when`(appInfoSource.getAll()).thenReturn(expectedAppInfoList.toObservable())
+        whenever(appInfoSource.getAll()).thenReturn(expectedAppInfoList.toObservable())
 
         val testSubscriber = TestSubscriber.create<List<AppInfo>>()
         repository.loadAll().subscribe(testSubscriber)
@@ -104,7 +104,7 @@ class AppInfoRepositoryImplTest {
         )
 
         expectedAppInfoList.forEach {
-            `when`(appInfoSource.get(it.packageName)).thenReturn(singleOf(it))
+            whenever(appInfoSource.get(it.packageName)).thenReturn(singleOf(it))
 
             repository.addOrUpdate(packageName = it.packageName)
                     .subscribe { assertThat(it).isTrue() }
@@ -121,7 +121,7 @@ class AppInfoRepositoryImplTest {
                         lastUpdateTime = 8
                 )
         )
-        `when`(appInfoSource.getAll()).thenReturn(notCallAppInfoList.toObservable())
+        whenever(appInfoSource.getAll()).thenReturn(notCallAppInfoList.toObservable())
 
         val testSubscriber = TestSubscriber.create<List<AppInfo>>()
         repository.loadAll().subscribe(testSubscriber)
@@ -158,10 +158,10 @@ class AppInfoRepositoryImplTest {
                         lastUpdateTime = 8
                 )
         )
-        `when`(appInfoSource.getAll()).thenReturn(expectedAppInfoList.toObservable())
+        whenever(appInfoSource.getAll()).thenReturn(expectedAppInfoList.toObservable())
         repository.loadAll().subscribe()
 
-        `when`(appInfoSource.getAll()).thenReturn(Observable.empty())
+        whenever(appInfoSource.getAll()).thenReturn(Observable.empty())
         assertThat(orma.deleteFromAppInfo().execute()).isEqualTo(2)
 
         val testSubscriber = TestSubscriber.create<List<AppInfo>>()
@@ -206,7 +206,7 @@ class AppInfoRepositoryImplTest {
                         lastUpdateTime = 12
                 )
         )
-        `when`(appInfoSource.getAll()).thenReturn(expectedAppInfoList.toObservable())
+        whenever(appInfoSource.getAll()).thenReturn(expectedAppInfoList.toObservable())
 
         run {
             val testSubscriber = TestSubscriber.create<List<AppInfo>>()
@@ -245,7 +245,7 @@ class AppInfoRepositoryImplTest {
                     preInstalled = true,
                     lastUpdateTime = 4
             )
-            `when`(appInfoSource.getAll()).thenReturn(listOf(appInfo).toObservable())
+            whenever(appInfoSource.getAll()).thenReturn(listOf(appInfo).toObservable())
 
             val testSubscriber = TestSubscriber.create<List<AppInfo>>()
             repository.loadAll().subscribe(testSubscriber)
@@ -279,7 +279,7 @@ class AppInfoRepositoryImplTest {
                             lastUpdateTime = 12
                     )
             )
-            `when`(appInfoSource.getAll()).thenReturn(expectedAppInfoList.toObservable())
+            whenever(appInfoSource.getAll()).thenReturn(expectedAppInfoList.toObservable())
 
             val testSubscriber = TestSubscriber.create<List<AppInfo>>()
             repository.loadAll(forceReload = true).subscribe(testSubscriber)
@@ -316,7 +316,7 @@ class AppInfoRepositoryImplTest {
                 )
         )
         expectedAppInfoList.forEach { appInfo ->
-            `when`(appInfoSource.get(appInfo.packageName)).thenReturn(singleOf(appInfo))
+            whenever(appInfoSource.get(appInfo.packageName)).thenReturn(singleOf(appInfo))
 
             repository.addOrUpdate(appInfo.packageName)
                     .subscribe { added ->
@@ -338,7 +338,7 @@ class AppInfoRepositoryImplTest {
                 preInstalled = true,
                 lastUpdateTime = 4
         ).apply {
-            `when`(appInfoSource.get(packageName)).thenReturn(singleOf(this))
+            whenever(appInfoSource.get(packageName)).thenReturn(singleOf(this))
 
             repository.addOrUpdate(packageName)
                     .subscribe { assertThat(it).isTrue() }
@@ -355,7 +355,7 @@ class AppInfoRepositoryImplTest {
                 preInstalled = true,
                 lastUpdateTime = 5
         ).run {
-            `when`(appInfoSource.get(packageName)).thenReturn(singleOf(this))
+            whenever(appInfoSource.get(packageName)).thenReturn(singleOf(this))
 
             repository.addOrUpdate(packageName)
                     .subscribe { assertThat(it).isTrue() }
@@ -375,7 +375,7 @@ class AppInfoRepositoryImplTest {
                 preInstalled = true,
                 lastUpdateTime = 4
         ).apply {
-            `when`(appInfoSource.get(packageName)).thenReturn(singleOf(this))
+            whenever(appInfoSource.get(packageName)).thenReturn(singleOf(this))
 
             repository.addOrUpdate(packageName)
                     .subscribe { assertThat(it).isTrue() }

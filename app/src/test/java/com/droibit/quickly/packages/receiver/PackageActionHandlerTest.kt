@@ -2,11 +2,13 @@ package com.droibit.quickly.packages.receiver
 
 import com.droibit.quickly.packages.PackageContract
 import com.droibit.quickly.packages.PackageContract.Action.*
+import com.nhaarman.mockito_kotlin.never
+import com.nhaarman.mockito_kotlin.reset
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mock
-import org.mockito.Mockito.*
+import org.mockito.Mockito.verify
 import org.mockito.junit.MockitoJUnit
 
 class PackageActionHandlerTest {

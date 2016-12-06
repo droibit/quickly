@@ -4,14 +4,15 @@ import com.droibit.quickly.data.repository.appinfo.AppInfo
 import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.Order
 import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.SortBy
 import com.droibit.quickly.main.MainContract
+import com.droibit.quickly.main.MainContract.QuickActionEvent
 import com.droibit.quickly.main.search.SearchContract.QueryTextEvent
 import com.droibit.quickly.rules.RxSchedulersOverrideRule
+import com.nhaarman.mockito_kotlin.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.Matchers
 import org.mockito.Mock
-import org.mockito.Mockito.*
+import org.mockito.Mockito.verify
 import org.mockito.junit.MockitoJUnit
 import rx.Observable
 import rx.lang.kotlin.singleOf
@@ -72,7 +73,7 @@ class SearchPresenterTest {
 
     @Test
     fun onCreate_setSortBy() {
-        `when`(showSettingsTask.loadSortBy())
+        whenever(showSettingsTask.loadSortBy())
                 .thenReturn(singleOf(Pair(SortBy.LAST_UPDATED, Order.DESC)))
 
         presenter.onCreate()
@@ -81,25 +82,25 @@ class SearchPresenterTest {
 
     @Test
     fun onResume_subscribeRunning() {
-        `when`(loadTask.requestLoad()).thenReturn(Observable.empty())
+        whenever(loadTask.requestLoad()).thenReturn(Observable.empty())
 
-        `when`(loadTask.isRunning()).thenReturn(true.toSingletonObservable())
+        whenever(loadTask.isRunning()).thenReturn(true.toSingletonObservable())
         presenter.onResume()
         verify(view).setLoadingIndicator(true)
 
-        `when`(loadTask.isRunning()).thenReturn(false.toSingletonObservable())
+        whenever(loadTask.isRunning()).thenReturn(false.toSingletonObservable())
         presenter.onResume()
         verify(view).setLoadingIndicator(false)
     }
 
     @Test
     fun onResume_subscribeApps() {
-        `when`(loadTask.isRunning()).thenReturn(Observable.empty())
-        `when`(view.searchQuery).thenReturn("")
+        whenever(loadTask.isRunning()).thenReturn(Observable.empty())
+        whenever(view.searchQuery).thenReturn("")
 
-        val mockList = mock(List::class.java) as List<AppInfo>
-        `when`(loadTask.requestLoad()).thenReturn(mockList.toSingletonObservable())
-        `when`(sourceApps.isEmpty()).thenReturn(true)
+        val mockList: List<AppInfo> = mock()
+        whenever(loadTask.requestLoad()).thenReturn(mockList.toSingletonObservable())
+        whenever(sourceApps.isEmpty()).thenReturn(true)
 
         presenter.onResume()
         verify(sourceApps).addAll(mockList)
@@ -110,7 +111,7 @@ class SearchPresenterTest {
     fun onQueryTextEventEmitted_showAppsOnChanged() {
         // hit both
         run {
-            `when`(sourceApps.iterator()).thenReturn(SOURCE_APPS.iterator())
+            whenever(sourceApps.iterator()).thenReturn(SOURCE_APPS.iterator())
             val event = QueryTextEvent.Change(query = "Quickly")
             presenter.onQueryTextEventEmitted(event)
 
@@ -120,7 +121,7 @@ class SearchPresenterTest {
 
         // hit app name
         run {
-            `when`(sourceApps.iterator()).thenReturn(SOURCE_APPS.iterator())
+            whenever(sourceApps.iterator()).thenReturn(SOURCE_APPS.iterator())
             val event = QueryTextEvent.Change(query = "daily")
             presenter.onQueryTextEventEmitted(event)
 
@@ -130,7 +131,7 @@ class SearchPresenterTest {
 
         // hit package name
         run {
-            `when`(sourceApps.iterator()).thenReturn(SOURCE_APPS.iterator())
+            whenever(sourceApps.iterator()).thenReturn(SOURCE_APPS.iterator())
             val event = QueryTextEvent.Change(query = "books")
             presenter.onQueryTextEventEmitted(event)
 
@@ -142,7 +143,7 @@ class SearchPresenterTest {
     fun onQueryTextEventEmitted_showNoApps() {
         // empty query
         run {
-            `when`(sourceApps.iterator()).thenReturn(SOURCE_APPS.iterator())
+            whenever(sourceApps.iterator()).thenReturn(SOURCE_APPS.iterator())
             val event = QueryTextEvent.Change(query = "")
             presenter.onQueryTextEventEmitted(event)
 
@@ -152,7 +153,7 @@ class SearchPresenterTest {
 
         // no hit
         run {
-            `when`(sourceApps.iterator()).thenReturn(SOURCE_APPS.iterator())
+            whenever(sourceApps.iterator()).thenReturn(SOURCE_APPS.iterator())
             val event = QueryTextEvent.Change(query = "no_hit")
             presenter.onQueryTextEventEmitted(event)
 
@@ -171,41 +172,41 @@ class SearchPresenterTest {
     @Test
     fun onQuickActionSelected_performUninstall() {
         val app = SOURCE_APPS.first()
-        presenter.onQuickActionSelected(MainContract.QuickActionEvent.Uninstall(app))
+        presenter.onQuickActionSelected(QuickActionEvent.Uninstall(app))
 
         verify(view).performUninstall(app.packageName)
-        verify(view, never()).performSharePackage(anyString())
-        verify(navigator, never()).navigateAppInfoInSettings(anyString())
+        verify(view, never()).performSharePackage(any())
+        verify(navigator, never()).navigateAppInfoInSettings(any())
     }
 
     @Test
     fun onQuickActionSelected_performSharePackage() {
         val app = SOURCE_APPS.first()
-        presenter.onQuickActionSelected(MainContract.QuickActionEvent.SharePackage(app))
+        presenter.onQuickActionSelected(QuickActionEvent.SharePackage(app))
 
         verify(view).performSharePackage(app.packageName)
-        verify(view, never()).performUninstall(Matchers.anyString())
-        verify(navigator, never()).navigateAppInfoInSettings(anyString())
+        verify(view, never()).performUninstall(any())
+        verify(navigator, never()).navigateAppInfoInSettings(any())
     }
 
     @Test
     fun onQuickActionSelected_navigateAppInfoInSettings() {
         val app = SOURCE_APPS.first()
-        presenter.onQuickActionSelected(MainContract.QuickActionEvent.OpenAppInfo(app))
+        presenter.onQuickActionSelected(QuickActionEvent.OpenAppInfo(app))
 
-        verify(navigator).navigateAppInfoInSettings(anyString())
+        verify(navigator).navigateAppInfoInSettings(any())
         verify(view, never()).performSharePackage(app.packageName)
-        verify(view, never()).performUninstall(Matchers.anyString())
+        verify(view, never()).performUninstall(any())
     }
 
     @Test
     fun onPackageChanged_showApps() {
-        `when`(loadTask.isRunning()).thenReturn(Observable.empty())
-        `when`(view.searchQuery).thenReturn("")
+        whenever(loadTask.isRunning()).thenReturn(Observable.empty())
+        whenever(view.searchQuery).thenReturn("")
 
-        val mockList = mock(List::class.java) as List<AppInfo>
-        `when`(loadTask.requestLoad()).thenReturn(mockList.toSingletonObservable())
-        `when`(sourceApps.isEmpty()).thenReturn(true)
+        val mockList: List<AppInfo> = mock()
+        whenever(loadTask.requestLoad()).thenReturn(mockList.toSingletonObservable())
+        whenever(sourceApps.isEmpty()).thenReturn(true)
 
         presenter.onPackageChanged()
         verify(sourceApps).addAll(mockList)

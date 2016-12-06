@@ -20,6 +20,7 @@ buildscript {
         junitVersion = '4.12'
         assertjVersion = '3.6.1'
         mockitoVersion = '2.2.28'
+        mockitoKotlinVersion = '1.0.0'
         espressoVersion = '2.2.2'
         robolectricVersion = '3.1.4'
     }

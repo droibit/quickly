@@ -3,11 +3,13 @@ package com.droibit.quickly.main
 import com.droibit.quickly.data.repository.settings.ShowSettingsRepository
 import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.Order
 import com.droibit.quickly.data.repository.settings.ShowSettingsRepository.SortBy
+import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mock
-import org.mockito.Mockito.*
+import org.mockito.Mockito.reset
+import org.mockito.Mockito.verify
 import org.mockito.junit.MockitoJUnit
 import rx.observers.TestSubscriber
 
@@ -29,8 +31,8 @@ class ShowSettingsTaskTest {
 
     @Test
     fun load_sortByWithOrder() {
-        `when`(showSettingsRepository.sortBy).thenReturn(SortBy.LAST_UPDATED)
-        `when`(showSettingsRepository.order).thenReturn(Order.DESC)
+        whenever(showSettingsRepository.sortBy).thenReturn(SortBy.LAST_UPDATED)
+        whenever(showSettingsRepository.order).thenReturn(Order.DESC)
 
         val testSubscriber = TestSubscriber.create<Pair<SortBy, Order>>()
         task.loadSortBy().subscribe(testSubscriber)
@@ -45,8 +47,8 @@ class ShowSettingsTaskTest {
     fun store_sortByWithOrder() {
         // updated sort by
         run {
-            `when`(showSettingsRepository.sortBy).thenReturn(SortBy.LAST_UPDATED)
-            `when`(showSettingsRepository.order).thenReturn(Order.ASC)
+            whenever(showSettingsRepository.sortBy).thenReturn(SortBy.LAST_UPDATED)
+            whenever(showSettingsRepository.order).thenReturn(Order.ASC)
 
             val testSubscriber = TestSubscriber.create<Boolean>()
             task.storeSortBy(SortBy.PACKAGE, Order.ASC).subscribe(testSubscriber)
@@ -60,8 +62,8 @@ class ShowSettingsTaskTest {
 
         // updated order
         run {
-            `when`(showSettingsRepository.sortBy).thenReturn(SortBy.PACKAGE)
-            `when`(showSettingsRepository.order).thenReturn(Order.ASC)
+            whenever(showSettingsRepository.sortBy).thenReturn(SortBy.PACKAGE)
+            whenever(showSettingsRepository.order).thenReturn(Order.ASC)
 
             val testSubscriber = TestSubscriber.create<Boolean>()
             task.storeSortBy(SortBy.PACKAGE, Order.DESC).subscribe(testSubscriber)
@@ -75,8 +77,8 @@ class ShowSettingsTaskTest {
 
         // no updated
         run {
-            `when`(showSettingsRepository.sortBy).thenReturn(SortBy.PACKAGE)
-            `when`(showSettingsRepository.order).thenReturn(Order.ASC)
+            whenever(showSettingsRepository.sortBy).thenReturn(SortBy.PACKAGE)
+            whenever(showSettingsRepository.order).thenReturn(Order.ASC)
 
             val testSubscriber = TestSubscriber.create<Boolean>()
             task.storeSortBy(SortBy.PACKAGE, Order.ASC).subscribe(testSubscriber)
@@ -90,7 +92,7 @@ class ShowSettingsTaskTest {
 
     @Test
     fun load_showSystem() {
-        `when`(showSettingsRepository.isShowSystem).thenReturn(true)
+        whenever(showSettingsRepository.isShowSystem).thenReturn(true)
 
         val testSubscriber = TestSubscriber.create<Boolean>()
         task.loadShowSystem().subscribe(testSubscriber)

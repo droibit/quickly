@@ -7,12 +7,11 @@ import com.droibit.quickly.main.MainContract
 import com.droibit.quickly.main.MainContract.QuickActionEvent
 import com.droibit.quickly.main.apps.AppsContract.MenuItem
 import com.droibit.quickly.rules.RxSchedulersOverrideRule
+import com.nhaarman.mockito_kotlin.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.Matchers
 import org.mockito.Mock
-import org.mockito.Mockito.*
 import org.mockito.junit.MockitoJUnit
 import rx.Completable
 import rx.Observable
@@ -62,7 +61,7 @@ class AppsPresenterTest {
     @Test
     fun onCreate_setSortBy() {
         val result = Pair(SortBy.LAST_UPDATED, Order.DESC)
-        `when`(showSettingsTask.loadSortBy()).thenReturn(singleOf(result))
+        whenever(showSettingsTask.loadSortBy()).thenReturn(singleOf(result))
 
         presenter.onCreate(true)
         verify(view).setSortBy(result.first, result.second)
@@ -70,33 +69,33 @@ class AppsPresenterTest {
 
     @Test
     fun onResume_subscribeRunning() {
-        `when`(loadTask.requestLoad()).thenReturn(Observable.empty())
+        whenever(loadTask.requestLoad()).thenReturn(Observable.empty())
 
-        `when`(loadTask.isRunning()).thenReturn(true.toSingletonObservable())
+        whenever(loadTask.isRunning()).thenReturn(true.toSingletonObservable())
         presenter.onResume()
         verify(view).setLoadingIndicator(true)
 
-        `when`(loadTask.isRunning()).thenReturn(false.toSingletonObservable())
+        whenever(loadTask.isRunning()).thenReturn(false.toSingletonObservable())
         presenter.onResume()
         verify(view).setLoadingIndicator(false)
     }
 
     @Test
     fun onResume_subscribeApps() {
-        `when`(loadTask.isRunning()).thenReturn(Observable.empty())
+        whenever(loadTask.isRunning()).thenReturn(Observable.empty())
 
-        val mockList = mock(List::class.java) as List<AppInfo>
-        `when`(loadTask.requestLoad()).thenReturn(mockList.toSingletonObservable())
+        val mockList: List<AppInfo> = mock()
+        whenever(loadTask.requestLoad()).thenReturn(mockList.toSingletonObservable())
 
         run {
-            `when`(mockList.isEmpty()).thenReturn(false)
+            whenever(mockList.isEmpty()).thenReturn(false)
 
             presenter.onResume()
             verify(view).showApps(mockList)
         }
 
         run {
-            `when`(mockList.isEmpty()).thenReturn(true)
+            whenever(mockList.isEmpty()).thenReturn(true)
 
             presenter.onResume()
             verify(view).showNoAppInfo()
@@ -105,7 +104,7 @@ class AppsPresenterTest {
 
     @Test
     fun onPrepareShowSystemMenu_setShowSystem() {
-        `when`(showSettingsTask.loadShowSystem()).thenReturn(singleOf(true))
+        whenever(showSettingsTask.loadShowSystem()).thenReturn(singleOf(true))
 
         presenter.onPrepareShowSystemMenu()
         verify(view).setShowSystem(true)
@@ -113,11 +112,12 @@ class AppsPresenterTest {
 
     @Test
     fun onOptionsItemClicked_showSystem_showApps() {
-        `when`(showSettingsTask.storeShowSystem(anyBoolean())).thenReturn(Completable.complete())
+        whenever(showSettingsTask.storeShowSystem(any())).thenReturn(Completable.complete())
 
-        val mockList = mock(List::class.java) as List<AppInfo>
-        `when`(mockList.isEmpty()).thenReturn(false)
-        `when`(loadTask.requestLoad()).thenReturn(mockList.toSingletonObservable())
+        val mockList: List<AppInfo> = mock() {
+            on { isEmpty() } doReturn false
+        }
+        whenever(loadTask.requestLoad()).thenReturn(mockList.toSingletonObservable())
 
         presenter.onOptionsItemClicked(MenuItem.ShowSystem(checked = true))
 
@@ -126,9 +126,10 @@ class AppsPresenterTest {
 
     @Test
     fun onOptionsItemClicked_refresh_showApps() {
-        val mockList = mock(List::class.java) as List<AppInfo>
-        `when`(mockList.isEmpty()).thenReturn(false)
-        `when`(loadTask.requestLoad(anyBoolean())).thenReturn(mockList.toSingletonObservable())
+        val mockList: List<AppInfo> = mock() {
+            on { isEmpty() } doReturn false
+        }
+        whenever(loadTask.requestLoad(any())).thenReturn(mockList.toSingletonObservable())
 
         presenter.onOptionsItemClicked(MenuItem.Refresh)
 
@@ -153,7 +154,7 @@ class AppsPresenterTest {
     @Test
     fun onSortByClicked_showSortByChooserDialog() {
         val result = Pair(SortBy.NAME, Order.ASC)
-        `when`(showSettingsTask.loadSortBy()).thenReturn(singleOf(result))
+        whenever(showSettingsTask.loadSortBy()).thenReturn(singleOf(result))
 
         presenter.onSortByClicked()
         verify(view).showSortByChooserDialog(sortBy = result.first)
@@ -169,7 +170,7 @@ class AppsPresenterTest {
     @Test
     fun onSortByChoose_setSortBy() {
         val result = Pair(SortBy.LAST_UPDATED, Order.DESC)
-        `when`(showSettingsTask.storeSortBy(result.first, result.second)).thenReturn(singleOf(true))
+        whenever(showSettingsTask.storeSortBy(result.first, result.second)).thenReturn(singleOf(true))
 
         presenter.onSortByChoose(result.first, result.second)
         verify(view).setSortBy(result.first, result.second)
@@ -181,8 +182,8 @@ class AppsPresenterTest {
         presenter.onQuickActionSelected(QuickActionEvent.Uninstall(app))
 
         verify(view).performUninstall(app.packageName)
-        verify(view, never()).performSharePackage(anyString())
-        verify(navigator, never()).navigateAppInfoInSettings(anyString())
+        verify(view, never()).performSharePackage(any())
+        verify(navigator, never()).navigateAppInfoInSettings(any())
     }
 
     @Test
@@ -191,8 +192,8 @@ class AppsPresenterTest {
         presenter.onQuickActionSelected(QuickActionEvent.SharePackage(app))
 
         verify(view).performSharePackage(app.packageName)
-        verify(view, never()).performUninstall(Matchers.anyString())
-        verify(navigator, never()).navigateAppInfoInSettings(anyString())
+        verify(view, never()).performUninstall(any())
+        verify(navigator, never()).navigateAppInfoInSettings(any())
     }
 
     @Test
@@ -200,16 +201,17 @@ class AppsPresenterTest {
         val app = createAppInfo(id = 3)
         presenter.onQuickActionSelected(QuickActionEvent.OpenAppInfo(app))
 
-        verify(navigator).navigateAppInfoInSettings(anyString())
+        verify(navigator).navigateAppInfoInSettings(any())
         verify(view, never()).performSharePackage(app.packageName)
-        verify(view, never()).performUninstall(Matchers.anyString())
+        verify(view, never()).performUninstall(any())
     }
 
     @Test
     fun onPackageChanged_showApps() {
-        val mockList = mock(List::class.java) as List<AppInfo>
-        `when`(mockList.isEmpty()).thenReturn(false)
-        `when`(loadTask.requestLoad(anyBoolean())).thenReturn(mockList.toSingletonObservable())
+        val mockList: List<AppInfo> = mock() {
+            on { isEmpty() } doReturn false
+        }
+        whenever(loadTask.requestLoad(any())).thenReturn(mockList.toSingletonObservable())
 
         presenter.onPackageChanged()
 

@@ -87,6 +87,7 @@ dependencies {
     testCompile "junit:junit:$junitVersion"
     testCompile "org.assertj:assertj-core:$assertjVersion"
     testCompile "org.mockito:mockito-core:$mockitoVersion"
+    testCompile "com.nhaarman:mockito-kotlin:$mockitoKotlinVersion"
 }
 
 apply plugin: 'com.cookpad.android.licensetools'
