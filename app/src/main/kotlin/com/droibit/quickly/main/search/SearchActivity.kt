@@ -143,13 +143,21 @@ class SearchActivity : AppCompatActivity(),
         Timber.d("showApps(apps=${apps.size}, resetPosition=$resetPosition)")
         emptyView.visibility = View.GONE
 
-        val firstItemPosition = (recyclerView.layoutManager as LinearLayoutManager)
-                .findFirstVisibleItemPosition()
-        Timber.d("firstVisibleItemPosition: $firstItemPosition")
+        val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+        val firstVisibleItemPosition = Math.max(0, layoutManager.findFirstVisibleItemPosition())
+        val offsetPx = if (firstVisibleItemPosition > 0) {
+            layoutManager.findViewByPosition(firstVisibleItemPosition).top
+        } else {
+            LinearLayoutManager.INVALID_OFFSET
+        }
+        Timber.d("firstVisibleItemPosition: $firstVisibleItemPosition, offsetPx: $offsetPx")
 
         appInfoAdapter.replaceAll(apps)
 
-        recyclerView.scrollToPosition(if (resetPosition) 0 else Math.max(0, firstItemPosition))
+        layoutManager.scrollToPositionWithOffset(
+                if (resetPosition) 0 else firstVisibleItemPosition,
+                offsetPx
+        )
     }
 
     override fun showNoApps() {
