@@ -37,7 +37,7 @@ class AppsPresenter(
                 .subscribe { view.setLoadingIndicator(active = it) }
                 .addTo(subscriptions)
 
-        refreshApps(forceLoad = false)
+        subscribeApps(forceLoad = false)
     }
 
     @UiThread
@@ -60,8 +60,8 @@ class AppsPresenter(
     @UiThread
     override fun onOptionsItemClicked(menuItem: MenuItem) {
         when (menuItem) {
-            is MenuItem.Refresh -> refreshApps(forceLoad = true)
-            is MenuItem.ShowSystem -> toggleShowSystemApps(menuItem.checked)
+            is MenuItem.Refresh -> subscribeApps(forceLoad = true)
+            is MenuItem.ShowSystem -> subscribeToggleShowSystemApps(menuItem.checked)
             is MenuItem.Settings -> navigator.navigateSettings()
         }
     }
@@ -108,10 +108,17 @@ class AppsPresenter(
 
     @UiThread
     override fun onPackageChanged() {
-        refreshApps(forceLoad = false)
+        subscribeApps(forceLoad = false)
     }
 
     // Private
+
+    private fun subscribeApps(forceLoad: Boolean) {
+        loadTask.requestLoad(forceLoad)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { onAppsLoaded(apps = it, reloaded = forceLoad) }
+                .addTo(subscriptions)
+    }
 
     private fun onAppsLoaded(apps: List<AppInfo>, reloaded: Boolean) {
         if (apps.isNotEmpty()) {
@@ -121,17 +128,10 @@ class AppsPresenter(
         }
     }
 
-    private fun toggleShowSystemApps(checked: Boolean) {
+    private fun subscribeToggleShowSystemApps(checked: Boolean) {
         showSettingsTask.storeShowSystem(checked)
                 .andThen(loadTask.requestLoad())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { onAppsLoaded(apps = it, reloaded = true) }
-    }
-
-    private fun refreshApps(forceLoad: Boolean) {
-        loadTask.requestLoad(forceLoad)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { onAppsLoaded(apps = it, reloaded = forceLoad) }
-                .addTo(subscriptions)
     }
 }

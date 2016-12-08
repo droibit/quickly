@@ -35,7 +35,7 @@ class SearchPresenter(
                 .subscribe { view.setLoadingIndicator(active = it) }
                 .addTo(subscriptions)
 
-        loadApps()
+        subscribeApps()
     }
 
     override fun onPause() {
@@ -68,12 +68,12 @@ class SearchPresenter(
     }
 
     override fun onPackageChanged() {
-        loadApps()
+        subscribeApps()
     }
 
     // Private
 
-    private fun loadApps() {
+    private fun subscribeApps() {
         loadTask.requestLoad()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { onAppLoaded(apps = it) }
