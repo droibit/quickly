@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Quickly</string>
 
@@ -26,4 +27,5 @@
     <string name="apps_title">Apps</string>
     <string name="quick_action_open_app_info">Open app info</string>
     <string name="oss_license_title">Open source licenses</string>
+    <string name="shortcut_search_short_label">Search</string>
 </resources>
