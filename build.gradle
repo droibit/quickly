@@ -3,9 +3,9 @@
 buildscript {
     ext {
         kotlinVersion = '1.0.5-2'
-        supportLibraryVersion = '25.0.1'
+        supportLibraryVersion = '25.1.0'
         kodeinAndroidVersion = '3.1.0'
-        ormaVersion = '3.1.1'
+        ormaVersion = '3.2.0'
         rxJavaVersion = '1.2.3'
         rxKotlinVersion = '0.60.0'
         rxAndroidVersion = '1.2.1'
@@ -28,7 +28,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.0-alpha2'
+        classpath 'com.android.tools.build:gradle:2.3.0-alpha3'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath 'com.cookpad.android.licensetools:license-tools-plugin:0.19.0'
 
@@ -51,7 +51,7 @@ task clean(type: Delete) {
 
 ext {
     compileSdkVersion = 25
-    buildToolsVersion = "25.0.0"
+    buildToolsVersion = "25.0.2"
 
     minSdkVersion = 16
     targetSdkVersion = 25
