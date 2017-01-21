@@ -188,7 +188,7 @@ class AppsActivity : AppCompatActivity(),
         if (appInfoAdapter.isEmpty) {
             appInfoAdapter.addAll(apps)
         } else {
-            appInfoAdapter.replaceAll(apps)
+            appInfoAdapter.replaceAll(apps, force = true)
         }
 
         layoutManager.scrollToPositionWithOffset(

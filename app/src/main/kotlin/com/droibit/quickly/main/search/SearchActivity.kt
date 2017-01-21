@@ -152,7 +152,7 @@ class SearchActivity : AppCompatActivity(),
         }
         Timber.d("firstVisibleItemPosition: $firstVisibleItemPosition, offsetPx: $offsetPx")
 
-        appInfoAdapter.replaceAll(apps)
+        appInfoAdapter.replaceAll(apps, force = false)
 
         layoutManager.scrollToPositionWithOffset(
                 if (resetPosition) 0 else firstVisibleItemPosition,

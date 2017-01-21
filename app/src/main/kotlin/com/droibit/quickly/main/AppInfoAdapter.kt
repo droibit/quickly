@@ -63,6 +63,12 @@ class AppInfoAdapter(
         fun clickListener(listener: (View) -> Unit) = itemView.setOnClickListener(listener)
 
         fun moreClickListener(listener: (View) -> Unit) = moreView.setOnClickListener(listener)
+
+        private val AppInfo.iconUri: Uri
+            get() = Uri.parse("$SCHEME_ANDROID_RESOURCE://$packageName/$icon")
+
+        private val AppInfo.version: String
+            get() = "v$versionName ($versionCode)"
     }
 
     private val sortedItemsCallback = SortedListCallback(this)
@@ -111,10 +117,18 @@ class AppInfoAdapter(
         this.rawItems.addAll(newItems)
     }
 
-    fun replaceAll(newItems: List<AppInfo>) {
-        this.rawItems.beginBatchedUpdates()
+    fun replaceAll(newItems: List<AppInfo>, force: Boolean) {
         try {
-            this.rawItems.clear()
+            this.rawItems.beginBatchedUpdates()
+
+            if (force) {
+                this.rawItems.clear()
+            } else {
+                (0..rawItems.size()-1)
+                        .map { rawItems[it] }
+                        .filter { !newItems.contains(it) }
+                        .forEach { this.rawItems.remove(it) }
+            }
             this.rawItems.addAll(newItems)
         } finally {
             this.rawItems.endBatchedUpdates()
@@ -126,7 +140,7 @@ class AppInfoAdapter(
     }
 
     fun refresh() {
-        replaceAll(newItems = items)
+        replaceAll(newItems = items, force = true)
     }
 }
 
@@ -163,9 +177,3 @@ private class SortedListCallback(private val adapter: AppInfoAdapter)
         adapter.notifyItemRangeInserted(position, count)
     }
 }
-
-private val AppInfo.iconUri: Uri
-    get() = Uri.parse("$SCHEME_ANDROID_RESOURCE://$packageName/$icon")
-
-private val AppInfo.version: String
-    get() = "v$versionName ($versionCode)"
