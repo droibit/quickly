@@ -3,6 +3,8 @@
 
 Quickly display Android app information for development.
 
+![main](./assets/main.png)
+
 ## License
 
     Copyright 2016 Shinya Kumagai
