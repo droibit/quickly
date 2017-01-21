@@ -2,7 +2,7 @@
 
 buildscript {
     ext {
-        kotlinVersion = '1.0.5-2'
+        kotlinVersion = '1.0.6'
         supportLibraryVersion = '25.1.0'
         kodeinAndroidVersion = '3.1.0'
         ormaVersion = '3.2.0'
@@ -14,13 +14,13 @@ buildscript {
         searchViewVersion = '4.0'
         timberVersion = '4.3.0'
         chopsticksVersion = '0.5.1'
-        kotprefVersion = '1.5.0'
+        kotprefVersion = '1.6.0'
         leakCanaryVersion = '1.5'
         stethoVersion = '1.4.1'
         junitVersion = '4.12'
         assertjVersion = '3.6.1'
         mockitoVersion = '2.2.28'
-        mockitoKotlinVersion = '1.0.0'
+        mockitoKotlinVersion = '1.1.0'
         espressoVersion = '2.2.2'
         robolectricVersion = '3.1.4'
     }
